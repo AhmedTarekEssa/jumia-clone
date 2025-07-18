@@ -1,1 +1,19 @@
-<p>product-card works!</p>
+<div class="products-container two-rows">
+  <ng-container *ngFor="let product of products">
+    <div class="product-card">
+      <a class="text-decoration-none">
+        <div class="discount-badge">{{ product.discount }}%</div>
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name">
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-price">
+            <span class="final-price">EGP {{ product.finalPrice }}</span><br>
+            <span class="base-price">EGP {{ product.basePrice }}</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </ng-container>
+</div>
