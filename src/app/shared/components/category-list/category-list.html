@@ -1,1 +1,45 @@
-<p>category-list works!</p>
+<div class="sidebar">
+  <ul class="category-list">
+    <li
+      *ngFor="let category of sidebarCategories"
+      class="category-item"
+      (mouseenter)="hoveredCategory = category"
+      (mouseleave)="hoveredCategory = null"
+    >
+      <i [class]="category.icon"></i>&nbsp; {{ category.name }}
+
+      <!-- Mega Menu -->
+      <div class="mega-menu" *ngIf="hoveredCategory === category">
+        <div class="mega-columns">
+          <!-- Subcategories -->
+          <div
+            class="mega-column"
+            *ngFor="let sub of category.subcategories; let i = index"
+            [class.full-width]="category.brands?.length && i === category.subcategories.length - 1"
+          >
+            <h6 class="column-title">{{ sub.title }}</h6>
+            <ul class="column-list">
+              <li *ngFor="let item of sub.products">{{ item }}</li>
+            </ul>
+          </div>
+
+          <!-- Brands Section (only once) -->
+          <div
+            *ngIf="category.brands?.length"
+            class="mega-column brand-column"
+          >
+            <h6 class="column-title">أفضل الماركات</h6>
+            <ul class="column-list">
+              <li *ngFor="let brand of category.brands">{{ brand }}</li>
+            </ul>
+            <img
+              src="assets/official-store.png"
+              alt="Official Store"
+              class="official-store-image"
+            />
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
