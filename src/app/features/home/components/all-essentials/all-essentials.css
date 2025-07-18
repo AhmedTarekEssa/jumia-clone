@@ -1,0 +1,187 @@
+        body {
+            font-family: 'Arial', sans-serif;
+            direction: rtl;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px 0;
+        }
+        
+        .promo-header {
+            background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-radius: 0;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 50%;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+        
+        .price-info {
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        
+        .price-from {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .price-value {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 2px;
+            font-weight: 800;
+        }
+        
+        .price-currency {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .price-installment {
+            font-size: 9px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .product-title {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .special-offer {
+            background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
+            color: white;
+            border-radius: 50%;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .discount-text {
+            font-size: 11px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .discount-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .new-shape {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 50%;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .new-shape-text {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .free-delivery {
+            background: #dc3545;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .row-spacing {
+            margin-bottom: 20px;
+        }
+        
+        .col-custom {
+            flex: 0 0 16.666667%;
+            max-width: 16.666667%;
+            padding: 0 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .col-custom {
+                flex: 0 0 50%;
+                max-width: 50%;
+                margin-bottom: 20px;
+            }
+            
+            .product-card, .special-offer, .new-shape {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .price-value {
+                font-size: 18px;
+            }
+        }
+        
+        .product-placeholder {
+            width: 70px;
+            height: 70px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
