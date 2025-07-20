@@ -1,1 +1,63 @@
-<p>wishlist works!</p>
+<div class="wishlist-container">
+  <h2 class="wishlist-title">Wishlist ({{ wishlist?.totalQuantity || 0 }})</h2>
+
+  @if (isLoading) {
+    <div class="loading">Loading wishlist...</div>
+  } @else if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  } @else {
+    <div class="wishlist-items">
+      @for (item of wishlist?.wishlistItems; track item.wishlistItemId) {
+        <div class="wishlist-item">
+          <div class="item-image">
+            <img [src]="item.mainImageUrl" [alt]="item.productName" />
+          </div>
+
+          <div class="item-details">
+            <h3 class="item-name">{{ item.productName }}</h3>
+
+            @if (item.size) {
+              <div class="item-size">
+                Size: <span class="size-value">{{ item.size }}</span>
+              </div>
+            }
+
+            <div class="price-section">
+              <span class="current-price">EGP {{ item.unitPrice | number:'1.2-2' }}</span>
+              @if (item.originalPrice && item.originalPrice > item.unitPrice) {
+                <span class="original-price">EGP {{ item.originalPrice | number:'1.2-2' }}</span>
+                <span class="discount">
+                  -{{ ((item.originalPrice - item.unitPrice) / item.originalPrice * 100) | number:'1.0-0' }}%
+                </span>
+              }
+            </div>
+
+            @if (item.brandName) {
+              <div class="brand">
+                <span class="brand-logo">{{ item.brandName }}</span>
+                @if (item.isExpress) {
+                  <span class="express-label">EXPRESS</span>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="item-actions">
+            <button
+              class="remove-btn"
+              (click)="removeFromWishlist(item.wishlistItemId)">
+              Remove
+            </button>
+            <button
+              class="add-to-cart-btn"
+              (click)="addToCart(item)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-wishlist">Your wishlist is empty</div>
+      }
+    </div>
+  }
+</div>
