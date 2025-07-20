@@ -20,7 +20,21 @@ export const environment = {
         AddToCart:"Cart/items",
         UpdateCartItem:(id:number|undefined)=>`Cart/items/${id}`,
         DeleteCartItem:(id:number)=>`Cart/items/${id}`
-    }
+    },
+      Categories:{
+    GetAll: (includeSubcategories: boolean = true) =>
+      `Categories?includeSubcategories=${includeSubcategories}`,
+    Create: "Categories",
+    GetById: (id: number, includeSubcategories: boolean = true) =>
+      `Categories/${id}?includeSubcategories=${includeSubcategories}`,
+    Update: (id: number) => `Categories/${id}`,
+    Delete: (id: number) => `Categories/${id}`,
 
+    GetDescendants: (id: number) => `Categories/${id}/descendants`,
+    GetMainCategories: "Categories/main",
+
+    GetAttributes: (parentId: number) => `Categories/${parentId}/attributes`,
+  }
    
 };
+
