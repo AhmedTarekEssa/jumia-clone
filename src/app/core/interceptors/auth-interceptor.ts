@@ -1,0 +1,15 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  
+  const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDdXN0b21lciIsImVtYWlsIjoidXNlcjNAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImRiMzA4NjVkLTk2YWQtNDJkMS1hNmU3LWQ3OTcxZDg3ZjJhYiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJ1c2VyM0BleGFtcGxlLmNvbSIsInVzZXJUeXBlSWQiOiIxIiwiZXhwIjoxNzUzMDE3ODMwLCJpc3MiOiJKdW1pYUFwaSIsImF1ZCI6Ikp1bWlhQ2xpZW50In0.BMuvrbPFc89kT8rS-aQObYwqMj7Y65GXpa6e9VRk83w`
+  const authreq = req.clone(
+    {
+      setHeaders:{
+        Authorization:`Bearer ${token}`
+      }
+    }
+  )
+  
+  return next(authreq);
+};
