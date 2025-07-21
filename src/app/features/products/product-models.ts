@@ -41,8 +41,11 @@ export interface ProductUi {
   productId: number
   name: string
   basePrice: number
-  discountPercentage: number
+  discountPercentage: string
   imageUrl: any
+  discount?: number
+  variants:Variant[]
+
 }
 
 export interface CreateProduct {
@@ -60,7 +63,7 @@ export interface CreateProduct {
 
 
 export interface ProductFilterRequest {
-  categoryIds?: number[];
+  categoryIds: number[];
   attributeFilters?: Record<string, string>;
   minPrice?: number;
   maxPrice?: number;
@@ -72,4 +75,11 @@ export interface varinatOptions{
 
 export interface attributeOptions{
     nextOptions:Attribute[]
+}
+
+export interface pagedModelUi{
+  items:ProductUi[]
+  totalCount:number
+  totalPages:number
+  pageSize:number
 }
