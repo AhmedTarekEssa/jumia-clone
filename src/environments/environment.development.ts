@@ -1,4 +1,5 @@
 export const environment = {
+
     BaseUrlPath : "http://localhost:5087/api",
     ImageUrlBase:`http://localhost:5087`,
     Product:{
@@ -23,7 +24,17 @@ export const environment = {
         UpdateCartItem:(id:number|undefined)=>`/Cart/items/${id}`,
         DeleteCartItem:(id:number)=>`/Cart/items/${id}`
     },
-      Categories:{
+
+
+  Wishlist: {
+    GetAll: "/Wishlist",
+    Clear: "/Wishlist",
+    AddItem: (productId: number) => `/Wishlist/items/${productId}`,
+    RemoveItem: (id: number) => `/Wishlist/items/${id}`
+  },
+  
+  Categories: {
+
     GetAll: (includeSubcategories: boolean = true) =>
       `/Categories?includeSubcategories=${includeSubcategories}`,
     Create: "/Categories",
@@ -37,6 +48,6 @@ export const environment = {
 
     GetAttributes: (parentId: number) => `/Categories/${parentId}/attributes`,
   }
-   
+
 };
 
