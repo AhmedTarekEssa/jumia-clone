@@ -71,6 +71,10 @@ export const routes: Routes = [
     canActivate: [sellerGuard],
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
   },
+  {
+    path:'Products',
+    loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 
