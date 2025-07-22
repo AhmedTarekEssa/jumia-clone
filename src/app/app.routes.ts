@@ -49,5 +49,9 @@ export const routes: Routes = [
     path: 'vendor',
     loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
   },
+  {
+    path:'Products',
+    loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
