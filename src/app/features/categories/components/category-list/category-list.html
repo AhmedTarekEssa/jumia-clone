@@ -1,1 +1,187 @@
-<p>category-list works!</p>
+<div class="filter-sidebar">
+  <!-- Category Section -->
+  <div class="filter-section">
+  <h3 class="section-title">CATEGORY</h3>
+  <h3 class="section-title">{{currentCategory?.name}}</h3>
+  <div class="filter-options">
+    <div *ngFor="let subCategory of subCategories" class="filter-option">
+      <label class="category-label">
+        {{ subCategory.label }}
+      </label>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div *ngFor="let attribute of attributeResponse" class="filter-section">
+  <h3 class="section-title">{{ attribute.name | uppercase }}</h3>
+
+  <!-- Search box for this attribute's values -->
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search {{attribute.name}}"
+      class="search-input"
+      [(ngModel)]="attribute.searchTerm"
+      (input)="filterValues(attribute)">
+    <span class="search-icon">🔍</span>
+  </div>
+
+  <!-- Filtered values list -->
+  <div class="filter-options scrollable">
+    <div *ngFor="let value of attribute.filteredValues || []" class="filter-option">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [checked]="isSelected(attribute.name, value)"
+          (change)="toggleSelection(attribute.name, value)">
+        <span class="checkmark"></span>
+        {{value }}
+      </label>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <div class="filter-section">
+    <h3 class="section-title">DISCOUNT</h3>
+    <div class="filter-option">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [(ngModel)]="showOnlyDiscounted">
+        <span class="checkmark"></span>
+        Show only discounted items
+      </label>
+    </div>
+  </div>
+
+
+  <!-- <div class="filter-section">
+    <h3 class="section-title">MATERIAL FAMILY</h3>
+    <div class="search-container">
+      <input
+        type="text"
+        placeholder="Search"
+        class="search-input"
+        [(ngModel)]="materialSearchTerm"
+        (input)="onMaterialSearch(materialSearchTerm)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="filter-options scrollable">
+      <div *ngFor="let material of materials" class="filter-option">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            (change)="onFilterChange('material', material.id, $any($event.target).checked)">
+          <span class="checkmark"></span>
+          {{ material.label }}
+        </label>
+      </div>
+    </div>
+  </div> -->
+
+
+  <div class="filter-section">
+    <div class="price-header">
+      <h3 class="section-title">PRICE (EGP)</h3>
+      <button class="apply-btn" (click)="applyFilters()">Apply</button>
+    </div>
+    <div class="price-range">
+      <input
+        type="range"
+        class="price-slider"
+        [min]="1"
+        [max]="8000000"
+        [(ngModel)]="minPrice"
+        (input)="onPriceRangeChange()">
+    </div>
+    <div class="price-inputs">
+      <input
+        type="number"
+        class="price-input"
+        [(ngModel)]="minPrice"
+        (input)="onPriceRangeChange()">
+      <span class="price-separator">-</span>
+      <input
+        type="number"
+        class="price-input"
+        [(ngModel)]="maxPrice"
+        (input)="onPriceRangeChange()">
+    </div>
+  </div>
+
+
+  <div class="filter-section">
+    <h3 class="section-title">DISCOUNT PERCENTAGE</h3>
+    <div class="radio-options">
+      <div *ngFor="let option of discountOptions" class="filter-option">
+        <label class="radio-label">
+          <input
+            type="radio"
+            name="discountPercentage"
+            [value]="option.value"
+            [(ngModel)]="selectedDiscountPercentage"
+            (change)="onDiscountPercentageChange(option.value)">
+          <span class="radio-mark"></span>
+          {{ option.label }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="filter-section">
+    <h3 class="section-title">SHIPPED FROM</h3>
+    <div class="filter-option">
+      <label class="checkbox-label selected">
+        <input
+          type="checkbox"
+          [(ngModel)]="shippedFromEgypt">
+        <span class="checkmark"></span>
+        Shipped from Egypt
+      </label>
+    </div>
+  </div>
+
+
+  <div class="filter-section">
+    <h3 class="section-title">EXPRESS DELIVERY</h3>
+    <div class="filter-option">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [(ngModel)]="expressDelivery">
+        <span class="checkmark"></span>
+        <span class="jumia-express">JUMIA <span class="express-text">EXPRESS</span></span>
+      </label>
+      <span class="info-icon">ℹ</span>
+    </div>
+  </div>
+
+<!--
+  <div class="filter-section">
+    <h3 class="section-title">CAMPAIGNS</h3>
+    <div class="filter-options">
+      <div *ngFor="let campaign of campaigns" class="filter-option">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            (change)="onFilterChange('campaign', campaign.id, $any($event.target).checked)">
+          <span class="checkmark"></span>
+          {{ campaign.label }}
+        </label>
+      </div>
+    </div>
+  </div> -->
+
+
+
+</div>
