@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user-no-orders',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './user-no-orders.html',
   styleUrl: './user-no-orders.css'
 })
