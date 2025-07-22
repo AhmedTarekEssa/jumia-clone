@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { ProductDetails,CreateProduct, ProductFilterRequest, ProductUi, Variant, varinatOptions } from '../../../features/products/product-models';
+import { ProductDetails,CreateProduct, ProductFilterRequest, ProductUi, Variant, varinatOptions, pagedModelUi } from '../../../features/products/product-models';
 
 @Injectable({
   providedIn: 'root'
@@ -68,12 +68,12 @@ export class ProductService {
     )
   }
 
-  productsByFilters(filters:ProductFilterRequest):Observable<ProductUi[]>{
-    return this.httpClient.post<ProductUi[]>(this.apiBaseUrl+this.controller.GetProductsByFilters('customer'),filters,{withCredentials:true})
+  productsByFilters(filters:ProductFilterRequest,pageNumber:number,pageSize:number):Observable<pagedModelUi>{
+    return this.httpClient.post<pagedModelUi>(this.apiBaseUrl+this.controller.GetProductsByFilters('customer',pageNumber,pageSize),filters,{withCredentials:true})
   
     .pipe(
       tap({
-        next:(data)=>console.log("products ui number is " + data.length),
+        next:(data)=>console.log("products ui number is " + data.items.length),
         error:(e)=>console.log("error occured while fetching product ui list by filters" + e)
       })
     )

@@ -3,6 +3,7 @@ import { Cart, CartItem, UpdateCart } from '../../cart-models';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { ProductService } from '../../../../core/services/Product-Service/product';
+import { NotExpr } from '@angular/compiler';
 
 
 @Component({
@@ -56,15 +57,14 @@ export class CartItems implements OnInit {
     
     console.log(item);
     
-    if (item) {
-      item.quantity++;
-    }
+   
     this.cdr.detectChanges();
    
     this.cartService.UpdateCartItem(itemId,{quantity :item?.quantity}).subscribe(
       {
         next:(data)=>{
           item!.subtotal = data.subtotal
+          item!.quantity = data.quantity
           this.setSubtotal();
           this.cdr.detectChanges();
           
@@ -82,15 +82,14 @@ export class CartItems implements OnInit {
     
     console.log(item);
     
-    if (item) {
-      item.quantity--;
-    }
+    
     this.cdr.detectChanges();
    
-    this.cartService.UpdateCartItem(itemId,{quantity :item?.quantity}).subscribe(
+    this.cartService.UpdateCartItem(itemId,{quantity :-1}).subscribe(
       {
         next:(data)=>{
           item!.subtotal = data.subtotal
+          item!.quantity = data.quantity
           this.setSubtotal();
           this.cdr.detectChanges();
           
@@ -101,7 +100,18 @@ export class CartItems implements OnInit {
   }
 
   removeItem(itemId: number): void {
-    this.cartItems = this.cartItems.filter(item => item.cartItemId !== itemId);
+    this.cartService.DeleteCartItem(itemId).subscribe(
+      {
+        next:()=>{
+          this.cartItems = this.cartItems.filter(item => item.cartItemId !== itemId)
+          this.setSubtotal()
+           this.cdr.detectChanges();
+        },
+        error:()=>console.log("cant remove")
+      }
+    )
+    
+   
   }
 
   setSubtotal() {

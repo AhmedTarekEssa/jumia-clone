@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CenterSliderComponent } from "../../center-slider/center-slider.component";
 import { CategoryList } from "../../category-list/category-list";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-navbar-main',
@@ -24,4 +25,37 @@ export class NavbarMain {
     { name: 'Gaming', icon: 'fas fa-gamepad', id: '8' },
     { name: 'Other categories', icon: 'fas fa-ellipsis-h', id: '1' }
   ];
+
+  constructor(private router: Router){}
+
+  navigateTo(path: string){
+    this.dropdownVisible = false;
+    this.router.navigate([path]).then(success => {
+      if(!success) {
+        console.error('Navigation Failed');
+      }
+    });
+  }
+
+dropdownVisible = false;
+
+toggleDropdown(event: MouseEvent) {
+  event.preventDefault(); // prevent unwanted default behavior
+  this.dropdownVisible = !this.dropdownVisible;
+}
+
+closeDropdown() {
+  this.dropdownVisible = false;
+}
+
+// @HostListener('document:click', ['$event'])
+// onDocumentClick(event: MouseEvent) {
+//   const target = event.target as HTMLElement;
+//   if (!target.closest('.nav-item.dropdown')) {
+//     this.dropdownVisible = false;
+//   }
+// }
+
+
+
 }
