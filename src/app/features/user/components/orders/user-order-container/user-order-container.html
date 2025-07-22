@@ -1,0 +1,31 @@
+<div class="order-container">
+  <h1 class="page-title">Orders</h1>
+
+  <div class="order-tabs">
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'ongoing'"
+      (click)="setActiveTab('ongoing')">
+      ONGOING/DELIVERED ({{ ongoingCount }})
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'closed'"
+      (click)="setActiveTab('closed')">
+      CLOSED ORDERS
+    </button>
+  </div>
+
+  <div class="order-content">
+    <!-- No Orders -->
+    <app-user-no-orders *ngIf="!hasOrders"></app-user-no-orders>
+
+    <!-- Orders List -->
+    <div *ngIf="currentOrders.length > 0" class="orders-list">
+      <app-order-item
+        *ngFor="let order of currentOrders"
+        [order]="order">
+      </app-order-item>
+    </div>
+  </div>
+</div>

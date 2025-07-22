@@ -1,1 +1,129 @@
-<p>register works!</p>
+<!-- <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+  <input formControlName="email" placeholder="Email*" disabled />
+
+  <input formControlName="otpCode" maxlength="4" placeholder="Enter 4-digit OTP Code*" />
+
+  <input type="password" formControlName="password" placeholder="Password*" />
+
+  <input type="password" formControlName="confirmPassword" placeholder="Confirm Password*" />
+
+  <label class="terms">
+    <input type="checkbox" formControlName="terms" />
+    I agree to the Terms and Conditions
+  </label>
+
+  <button type="submit" [disabled]="registerForm.invalid">Continue</button>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <div *ngIf="registerForm.errors?.mismatch && submitted" class="error">
+    Passwords do not match.
+  </div>
+</form> -->
+
+
+<div class="content">
+    <div class="form-container">
+        <div class="star-icon"></div>
+        <h1>Personal details</h1>
+        <div class="subtitle">We just need you to fill in some details.</div>
+        
+        <form id="personalForm" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+            <!-- Error Message -->
+            <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+            <div class="form-group">
+  <label for="firstName">First Name</label>
+  <input type="text" id="firstName" class="form-input" formControlName="firstName">
+</div>
+
+<div class="form-group">
+  <label for="lastName">Last Name</label>
+  <input type="text" id="lastName" class="form-input" formControlName="lastName">
+</div>
+
+<div class="form-group">
+  <label for="birthDate">Birth Date</label>
+  <div class="date-input">
+    <input type="date" id="birthDate" class="form-input" formControlName="birthDate">
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="gender">Gender</label>
+  <select id="gender" class="form-input" formControlName="gender">
+    <option value="">Select</option>
+    <option value="female">Female</option>
+    <option value="male">Male</option>
+    <option value="other">Other</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="address">Address</label>
+  <textarea id="address" class="form-input" formControlName="address" rows="2"></textarea>
+</div>
+
+
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Email*" id="email" formControlName="email"  >
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Password*" id="password" formControlName="password" required>
+                <div *ngIf="submitted && registerForm.get('password')?.invalid" class="error">
+                    Password must be at least 6 characters.
+                    </div>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Confirm Password*" id="confirmPassword" formControlName="confirmPassword" required>
+                <div *ngIf="submitted && registerForm.errors?.['mismatch']" class="error">
+                Passwords do not match.
+                </div>
+            </div>
+            
+            <!-- <div class="form-group">
+                <input type="text" class="form-input" placeholder="OTP Code*" id="otpCode" required maxlength="4" formControlName="otpCode" >
+                <div *ngIf="submitted && registerForm.get('otpCode')?.invalid" class="error">
+                OTP must be a 4-digit number.
+                </div>
+            </div> -->
+
+                        <!-- <div class="debug">
+                            <pre>Form Status: {{ registerForm.status }}</pre>
+                            <pre>Form Valid: {{ registerForm.valid }}</pre>
+                            <pre>Form Value: {{ registerForm.getRawValue() | json }}</pre>
+                        </div>
+
+                        <p>Button disabled: {{ registerForm.invalid || !registerForm.dirty }}</p> -->
+
+
+            
+            <button type="submit" class="continue-btn" id="continueBtn"
+            [class.active]="registerForm.valid && registerForm.dirty" 
+            [disabled]="registerForm.invalid || !registerForm.dirty">Continue</button>
+            
+            <div class="checkbox-group">
+                <label>
+                <input type="checkbox" id="terms" formControlName="terms">
+                </label>
+                <label for="terms">
+                I read and consented to the <a href="#" target="_blank">Terms and Conditions</a>
+                </label>
+                <div *ngIf="submitted && registerForm.get('terms')?.invalid" class="error">
+                You must agree to the terms.
+                </div>
+            </div>
+        </form>
+        
+        <div class="footer-text">
+            For further support, you may visit the Help Center or contact our<br>
+            customer service team.
+        </div>
+        
+        <div class="jumia-logo">JUMIA</div>
+    </div>
+    </div>

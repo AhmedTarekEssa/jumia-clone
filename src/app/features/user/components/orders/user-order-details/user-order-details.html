@@ -1,0 +1,127 @@
+<div class="order-container">
+  <!-- Header Section -->
+  <div class="order-header">
+    <h2>Order n° {{ orderData.orderNumber }}</h2>
+    <p class="order-meta">{{ orderData.itemCount }} Items</p>
+    <p class="order-meta">Placed on {{ orderData.placedDate }}</p>
+    <p class="order-meta">Total: EGP {{ orderData.total }}</p>
+  </div>
+
+  <!-- Items Section -->
+  <div class="items-section">
+    <h3 class="section-title">ITEMS IN YOUR ORDER</h3>
+
+    <div class="item-card" *ngFor="let item of orderData.items">
+      <div class="item-status">
+        <span class="status-badge" [ngClass]="'status-' + item.status">
+          {{ getStatusText(item.status) }}
+        </span>
+        <span class="status-date">On Thursday, {{ item.statusDate }}</span>
+      </div>
+
+      <div class="item-details">
+        <div class="item-image">
+          <img [src]="item.image" [alt]="item.name" />
+        </div>
+
+        <div class="item-info">
+          <h4>{{ item.name }}</h4>
+          <p class="quantity">QTY: {{ item.quantity }}</p>
+          <div class="price-info">
+            <span class="current-price">EGP {{ item.currentPrice }}</span>
+            <span class="original-price" *ngIf="item.originalPrice !== item.currentPrice">
+              EGP {{ item.originalPrice }}
+            </span>
+          </div>
+        </div>
+
+        <div class="item-actions">
+          <button
+            class="action-btn"
+            [ngClass]="'btn-' + item.status"
+            (click)="onActionButtonClick(item)">
+            {{ getActionButtonText(item.status) }}
+          </button>
+          <a
+            href="#"
+            class="status-link"
+            (click)="onStatusHistoryClick(item); $event.preventDefault()">
+            See Status History
+          </a>
+        </div>
+      </div>
+
+      <div class="return-notice" *ngIf="item.status === 'cancelled' || item.status === 'returned'">
+        <span class="return-icon">⊕</span>
+        <span *ngIf="item.status === 'cancelled'">
+          Product no longer eligible for return. Access our Return Policy.
+        </span>
+        <span *ngIf="item.status === 'returned'">
+          Item has been successfully returned. Refund processed.
+        </span>
+      </div>
+
+      <div class="tracking-notice" *ngIf="item.status === 'ongoing' || item.status === 'shipped'">
+        <span class="tracking-icon">📦</span>
+        <span *ngIf="item.status === 'ongoing'">
+          Your order is being prepared for shipment.
+        </span>
+        <span *ngIf="item.status === 'shipped'">
+          Your order has been shipped and is on the way!
+        </span>
+      </div>
+
+      <div class="pending-notice" *ngIf="item.status === 'pending'">
+        <span class="pending-icon">⏱️</span>
+        <span>Order is pending confirmation. We'll update you soon.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Information Sections -->
+  <div class="info-sections">
+    <div class="info-column">
+      <h3 class="section-title">PAYMENT INFORMATION</h3>
+
+      <div class="info-group">
+        <h4>Payment Method</h4>
+        <p>{{ paymentInfo.method }}</p>
+      </div>
+
+      <div class="info-group">
+        <h4>Payment Details</h4>
+        <p>Items total: EGP {{ paymentInfo.itemsTotal }}</p>
+        <p>Delivery Fees: EGP {{ paymentInfo.deliveryFees }}</p>
+        <p><strong>Total: EGP {{ paymentInfo.total }}</strong></p>
+      </div>
+    </div>
+
+    <div class="info-column">
+      <h3 class="section-title">DELIVERY INFORMATION</h3>
+
+      <div class="info-group">
+        <h4>Delivery Method</h4>
+        <p>{{ deliveryInfo.method }}</p>
+      </div>
+
+      <div class="info-group">
+        <h4>Shipping Address</h4>
+        <p>{{ deliveryInfo.address.name }}</p>
+        <p>{{ deliveryInfo.address.street }}</p>
+        <p>{{ deliveryInfo.address.area }}</p>
+        <p>{{ deliveryInfo.address.city }}</p>
+      </div>
+
+      <div class="info-group">
+        <h4>Shipping Details</h4>
+        <p>{{ deliveryInfo.details }}</p>
+        <p>{{ deliveryInfo.schedule }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Section -->
+  <div class="help-section">
+    <a href="#" class="help-link">Need Help?</a>
+  </div>
+</div>

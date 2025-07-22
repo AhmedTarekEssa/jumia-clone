@@ -23,27 +23,32 @@
         </button>
 
         <!-- Products container -->
-        <div #productContainer class="products-container">
+        <div *ngFor="let product of products" (click)="goToProductDetails(product.productId)" class="products-container">
             <div class="product-card">
                 <a class="text-decoration-none">
                     <!-- Discount badge -->
-                    <div class="discount-badge">
-                        %
-                    </div>
+                     @if (product.discount) {
+
+                         <div class="discount-badge">
+                             {{product.discountPercentage}}
+                         </div>
+                     }
 
                     <!-- Product image -->
                     <div class="product-image">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHf5n2IQep8_NEGfGaCc_zNJjaS2QfxW7XQw&s"
+                        <img [src]="base+product.imageUrl"
                             [alt]="">
                     </div>
 
                     <!-- Product info -->
                     <div class="product-info">
-                        <h3 class="product-name"></h3>
+                        <h3 class="product-name">{{product.name}}</h3>
                         <div class="product-price">
-                            <span class="final-price">EGP </span>
+                            @if(product.discount){
+                            <span class="final-price">EGP {{ product.basePrice | discountPrice:product.discountPercentage | number:'1.2-2' }}</span>
+                            }
                             <br>
-                            <span class="base-price">EGP </span>
+                            <span class="base-price">EGP {{product.basePrice}}</span>
                         </div>
 
                     </div>

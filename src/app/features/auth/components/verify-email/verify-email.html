@@ -1,0 +1,40 @@
+<div class="content">
+    <div class="verification-container">
+        <div class="star-icon"></div>
+        <h1>Verify your email address</h1>
+        <div *ngIf="errorMessage" class="error-alert"> {{ errorMessage }} </div>
+        <form [formGroup]="otpForm" (ngSubmit)="submitOtp()">
+            <div class="subtitle">We have sent a verification code to</div>
+            <div class="email">{{ tempEmail }}</div>
+            
+            <div class="code-inputs">
+                <input type="text" maxlength="1" class="code-input" formControlName="digit1" (input)="onInput($event, 0)" #otp0>
+                <input type="text" maxlength="1" class="code-input" formControlName="digit2" (input)="onInput($event, 1)" #otp1>
+                <input type="text" maxlength="1" class="code-input" formControlName="digit3" (input)="onInput($event, 2)" #otp2>
+                <input type="text" maxlength="1" class="code-input" formControlName="digit4" (input)="onInput($event, 3)" #otp3>
+            </div>
+
+            
+            <button class="submit-btn">Submit</button>
+        </form>
+        
+        <div class="resend-text" *ngIf="!resendEnabled">
+            Didn't receive the verification code? Request a new code in <span class="countdown">{{ countdownLabel }}</span>
+        </div>
+
+        <div class="resend-text" *ngIf="resendEnabled">
+            Didn't receive the code? 
+            <button class="resend-btn" (click)="resendCode()">Resend Code</button>
+        </div>
+
+        
+        <div class="footer-text">
+            For further <a href="#">support</a>, you may visit the Help Center or contact our<br>
+            customer service team.
+        </div>
+        
+        <div class="jumia-logo">JUMIA</div>
+    </div>
+</div>
+
+    

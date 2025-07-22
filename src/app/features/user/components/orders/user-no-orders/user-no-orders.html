@@ -1,0 +1,33 @@
+<div class="empty-orders">
+  <div class="empty-icon">
+    <div class="cart-icon">
+      <div class="cart-body">
+        <div class="cart-handle"></div>
+        <div class="cart-wheels">
+          <div class="wheel"></div>
+          <div class="wheel"></div>
+        </div>
+      </div>
+      <div class="packages">
+        <div class="package package-1"></div>
+        <div class="package package-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-content">
+    <h2 class="empty-title">You have placed no orders yet!</h2>
+    <p class="empty-description">
+      All your orders will be saved here for you to access their state anytime.
+    </p>
+
+    <a
+      class="continue-shopping-btn"
+      [routerLink]="['/home']"
+      routerLinkActive="router-link-active">
+      Continue Shopping
+    </a>
+  </div>
+
+
+</div>

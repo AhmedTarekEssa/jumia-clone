@@ -1,0 +1,24 @@
+<div class="order-item">
+  <div class="product-image">
+    <img [src]="productImage" [alt]="productName" />
+  </div>
+
+  <div class="order-details">
+    <h3 class="product-name">{{ productName }}</h3>
+    <p class="order-number">Order #{{ orderNumber }}</p>
+
+    <div class="order-status">
+      <span class="status-badge" [ngClass]="statusClass">
+        {{ statusDisplayText }}
+      </span>
+    </div>
+
+    <p class="order-date">On {{ date }}</p>
+  </div>
+
+  <div class="order-actions">
+    <button class="see-details-btn" (click)="onSeeDetails()">
+      See Details
+    </button>
+  </div>
+</div>
