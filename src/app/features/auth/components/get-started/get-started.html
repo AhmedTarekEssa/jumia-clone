@@ -1,0 +1,22 @@
+<div class="content">
+    <div class="success-container">
+        <div class="success-icon">
+            <svg class="star-icon" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <div class="checkmark"></div>
+        </div>
+        
+        <h1 class="success-title">Your account has been created!</h1>
+        
+        <p class="redirect-text">
+            You'll be redirected in <span class="countdown" id="countdown">{{ timeLeft }}</span> seconds
+        </p>
+        
+        <button class="get-started-btn" (click)="getStarted()">Get started</button>
+    </div>
+    
+    <div class="footer-logo">
+        JUMIA<span class="logo-dot"></span>
+    </div>
+    </div>

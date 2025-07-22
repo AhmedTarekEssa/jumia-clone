@@ -380,13 +380,35 @@
                             </ul>
                         </li>
                         
-                        <!-- Login -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
+                       <!-- Login Dropdown -->
+                            <li class="nav-item dropdown" [class.show]="dropdownVisible">
+                              <button
+                                class="nav-link dropdown-toggle btn btn-link"
+                                type="button"
+                                (click)="toggleDropdown($event)"
+                                [attr.aria-expanded]="dropdownVisible"
+                              >
                                 <i class="fas fa-user"></i>
                                 تسجيل الدخول
-                            </a>
-                        </li>
+                              </button>
+
+                              <ul class="dropdown-menu" [class.show]="dropdownVisible">
+                                <li>
+                                  <a 
+                                    class="dropdown-item" 
+                                    
+                                    (click)="navigateTo('/auth/login')">تسجيل</a>
+                                </li>
+                                <li>
+                                  <a 
+                                    class="dropdown-item" 
+                                     
+                                    (click)="navigateTo('/auth/register')">إنشاء حساب</a>
+                                </li>
+                              </ul>
+                            </li>
+
+
                     </ul>
                     
                     <!-- Search Bar -->
