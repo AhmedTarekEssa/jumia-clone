@@ -1,0 +1,27 @@
+<div class="center-wrapper">
+<div class="login-container">
+        <div class="logo"></div>
+        
+        <h1>Welcome to Jumia</h1>
+        <p class="subtitle">Type your e-mail or phone number to log in or create a Jumia account.</p>
+        
+        <form [formGroup]="checkEmailForm" (ngSubmit)="onSubmit()">
+            
+            <div class="form-group">
+                <label for="email">Email or Mobile Number<span class="required">*</span></label>
+                <input type="text" id="email" name="email" formControlName="email">
+                <div *ngIf="checkEmailForm.get('email')?.invalid && checkEmailForm.get('email')?.touched" class="text-danger">
+                    Valid email is required.
+                </div>
+            </div>
+            
+            <button type="submit" class="continue-btn">Continue</button>
+            
+            <p class="terms">By continuing you agree to Jumia's <a href="#">Terms and Conditions</a></p>
+        </form>
+        
+        <p class="support-text">For further support, you may visit the Help Center or contact our customer service team.</p>
+        
+        <div class="jumia-logo">JUMIA</div>
+    </div>
+    </div>
