@@ -1,0 +1,408 @@
+/* Main Container */
+.order-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Order Header */
+.order-header {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.order-header h2 {
+  margin: 0 0 15px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.order-meta {
+  margin: 8px 0;
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Section Titles */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Items Section */
+.items-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.item-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: box-shadow 0.2s ease;
+}
+
+.item-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.item-card:last-child {
+  margin-bottom: 0;
+}
+
+/* Status Section */
+.item-status {
+  background: #f9fafb;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Status Badge Colors */
+.status-cancelled {
+  background: #dc2626;
+  color: white;
+}
+
+.status-ongoing {
+  background: #2563eb;
+  color: white;
+}
+
+.status-pending {
+  background: #d97706;
+  color: white;
+}
+
+.status-returned {
+  background: #7c2d12;
+  color: white;
+}
+
+.status-shipped {
+  background: #059669;
+  color: white;
+}
+
+.status-date {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Item Details */
+.item-details {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.item-image img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  margin: 0 0 12px 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.quantity {
+  margin: 8px 0 12px 0;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.price-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.current-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.original-price {
+  font-size: 15px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+/* Item Actions */
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  min-width: 140px;
+}
+
+.action-btn {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 130px;
+  text-align: center;
+}
+
+/* Action Button Colors */
+.btn-cancelled {
+  background: #ff8c00;
+  color: white;
+}
+
+.btn-cancelled:hover {
+  background: #e67e00;
+  transform: translateY(-1px);
+}
+
+.btn-ongoing {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-ongoing:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-pending {
+  background: #d97706;
+  color: white;
+}
+
+.btn-pending:hover {
+  background: #b45309;
+  transform: translateY(-1px);
+}
+
+.btn-returned {
+  background: #059669;
+  color: white;
+}
+
+.btn-returned:hover {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.btn-shipped {
+  background: #7c3aed;
+  color: white;
+}
+
+.btn-shipped:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+.status-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.status-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Notice Sections */
+.return-notice,
+.tracking-notice,
+.pending-notice {
+  padding: 15px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.return-notice {
+  background: #fef2f2;
+  border-top-color: #fecaca;
+}
+
+.tracking-notice {
+  background: #f0f9ff;
+  border-top-color: #bae6fd;
+}
+
+.pending-notice {
+  background: #fffbeb;
+  border-top-color: #fed7aa;
+}
+
+.return-icon,
+.tracking-icon,
+.pending-icon {
+  font-size: 16px;
+}
+
+/* Information Sections */
+.info-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.info-column {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.info-group {
+  margin-bottom: 25px;
+}
+
+.info-group:last-child {
+  margin-bottom: 0;
+}
+
+.info-group h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.info-group p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.info-group p:last-child {
+  margin-bottom: 0;
+}
+
+/* Help Section */
+.help-section {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+}
+
+.help-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.help-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .order-container {
+    padding: 15px;
+  }
+
+  .info-sections {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .item-details {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .item-actions {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .action-btn {
+    min-width: auto;
+  }
+
+  .item-image {
+    align-self: center;
+  }
+
+  .order-header {
+    padding: 20px;
+  }
+
+  .items-section,
+  .info-column {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .item-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .status-date {
+    font-size: 13px;
+  }
+
+  .order-header h2 {
+    font-size: 24px;
+  }
+}

@@ -1,13 +1,17 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth-guard';
+import { AuthGuard } from './core/guards/auth-guard';
 import { adminGuard } from './core/guards/admin-guard';
 import { sellerGuard } from './core/guards/seller-guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     loadComponent: () => import('./features/home/home-container/home-container').then(m => m.HomeContainer),
     pathMatch: 'full'
+  },
+  {
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
   },
   {
     path: 'categories',
@@ -35,7 +39,7 @@ export const routes: Routes = [
   {
     path: 'user',
     loadChildren: () => import('./features/user/user.routes').then(m => m.routes),
-    canActivate: [authGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'cart',
