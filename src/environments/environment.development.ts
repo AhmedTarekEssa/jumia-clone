@@ -1,5 +1,17 @@
 export const environment = {
 
+
+    production: false,
+    apiUrl: 'http://localhost:5087/api',
+    authRoutes: {
+        login: '/auth/login',
+        register: '/auth/register',
+        checkEmail: '/Auth/email-check',
+        verifyOtp: '/auth/verify-otp',
+        logout: '/auth/logout',
+    }
+,
+
     BaseUrlPath : "http://localhost:5087/api",
     ImageUrlBase:`http://localhost:5087`,
     Product:{
@@ -32,7 +44,7 @@ export const environment = {
     AddItem: (productId: number) => `/Wishlist/items/${productId}`,
     RemoveItem: (id: number) => `/Wishlist/items/${id}`
   },
-  
+
   Categories: {
 
     GetAll: (includeSubcategories: boolean = true) =>
@@ -45,9 +57,21 @@ export const environment = {
 
     GetDescendants: (id: number) => `/Categories/${id}/descendants`,
     GetMainCategories: "/Categories/main",
-
     GetAttributes: (parentId: number) => `/Categories/${parentId}/attributes`,
+
+  },
+  Orders: {
+    GetAll: "Order",
+    GetById: (id: number) => `Order/get-by-id/${id}`,
+    Create: "Order",
+    UpdateStatus: (id: number) => `Order/${id}/status`,
+    GetByUserId: (userId: string) => `Order/customer/${userId}`,
+    getCurrentUserOrders: "Order/current-customer"
   }
 
-};
+  };
+
+
+
+
 

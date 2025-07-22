@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserOngoingDelivered } from './user-ongoing-delivered';
+import { OrderItem } from './order-item';
 
-describe('UserOngoingDelivered', () => {
-  let component: UserOngoingDelivered;
-  let fixture: ComponentFixture<UserOngoingDelivered>;
+describe('OrderItem', () => {
+  let component: OrderItem;
+  let fixture: ComponentFixture<OrderItem>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserOngoingDelivered]
+      imports: [OrderItem]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserOngoingDelivered);
+    fixture = TestBed.createComponent(OrderItem);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
