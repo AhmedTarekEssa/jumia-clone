@@ -1,486 +1,104 @@
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-
-<!-- Top Banner -->
-<!-- <div class="top-banner">
-  <div class="flash-sale">
-    <div class="call-to-order">
-      <span>Call To Order</span>
-      <span class="phone-number">17269</span>
-    </div>
-    <div class="flash-sale-text">Flash Sale</div>
-    <div class="limited-time">Limited Time Savings!</div>
-  </div>
-  <div class="secondary-top-bar">
-    <a href="/auth/register-seller" class="sell-on-jumia-link">
-      <div class="sell-on-jumia">
-        <img src="/images/header/star.png" alt="Sell Icon" class="small-icon">
-        <span>Sell on Jumia</span>
-      </div>
-    </a>
-    <div class="jumia-pay">
-      <img src="/images/jumiaLogo.png" alt="Jumia Logo" class="jumia-logo">
-    </div>
-  </div>
-</div> -->
-
-<!-- Main Header -->
-<!-- <div class="main-header">
-  <div class="header-container"> -->
-
-    <!-- Logo -->
-    <!-- <div class="logo">
-      <a href="/">
-        <img src="/images/jumiaLogo.png" alt="Jumia Logo">
-      </a>
-    </div> -->
-
-    <!-- Search Box -->
-    <!-- <div class="search-box">
-      <form class="search-form">
-        <input 
-          type="text" 
-          name="searchQuery"
-          placeholder="Search products, brands and categories">
-        <button type="submit" class="search-button">Search</button>
-      </form> -->
-
-      <!-- Search Dropdown -->
-      <!-- <div class="search-results-dropdown">
-        <div class="loading-indicator">Searching...</div>
-
-        <ul class="search-results-list">
-          <li class="search-result-item">
-            <div class="search-result-content">
-              <div class="search-result-image">
-                <img src="/images/sample-product.jpg" alt="Sample Product">
-              </div>
-              <div class="search-result-details">
-                <div class="search-result-name">Sample Product Name</div>
-                <div class="search-result-category">Sample Category</div>
-                <div class="search-result-price">
-                  <span class="final-price">EGP 99.99</span>
-                  <span class="base-price">EGP 149.99</span>
-                  <span class="discount-badge">-33%</span>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="view-all-results">View all 12 results</li>
-          <li class="no-results">No products found matching "Search Query"</li>
-        </ul>
-      </div>
-    </div> -->
-
-    <!-- Right Navigation -->
-    <!-- <div class="right-nav">
-      <div class="header-wrapper">
-        <div class="bottom-header">
-          <div class="nav-controls d-flex"> -->
-
-            <!-- Account -->
-            <!-- <div class="account-section">
-              <div class="account-button">
-                <img src="/images/header/account.png" alt="Account" class="nav-icon">
-                <span>Account</span>
-                <i class="arrow-down"></i>
-              </div> -->
-
-              <!-- <div class="account-dropdown"> -->
-                <!-- Default: unauthenticated -->
-                <!-- <div class="sign-in-button">Sign In</div>
-                <ul class="account-menu">
-                  <li>
-                    <img src="/images/header/account.png" alt="Register" class="menu-icon">
-                    <span>Create Account</span>
-                  </li>
-                  <li>
-                    <img src="/images/header/star.png" alt="Seller Registration" class="menu-icon">
-                    <span>Sell on Jumia</span>
-                  </li>
-                </ul> -->
-
-                <!-- Example Authenticated (optional preview) -->
-                <!--
-                <ul class="account-menu">
-                  <li>
-                    <img src="/images/header/account.png" alt="My Account" class="menu-icon">
-                    <span>My Account</span>
-                  </li>
-                  <li>
-                    <img src="/images/header/order.png" alt="Orders" class="menu-icon">
-                    <span>Orders</span>
-                  </li>
-                  <li>
-                    <img src="/images/header/wishList.png" alt="Wishlist" class="menu-icon">
-                    <span>Wishlist</span>
-                  </li>
-                  <li>
-                    <img src="/images/header/account.png" alt="Logout" class="menu-icon">
-                    <span>Logout</span>
-                  </li>
-                </ul>
-                -->
-              <!-- </div>
-            </div> -->
-
-            <!-- Cart -->
-            <!-- <div class="cart-button">
-              <img src="/images/header/cart.png" alt="Cart" class="nav-icon">
-              <span>Cart</span>
-              <span class="cart-count">0</span>
-            </div> -->
-
-          <!-- </div>
-        </div>
-      </div>
-    </div> -->
-<!-- 
-  </div>
-</div> -->
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jumia Style Header</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .main-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-bottom: 1px solid #e9ecef;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #ff6900 !important;
-            text-decoration: none;
-        }
-        
-        .navbar-brand:hover {
-            color: #e55a00 !important;
-        }
-        
-        .search-container {
-            position: relative;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .search-input {
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 12px 50px 12px 20px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #ff6900;
-            box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.1);
-        }
-        
-        .search-btn {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #ff6900;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .search-btn:hover {
-            background: #e55a00;
-            transform: translateY(-50%) scale(1.02);
-        }
-        
-        .nav-item {
-            margin: 0 10px;
-        }
-        
-        .nav-link {
-            color: #6c757d !important;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .nav-link:hover {
-            color: #ff6900 !important;
-            background: rgba(255, 105, 0, 0.1);
-            transform: translateY(-1px);
-        }
-        
-        .dropdown-toggle::after {
-            margin-right: 8px;
-        }
-        
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            padding: 10px 0;
-        }
-        
-        .dropdown-item {
-            padding: 8px 20px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown-item:hover {
-            background: rgba(255, 105, 0, 0.1);
-            color: #ff6900;
-        }
-        
-        .badge-orange {
-            background: #ff6900;
-            color: white;
-            border-radius: 50%;
-            padding: 4px 8px;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-        
-        .help-icon {
-            background: #17a2b8;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            margin-right: 5px;
-        }
-        
-        @media (max-width: 768px) {
-            .search-container {
-                max-width: 100%;
-                margin: 10px 0;
-            }
-            
-            .navbar-nav {
-                text-align: center;
-                margin-top: 10px;
-            }
-            
-            .nav-item {
-                margin: 5px 0;
-            }
-        }
-        
-        .navbar-toggler {
-            border: none;
-            padding: 4px 8px;
-        }
-        
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-        
-        .navbar-collapse {
-            flex-grow: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jumia Style Header</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+
+  </style>
 </head>
 <body>
   <div class="top-banner">
-  <!-- Banner content remains unchanged -->
-  <div class="flash-sale">
-    <div class="call-to-order">
-      <span>Call To Order</span>
-      <span class="phone-number">17269</span>
-    </div>
-    <div class="flash-sale-text">Flash Sale</div>
-    <div class="limited-time">Limited Time Savings!</div>
-  </div>
-  <div class="secondary-top-bar">
-    <a routerLink="/auth/register-seller" class="sell-on-jumia-link">
-    <div class="sell-on-jumia">
-      <img src="/images/header/star.png" alt="Sell Icon" class="small-icon">
-      <span>Sell on Jumia</span>
-    </div>
-  </a>
-    <div class="jumia-pay">
-      <img src="/images/jumiaLogo.png" alt="Jumia Logo" class="jumia-logo">
-      <!-- <img src="assets/icons/jumia-pay.png" alt="Jumia Pay" class="jumia-pay-logo"> -->
-    </div>
-    <!-- <div class="language-selector">
-      <span class="english">English</span>
-      <span class="arabic">عربي</span>
-    </div> -->
-  </div>
-</div>
-    <header class="main-header">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <!-- Brand -->
-                <a class="navbar-brand" href="#">
-                    JUMIA<span style="color: #f0c14b;">●</span>
-                </a>
-                
-                <!-- Mobile toggle button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <!-- Navigation Items -->
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <!-- Cart -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-shopping-cart"></i>
-                                سلة التسوق
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">عرض السلة</a></li>
-                                <li><a class="dropdown-item" href="#">الدفع</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">تتبع الطلب</a></li>
-                            </ul>
-                        </li>
-                        
-                        <!-- Help -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <span class="help-icon">?</span>
-                                المساعدة
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">الأسئلة الشائعة</a></li>
-                                <li><a class="dropdown-item" href="#">اتصل بنا</a></li>
-                                <li><a class="dropdown-item" href="#">سياسة الإرجاع</a></li>
-                            </ul>
-                        </li>
-                        
-                        <!-- Login -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-user"></i>
-                                تسجيل الدخول
-                            </a>
-                        </li>
-                    </ul>
-                    
-                    <!-- Search Bar -->
-                    <div class="search-container">
-                        <form class="d-flex" role="search">
-                            <input class="search-input" type="search" placeholder="البحث عن منتجات، والعلامات التجارية والأقسام..." aria-label="Search">
-                            <button class="search-btn" type="submit">البحث</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="mainHomeContainer container">
-
-<div class="jumia-container">
-  <!-- Left Sidebar -->  
-   <app-category-list></app-category-list>
-
-  <!-- Main Content Area -->
-  <div class="main-content mt-4">
-    <!-- Banner Slider -->
-    <section class="slider-section">  
-        <app-center-slider></app-center-slider>
-      <!-- <app-center-slider></app-center-slider> -->
-    </section>
-
-  </div>
-
-  <!-- Right Sidebar -->
-   <div class="wrapper-right-sidebar">
-  <div class="right-sidebar">
-    <!-- Join Jumia Section -->
-    <a href="/auth/register-seller" class="sell-on-jumia-link">
-    <div class="sidebar-section join-jumia">
-      <div class="icon-container">
-        <img src="/images/header/star.png" alt="Join Jumia Icon" width="30" height="30">
+    <div class="flash-sale">
+      <div class="call-to-order">
+        <span>Call To Order</span>
+        <span class="phone-number">17269</span>
       </div>
-      <div class="section-content">
-        <h3>Join Jumia</h3>
-        <p>as a Sales Consultant</p>
-      </div>
+      <div class="flash-sale-text">Flash Sale</div>
+      <div class="limited-time">Limited Time Savings!</div>
     </div>
-    </a>
-
-    <!-- Sell on Jumia Section -->
-    <a href="/auth/register-seller" class="sell-on-jumia-link">
-    <div class="sidebar-section sell-jumia">
-      <div class="icon-container">
-        <img src="/images/header/money.png" alt="Sell on Jumia Icon" width="30" height="30">
-      </div>
-      <div class="section-content">
-        <h3>Sell on JUMIA</h3>
-        <p>And Grow Your Business</p>
-      </div>
-    </div>
-    </a>
-
-    <!-- Warranty Section -->
-    <a routerLink="/warranty" class="warranty-link">
-    <div class="sidebar-section warranty">
-      <div class="icon-container">
-        <img src="/images/header/warrenty.png" alt="Warranty Icon" width="30" height="30">
-      </div>
-      <div class="section-content">
-        <h3>Warranty</h3>
-        <p>On Your Purchases</p>
-      </div>
-    </div>
-    </a>
-
-    <!-- Buy Now Pay Later Banner -->
-    <div class="sidebar-banner mt-4">
-      <img src="/images/header/buyNow.PNG" alt="Buy Now Pay Later" class="banner-image">
-    </div>
-  </div>
-</div>
-</div>
-    
-    <!-- Demo Content -->
-    <!-- <div class="container mt-4">
-        <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle me-2"></i>
-            هذا مثال على تصميم رأس الصفحة بأسلوب جوميا باستخدام Bootstrap و HTML/CSS
+    <div class="secondary-top-bar">
+      <a routerLink="/auth/register-seller" class="sell-on-jumia-link">
+        <div class="sell-on-jumia">
+          <img src="/images/header/star.png" alt="Sell Icon" class="small-icon">
+          <span>Sell on Jumia</span>
         </div>
-        
-        <div class="row">
-            <div class="col-12">
-                <h2>مرحباً بك في متجرنا</h2>
-                <p>اكتشف أحدث المنتجات والعروض المميزة</p>
-            </div>
-        </div>
-    </div> -->
+      </a>
+      <div class="jumia-pay">
+        <img src="/images/jumiaLogo.png" alt="Jumia Logo" class="jumia-logo">
+      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  </div>
+
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          JUMIA<span style="color: #f0c14b;">●</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">View Cart</a></li>
+                <li><a class="dropdown-item" href="#">Checkout</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Track Order</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <span class="help-icon">?</span>
+                Help
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">FAQs</a></li>
+                <li><a class="dropdown-item" href="#">Contact Us</a></li>
+                <li><a class="dropdown-item" href="#">Return Policy</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fas fa-user"></i>
+                Login
+              </a>
+            </li>
+          </ul>
+          <div class="search-container">
+            <form class="d-flex" role="search">
+              <input class="search-input" type="search" placeholder="Search for products, brands and categories..." aria-label="Search">
+              <button class="search-btn" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="mainHomeContainer container">
+    <div class="jumia-container">
+      <app-category-list></app-category-list>
+
+      <div class="main-content mt-4">
+        <section class="slider-section">  
+          <app-center-slider></app-center-slider>
+        </section>
+      </div>
+
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
