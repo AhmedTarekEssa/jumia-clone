@@ -8,9 +8,9 @@ export const environment = {
         register: '/auth/register',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
-        logout: '/auth/logout',   
+        logout: '/auth/logout',
     }
-};
+,
 
     BaseUrlPath : "http://localhost:5087/api",
     ImageUrlBase:`http://localhost:5087`,
@@ -44,7 +44,7 @@ export const environment = {
     AddItem: (productId: number) => `/Wishlist/items/${productId}`,
     RemoveItem: (id: number) => `/Wishlist/items/${id}`
   },
-  
+
   Categories: {
 
     GetAll: (includeSubcategories: boolean = true) =>
@@ -68,10 +68,10 @@ export const environment = {
     GetByUserId: (userId: string) => `Order/customer/${userId}`,
     getCurrentUserOrders: "Order/current-customer"
   }
-    
-  
+
+  };
 
 
-};
+
 
 
