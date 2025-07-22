@@ -8,13 +8,13 @@ import { ProductDetailC } from './features/products/components/product-detail/pr
 import { CartItems } from "./features/cart/components/cart-items/cart-items";
 import { ProductGrid } from "./shared/components/product-containers/product-grid/product-grid";
 import { CategoryShowcase } from "./features/home/components/category-showcase/category-showcase";
+import { ProductReviews } from "./features/products/components/product-reviews/product-reviews";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, CartItems, ProductGrid, CategoryShowcase],
+  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, CartItems, ProductGrid, CategoryShowcase, ProductReviews],
 
 
-  imports: [RouterOutlet, NavbarMain, HomeContainer],
 
   templateUrl: './app.html',
   styleUrl: './app.css'
