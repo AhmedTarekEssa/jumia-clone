@@ -6,7 +6,6 @@ import { environment } from '../../../../environments/environment.development';
 import { CategoryCreateUpdate } from '../../../shared/models/category-create-update';
 import { CategoryDescendants } from '../../../shared/models/category-descendants';
 import { MainCategory } from '../../../shared/models/main-category';
-import { ParsedCategoryAttribute } from '../../../shared/models/parsed-category-attribute';
 import { CategoryAttribute } from '../../../shared/models/category-attribute';
 
 @Injectable({

@@ -11,6 +11,7 @@ import { ProductDetailC } from './features/products/components/product-detail/pr
 import { CartItems } from "./features/cart/components/cart-items/cart-items";
 import { ProductGrid } from "./shared/components/product-containers/product-grid/product-grid";
 import { CategoryShowcase } from "./features/home/components/category-showcase/category-showcase";
+
 import { Dashboard } from "./features/seller/components/dashboard/dashboard";
 import { DashboardComponent } from './features/admin/components/dashboard/dashboard';
 import { AdminSidebar } from "./features/admin/components/admin-sidebar/admin-sidebar";
@@ -20,13 +21,19 @@ import { AdminStats } from "./features/admin/components/stats/admin-stats/admin-
 import { AdminCategories } from "./features/admin/components/categories/admin-categories/admin-categories";
 import { AdminContainer } from "./features/admin/admin-container/admin-container";
 
+import { ProductReviews } from "./features/products/components/product-reviews/product-reviews";
+
+
 @Component({
   selector: 'app-root',
+
 
   imports: [RouterOutlet, NavbarMain, HomeContainer, DashboardComponent, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, Dashboard, AdminSidebar, AdminHeader, AdminSettings, AdminStats, AdminCategories, AdminContainer],
 
 
- 
+
+
+
 
 
   templateUrl: './app.html',

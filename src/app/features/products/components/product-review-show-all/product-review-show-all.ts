@@ -1,20 +1,18 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { IReview,  } from '../../../../shared/models/ireview';
-import { IReviewService } from '../../../../core/services/ReviewService/ireview-service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { IReview } from '../../../../shared/models/ireview';
 import { IReviewCreate } from '../../../../shared/models/ireview-create';
-import { RouterLink } from '@angular/router';
+import { IReviewService } from '../../../../core/services/ReviewService/ireview-service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-product-reviews',
-  templateUrl: './product-reviews.html',
-  styleUrls: ['./product-reviews.css'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink]
+  selector: 'app-product-review-show-all',
+  imports: [FormsModule,CommonModule],
+  templateUrl: './product-review-show-all.html',
+  styleUrl: './product-review-show-all.css'
 })
-export class ProductReviews implements OnInit {
-
+export class ProductReviewShowAll {
   reviews: IReview[] = [];
   averageRating = 0;
 
@@ -22,7 +20,7 @@ export class ProductReviews implements OnInit {
   showReviewForm = false;
   
 
-  customerId = 1; // Simulate for now
+  customerId = 2; // Simulate for now
   productId = 4; // Make dynamic later
 
   newReview: IReviewCreate = {
@@ -34,15 +32,20 @@ export class ProductReviews implements OnInit {
 
   constructor(
     private reviewService: IReviewService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+      private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.loadReviews();
-  }
-
-  Print() {
-    console.log('Print');
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    if (id) {
+      this.productId = +id;
+      this.newReview.productID = this.productId; // also update the form model
+      this.loadReviews();
+    }
+    this.cdr.detectChanges();
+  });
   }
 
   loadReviews() {
@@ -59,6 +62,30 @@ export class ProductReviews implements OnInit {
       }
     });
   }
+
+
+  pageSize = 5;
+currentPage = 1;
+
+get totalPages(): number {
+  return Math.ceil(this.reviews.length / this.pageSize);
+}
+
+get paginatedReviews(): IReview[] {
+  const sorted = [...this.reviews].sort((a, b) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  return sorted.slice(startIndex, startIndex + this.pageSize);
+}
+
+goToPage(page: number) {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+  }
+}
+
 
   calculateAverage() {
     const total = this.reviews.reduce((sum, r) => sum + r.stars, 0);

@@ -7,7 +7,7 @@ export const routes: Routes = [
     component: UserContainer,
     children: [
       { path: 'profile', loadComponent: () => import('./components/profile/profile').then(m => m.Profile) },
-      { path: 'orders', loadComponent: () => import('./components/orders//user-order-container/user-order-container').then(m => m.UserOrderContainer) },
+      { path: 'orders', loadComponent: () => import('./components/orders/user-order-container/user-order-container').then(m => m.UserOrderContainer) },
       {path: 'order-details/:orderId', loadComponent: () => import('./components/orders/user-order-details/user-order-details').then(m => m.UserOrderDetails) },
       { path: 'wishlist', loadComponent: () => import('./components/wishlist/wishlist').then(m => m.Wishlist) },
       { path: 'account-details', loadComponent: () => import('./components/account-details/account-details').then(m => m.AccountDetails) },

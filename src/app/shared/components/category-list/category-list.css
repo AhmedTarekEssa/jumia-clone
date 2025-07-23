@@ -1,5 +1,5 @@
 .sidebar {
-  direction: rtl;
+  direction: ltr; /* Changed from rtl to ltr */
   background: #fff;
   width: 250px;
   font-family: 'Arial', sans-serif;
@@ -22,14 +22,14 @@
 }
 
 .category-item i {
-  margin-left: 8px;
+  margin-right: 8px; /* Changed from margin-left to margin-right */
   color: #ff6f00;
 }
 
 .mega-menu {
   position: absolute;
   top: 0;
-  right: 250px;
+  left: 250px; /* Changed from right to left */
   background-color: #fff;
   width: 700px;
   min-height: 100%;
@@ -47,7 +47,7 @@
 
 .mega-column {
   flex: 1;
-  margin-left: 20px;
+  margin-right: 20px; /* Changed from margin-left to margin-right */
 }
 
 .column-title {
@@ -76,7 +76,7 @@
 
 .brand-column {
   max-width: 180px;
-  margin-right: 20px;
+  margin-left: 20px; /* Changed from margin-right to margin-left */
   text-align: center;
 }
 
