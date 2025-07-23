@@ -1,1 +1,163 @@
-<p>promotions works!</p>
+<div class="promotions">
+  <div class="page-header">
+    <div class="header-content">
+      <h2>Promotions & Discounts</h2>
+      <p>Create and manage promotional campaigns for your products</p>
+    </div>
+    <button class="btn-primary" (click)="toggleCreateForm()">
+      {{ showCreateForm ? 'Cancel' : '+ Create Promotion' }}
+    </button>
+  </div>
+
+  <div class="create-form" *ngIf="showCreateForm">
+    <div class="form-card">
+      <h3>Create New Promotion</h3>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Title</label>
+          <input
+            type="text"
+            [(ngModel)]="newPromotion.title"
+            placeholder="Enter promotion title">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            [(ngModel)]="newPromotion.description"
+            placeholder="Describe your promotion"
+            rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Discount Type</label>
+            <select [(ngModel)]="newPromotion.discountType">
+              <option value="percentage">Percentage (%)</option>
+              <option value="fixed">Fixed Amount ($)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Discount Value</label>
+            <input
+              type="number"
+              [(ngModel)]="newPromotion.discountValue"
+              [placeholder]="newPromotion.discountType === 'percentage' ? 'Enter percentage' : 'Enter amount'">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input
+              type="date"
+              [(ngModel)]="newPromotion.startDate">
+          </div>
+
+          <div class="form-group">
+            <label>End Date</label>
+            <input
+              type="date"
+              [(ngModel)]="newPromotion.endDate">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          class="btn-create"
+          (click)="createPromotion()"
+          [disabled]="!isValidPromotion()">
+          Create Promotion
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="promotions-stats">
+    <div class="stat-item">
+      <span class="stat-number">{{promotions.length}}</span>
+      <span class="stat-label">Total Promotions</span>
+    </div>
+    <div class="stat-item">
+      <!-- <span class="stat-number">{{promotions.filter(p => p.status === 'active').length}}</span> -->
+      <span class="stat-label">Active</span>
+    </div>
+    <div class="stat-item">
+      <!-- <span class="stat-number">{{promotions.filter(p => p.status === 'expired').length}}</span> -->
+      <span class="stat-label">Expired</span>
+    </div>
+  </div>
+
+  <div class="promotions-list">
+    <div class="promotion-card" *ngFor="let promotion of promotions">
+      <div class="promotion-header">
+        <div class="promotion-title">
+          <h3>{{promotion.title}}</h3>
+          <span class="discount-badge">
+            {{getDiscountDisplay(promotion)}} OFF
+          </span>
+        </div>
+        <div class="promotion-status">
+          <span class="status-badge" [class]="getStatusClass(promotion.status)">
+            {{promotion.status | titlecase}}
+          </span>
+        </div>
+      </div>
+
+      <div class="promotion-content">
+        <p class="promotion-description">{{promotion.description}}</p>
+
+        <div class="promotion-details">
+          <div class="detail-item">
+            <span class="label">Start Date:</span>
+            <span class="value">{{promotion.startDate | date:'mediumDate'}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">End Date:</span>
+            <span class="value">{{promotion.endDate | date:'mediumDate'}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Applicable Products:</span>
+            <span class="value">{{promotion.applicableProducts}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="promotion-actions">
+        <button
+          class="btn-action edit"
+          title="Edit Promotion">
+          ✏️ Edit
+        </button>
+        <button
+          *ngIf="promotion.status !== 'expired'"
+          class="btn-action toggle"
+          [class.active]="promotion.status === 'active'"
+          (click)="togglePromotionStatus(promotion.id)"
+          [title]="promotion.status === 'active' ? 'Deactivate' : 'Activate'">
+          {{promotion.status === 'active' ? '⏸️ Deactivate' : '▶️ Activate'}}
+        </button>
+        <button
+          class="btn-action delete"
+          (click)="deletePromotion(promotion.id)"
+          title="Delete Promotion">
+          🗑️ Delete
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="promotions.length === 0" class="no-promotions">
+      <div class="empty-state">
+        <div class="empty-icon">🎯</div>
+        <h3>No promotions yet</h3>
+        <p>Create your first promotional campaign to boost sales.</p>
+        <button class="btn-primary" (click)="toggleCreateForm()">
+          Create Your First Promotion
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

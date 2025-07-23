@@ -1,1 +1,23 @@
-<p>seller-container works!</p>
+<div class="seller-container">
+  <app-seller-sidebar
+    [isCollapsed]="isSidebarCollapsed"
+    (toggleSidebar)="toggleSidebar()">
+  </app-seller-sidebar>
+
+  <main class="main-content" [class.expanded]="isSidebarCollapsed">
+    <header class="top-bar">
+      <button class="menu-toggle" (click)="toggleSidebar()">
+        <span class="hamburger"></span>
+      </button>
+      <h1>Seller Dashboard</h1>
+      <div class="user-info">
+        <span>Welcome, Seller</span>
+        <div class="avatar">S</div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
