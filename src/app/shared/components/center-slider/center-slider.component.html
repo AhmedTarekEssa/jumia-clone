@@ -1,26 +1,65 @@
 <!-- shared/center-slider/center-slider.component.html -->
+ <div class="slider-and-sidebar">
 <div class="center-slider-container">
-    <div class="center-slider-track" [style.transform]="'translateX(' + translateValue + 'px)'">
-      <div *ngFor="let image of images" class="center-slider-slide">
-        <a [routerLink]="image.link">
-          <img [src]="image.image" alt="Promo banner">
-        </a>
-      </div>
-    </div>
-    <div class="center-slider-controls">
-      <button class="center-slider-control prev" (click)="prevSlide()">
-        &#10094;
-      </button>
-      <button class="center-slider-control next" (click)="nextSlide()">
-        &#10095;
-      </button>
-    </div>
-    <div class="center-slider-indicators">
-      <span 
-        *ngFor="let image of images; let i = index" 
-        class="indicator" 
-        [class.active]="i === currentSlide"
-        (click)="goToSlide(i)">
-      </span>
+  <div class="center-slider-track" [style.transform]="'translateX(' + translateValue + 'px)'">
+    <div *ngFor="let image of images" class="center-slider-slide">
+      <a [routerLink]="image.link">
+        <img [src]="image.image" alt="Promo banner">
+      </a>
     </div>
   </div>
+  <div class="center-slider-controls">
+    <button class="center-slider-control prev" (click)="prevSlide()">
+      &#10094;
+    </button>
+    <button class="center-slider-control next" (click)="nextSlide()">
+      &#10095;
+    </button>
+  </div>
+  <div class="center-slider-indicators">
+    <span *ngFor="let image of images; let i = index" class="indicator" [class.active]="i === currentSlide"
+      (click)="goToSlide(i)">
+    </span>
+  </div>
+</div>
+<div class="wrapper-right-sidebar">
+  <div class="right-sidebar">
+    <a href="/auth/register-seller" class="sell-on-jumia-link">
+      <div class="sidebar-section join-jumia">
+        <div class="icon-container">
+          <img src="/images/header/star.png" alt="Join Jumia Icon" width="30" height="30">
+        </div>
+        <div class="section-content">
+          <h3>Join Jumia</h3>
+          <p>as a Sales Consultant</p>
+        </div>
+      </div>
+    </a>
+    <a href="/auth/register-seller" class="sell-on-jumia-link">
+      <div class="sidebar-section sell-jumia">
+        <div class="icon-container">
+          <img src="/images/header/money.png" alt="Sell on Jumia Icon" width="30" height="30">
+        </div>
+        <div class="section-content">
+          <h3>Sell on JUMIA</h3>
+          <p>And Grow Your Business</p>
+        </div>
+      </div>
+    </a>
+    <a routerLink="/warranty" class="warranty-link">
+      <div class="sidebar-section warranty">
+        <div class="icon-container">
+          <img src="/images/header/warrenty.png" alt="Warranty Icon" width="30" height="30">
+        </div>
+        <div class="section-content">
+          <h3>Warranty</h3>
+          <p>On Your Purchases</p>
+        </div>
+      </div>
+    </a>
+    <div class="sidebar-banner mt-4">
+      <img src="/images/header/buyNow.PNG" alt="Buy Now Pay Later" class="banner-image">
+    </div>
+  </div>
+</div>
+</div>

@@ -11,7 +11,7 @@ import { ImageContainer } from "../../../shared/components/image-container/image
 
 @Component({
   selector: 'app-home-container',
-  imports: [NavbarMain, FlashSale, AllEssentials, CategoryShowcase, MegaSale, InfoComponent, FooterMain, PromoSliderComponent, ImageContainer],
+  imports: [ FlashSale, AllEssentials, CategoryShowcase, MegaSale, InfoComponent,  PromoSliderComponent, ImageContainer],
   templateUrl: './home-container.html',
   styleUrl: './home-container.css'
 })
