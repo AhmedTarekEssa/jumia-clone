@@ -1,11 +1,21 @@
-import { Component } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { AdminSidebar } from "../admin-sidebar/admin-sidebar";
+import { Actions } from "../actions/actions";
+import { AdminStats } from "../stats/admin-stats/admin-stats";
+import { Activity } from "../activity/activity";
+
 
 @Component({
-  selector: 'app-dashboard',
-  imports: [],
+  standalone: true,
+  selector: 'app-dashboard-component',
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrls: ['./dashboard.css'],
+  imports: [CommonModule, FormsModule, AdminSidebar, Actions, AdminStats, Activity]
 })
-export class Dashboard {
-
+export class DashboardComponent {
+  
+   
 }

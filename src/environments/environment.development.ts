@@ -8,9 +8,11 @@ export const environment = {
         register: '/auth/register',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
+
         logout: '/auth/logout',
     }
 ,
+
 
     BaseUrlPath : "http://localhost:5087/api",
     ImageUrlBase:`http://localhost:5087`,

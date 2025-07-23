@@ -14,29 +14,29 @@ export class OrderService {
 
 
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetAll}`);
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetAll}`,{withCredentials: true});
   }
   getCurrentUserOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.getCurrentUserOrders}`);
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.getCurrentUserOrders}`,{withCredentials: true});
   }
 
 
   getOrderById(id: number): Observable<Order> {
-    return this.http.get<Order>(`${this.baseUrl}${environment.Orders.GetById(id)}`);
+    return this.http.get<Order>(`${this.baseUrl}${environment.Orders.GetById(id)}`,{withCredentials: true});
   }
 
 
   createOrder(order: any): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}${environment.Orders.Create}`, order);
+    return this.http.post<Order>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
   }
 
 
   updateOrderStatus(id: number, status: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}${environment.Orders.UpdateStatus(id)}`, { status });
+    return this.http.put(`${this.baseUrl}${environment.Orders.UpdateStatus(id)}`, { status },{withCredentials: true});
   }
 
 
   getOrdersByUserId(userId: string): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`);
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`,{withCredentials: true});
   }
 }
