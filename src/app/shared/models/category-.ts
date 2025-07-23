@@ -5,5 +5,5 @@ export interface Category {
   imageSrc: string;
   parentCategoryId: number;
   parentCategory: string;
-  subCategories: string[];
+  subCategories: Category[];
 }

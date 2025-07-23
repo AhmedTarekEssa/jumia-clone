@@ -12,12 +12,14 @@ import { CartItems } from "./features/cart/components/cart-items/cart-items";
 import { ProductGrid } from "./shared/components/product-containers/product-grid/product-grid";
 import { CategoryShowcase } from "./features/home/components/category-showcase/category-showcase";
 import { ProductReviews } from "./features/products/components/product-reviews/product-reviews";
+import { LiveChat } from "./shared/components/live-chat/live-chat";
+import { AddProduct } from "./features/seller/components/add-product/add-product";
 
 @Component({
   selector: 'app-root',
 
 
-  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC,Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase],
+  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, LiveChat, AddProduct],
 
 
 
