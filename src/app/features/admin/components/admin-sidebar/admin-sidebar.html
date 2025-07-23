@@ -1,1 +1,72 @@
-<p>admin-sidebar works!</p>
+ <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" ></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">J</div>
+            <div class="logo-text">Jumia Admin</div>
+        </div>
+        
+        <nav class="nav-section">
+            <div class="nav-item">
+                <a  class="nav-link active" [routerLink]="['/admin/dashboard']" [routerLinkActive]="'active'" >
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/customers']" [routerLinkActive]="'active'" >
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                    <i class="fas fa-chevron-down" ></i>
+                </a>
+                
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/products']" [routerLinkActive]="'active'" >
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Products</span>
+                    <i class="fas fa-chevron-down" ></i>
+                </a>
+                
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/orders']" [routerLinkActive]="'active'" >
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Orders</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/Payments']" [routerLinkActive]="'active'">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/sellers']" [routerLinkActive]="'active'">
+                    <i class="fas fa-store"></i>
+                    <span>Sellers</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a  class="nav-link" [routerLink]="['/admin/reviews']" [routerLinkActive]="'active'">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin/settings']" [routerLinkActive]="'active'">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
