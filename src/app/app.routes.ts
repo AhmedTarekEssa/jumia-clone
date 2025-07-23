@@ -10,10 +10,6 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: '',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
-  },
-  {
     path: 'categories',
     loadChildren: () => import('./features/categories/categories.routes').then(m => m.routes),
     data: { preload: true }
@@ -24,8 +20,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes),
-    canActivate: [adminGuard]
+    loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes)
+    // canActivate: [adminGuard]
   },
   {
     path: 'seller',
@@ -48,6 +44,10 @@ export const routes: Routes = [
   {
     path: 'vendor',
     loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
