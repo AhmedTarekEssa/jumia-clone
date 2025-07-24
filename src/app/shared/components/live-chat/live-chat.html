@@ -1,0 +1,124 @@
+<!-- Chat Button -->
+<div class="chat-button" (click)="toggleChat()" [class.active]="isOpen">
+  <div class="chat-icon">
+    <span class="dots">...</span>
+  </div>
+  <span class="chat-text">Chat with us</span>
+</div>
+
+<!-- Chat Popup -->
+<div class="chat-popup" [class.open]="isOpen">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button *ngIf="currentView === 'conversation'" class="back-btn" (click)="backToList()">
+          <span class="back-arrow">←</span>
+        </button>
+        <div class="jumia-logo">
+          <span class="logo-text">JUMIA</span>
+          <span class="star">⭐</span>
+        </div>
+        <span *ngIf="currentView === 'conversation'" class="chat-support">Chat Support</span>
+      </div>
+      <button class="close-btn" (click)="toggleChat()">
+        <span class="chevron">⌄</span>
+      </button>
+    </div>
+    <div class="welcome-section" *ngIf="currentView === 'list'">
+      <h2>Welcome!</h2>
+      <p>How can we help you ?</p>
+    </div>
+  </div>
+
+  <!-- Chat Body -->
+  <div class="chat-body">
+    <!-- Main List View -->
+    <div *ngIf="currentView === 'list'">
+      <!-- Start Conversation Section -->
+      <div class="start-conversation">
+        <h3>Start a conversation with our team of experts now!</h3>
+        <div class="experts-avatars">
+          <div class="avatar" *ngFor="let expert of experts">
+            <span>{{ expert.avatar }}</span>
+          </div>
+        </div>
+        <button class="new-conversation-btn" (click)="startNewConversation()">
+          New Conversation
+        </button>
+      </div>
+
+      <!-- Conversations Section -->
+      <div class="conversations-section">
+        <h3>Your conversations</h3>
+        <div class="conversation-item" *ngFor="let conversation of conversations1"
+          (click)="openConversation(conversation)">
+          <div class="conversation-avatar">
+            <span class="star-icon">⭐</span>
+          </div>
+          <div class="conversation-content">
+            <div class="conversation-title">Jumia Virtual Assistant</div>
+            <div class="conversation-preview">{{ conversation.lastMessage.message }}</div>
+            <div class="conversation-time">{{ conversation.closedAt }}</div>
+          </div>
+          <div class="conversation-arrow">
+            <span>›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversation View -->
+    <div *ngIf="currentView === 'conversation'" class="conversation-view">
+      <div class="messages-container">
+        <div *ngFor="let message of messages" class="message-wrapper">
+          <!-- Date Separator -->
+          <div *ngIf="message.type === 'date'" class="date-separator">
+            <span>{{ message.message }}</span>
+          </div>
+
+          <!-- Received Message -->
+          <div *ngIf="message.isFromAdmin" class="message received-message">
+            <div class="message-avatar">
+              <span>{{ message.senderName }}</span>
+            </div>
+            <div class="message-content">
+              <div class="message-bubble">
+                <div class="message-text" [style.white-space]="'pre-line'">{{ message.message }}</div>
+              </div>
+              <div class="message-time" *ngIf="message.sentAt">{{ message.sentAt }}</div>
+            </div>
+          </div>
+
+          <!-- Sent Message -->
+          <div *ngIf="!message.isFromAdmin" class="message sent-message">
+            <div class="message-content">
+              <div class="message-bubble">
+                <div class="message-text">{{ message.message }}</div>
+              </div>
+              <div class="message-time">{{ message.sentAt }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversation Closed Notice -->
+      <div *ngIf="selectedConversation?.status!=='Active'" class="conversation-closed">
+        <p>The conversation has been closed</p>
+        <button class="new-conversation-btn" (click)="startNewConversationFromChat()">
+          New Conversation
+        </button>
+      </div>
+
+      <div *ngIf="selectedConversation?.status === 'Active'" class="chat-input">
+        <input type="text" [(ngModel)]="newMessage" placeholder="Type your message..." (keyup.enter)="sendMessage()">
+        <button (click)="sendMessage()">Send</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="chat-overlay" [class.visible]="isOpen" (click)="toggleChat()"></div>

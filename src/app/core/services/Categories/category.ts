@@ -12,6 +12,7 @@ import { CategoryAttribute } from '../../../shared/models/category-attribute';
   providedIn: 'root'
 })
 export class CategoryService {
+
   private apiUrl = environment.BaseUrlPath;
 
   constructor(private http: HttpClient) { }

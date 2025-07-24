@@ -1,0 +1,434 @@
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .jumia-navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0;
+            min-height: 70px;
+        }
+        
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        
+        .register-btn {
+            background-color: #f68b1e;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        
+        .register-btn:hover {
+            background-color: #e67c0a;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 40px;
+            margin-left: 40px;
+        }
+        
+        .navbar-menu li {
+            margin: 0;
+        }
+        
+        .navbar-menu a {
+            color: #f68b1e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar-menu a:hover {
+            color: #e67c0a;
+            text-decoration: none;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+            color: #f68b1e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .language-selector:hover {
+            color: #e67c0a;
+            text-decoration: none;
+        }
+        
+        .egypt-flag {
+            width: 20px;
+            height: 14px;
+            margin-right: 8px;
+            background: linear-gradient(to bottom, 
+                #ce1126 0%, #ce1126 33.33%, 
+                #ffffff 33.33%, #ffffff 66.66%, 
+                #000000 66.66%, #000000 100%);
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+        
+        .jumia-logo {
+            height: 35px;
+            width: auto;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Mobile responsiveness */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #f68b1e;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                gap: 0;
+                margin-left: 0;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            
+            .navbar-menu.active {
+                display: flex;
+            }
+            
+            .navbar-menu li {
+                width: 100%;
+                padding: 10px 0;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .navbar-container {
+                padding: 0 20px;
+            }
+            
+            .navbar-right {
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .register-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
+            .navbar-container {
+                padding: 0 15px;
+            }
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 80px 0 0 0;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            padding: 60px 0;
+        }
+        
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: #f68b1e;
+            margin-bottom: 50px;
+            line-height: 1.2;
+        }
+        
+        .cta-section {
+            margin-top: 40px;
+        }
+        
+        .cta-group {
+            margin-bottom: 40px;
+        }
+        
+        .cta-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f68b1e;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .btn-register {
+            background-color: #f68b1e;
+            border: none;
+            color: white;
+            padding: 15px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(246, 139, 30, 0.3);
+        }
+        
+        .btn-register:hover {
+            background-color: #e67c0a;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(246, 139, 30, 0.4);
+        }
+        
+        .btn-login {
+            background-color: #6c757d;
+            border: none;
+            color: white;
+            padding: 15px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-login:hover {
+            background-color: #5a6268;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        .laptop-mockup {
+            position: relative;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .laptop-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0;
+        }
+        
+        .laptop-frame {
+            width: 500px;
+            height: 320px;
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 20px 20px 40px 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .laptop-screen {
+            width: 100%;
+            height: 260px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .laptop-base {
+            width: 550px;
+            height: 30px;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .screen-content {
+            padding: 10px;
+            height: 100%;
+            background: linear-gradient(135deg, #f68b1e, #ff9f43);
+            position: relative;
+        }
+        
+        .jumia-interface {
+            background: white;
+            height: 100%;
+            border-radius: 5px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .interface-header {
+            height: 40px;
+            background: #f68b1e;
+            margin: -15px -15px 15px -15px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .interface-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            height: calc(100% - 55px);
+        }
+        
+        .product-card {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            font-size: 8px;
+            position: relative;
+        }
+        
+        .product-card.featured {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            grid-column: span 2;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .why-section {
+            background: linear-gradient(135deg, #f68b1e 0%, #ff9f43 100%);
+            padding: 80px 0;
+            position: relative;
+            margin-top: -50px;
+            clip-path: polygon(0 15%, 100% 0%, 100% 100%, 0% 100%);
+        }
+        
+        .why-content {
+            text-align: center;
+            padding-top: 50px;
+        }
+        
+        .why-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .why-subtitle {
+            font-size: 1.2rem;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .already-seller {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .laptop-frame {
+                width: 350px;
+                height: 220px;
+                padding: 15px 15px 30px 15px;
+            }
+            
+            .laptop-screen {
+                height: 175px;
+            }
+            
+            .laptop-base {
+                width: 380px;
+                height: 25px;
+            }
+            
+            .why-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-section {
+                padding: 40px 0 0 0;
+            }
+            
+            .btn-register, .btn-login {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .laptop-frame {
+                width: 280px;
+                height: 180px;
+                padding: 12px 12px 25px 12px;
+            }
+            
+            .laptop-screen {
+                height: 143px;
+            }
+            
+            .laptop-base {
+                width: 300px;
+                height: 20px;
+            }
+        }

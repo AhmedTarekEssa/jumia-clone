@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-footer-main',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './footer-main.html',
   styleUrl: './footer-main.css'
 })
