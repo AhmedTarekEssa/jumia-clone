@@ -49,8 +49,8 @@ export class ProductService {
     )
   }
   
-  getBySellerIdUi(sellerId:number):Observable<ProductUi[]>{
-    return this.httpClient.get<ProductUi[]>(this.apiBaseUrl+this.controller.GetBySellerIdForUI(sellerId,"customer"))
+  getBySellerIdUi(sellerId:number,role:string):Observable<ProductUi[]>{
+    return this.httpClient.get<ProductUi[]>(this.apiBaseUrl+this.controller.GetBySellerIdForUI(sellerId,role),{withCredentials:true})
     .pipe(
       tap({
         next:(data)=>console.log("products ui number is " + data.length),

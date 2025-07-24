@@ -91,15 +91,16 @@
   font-size: 0.9rem;
 }
 
-.products-grid {
+/* .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
-}
+} */
 
 .product-card {
   background: white;
-  border-radius: 8px;
+
+  border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   overflow: hidden;
   transition: transform 0.2s;
@@ -111,14 +112,14 @@
 
 .product-image {
   position: relative;
-  height: 200px;
+  
   overflow: hidden;
 }
 
 .product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100px;
+  height: 100px;
+
 }
 
 .product-status {

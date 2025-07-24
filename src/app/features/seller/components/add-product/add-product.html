@@ -29,13 +29,7 @@
           </div>
         </div>
       </div>
-
-    
-
-      <pre>{{ productForm.value | json }}</pre>
-
-
-
+  
        <div class="form-row">
           <div class="form-group">
             <label for="name">Product Name</label>
@@ -332,19 +326,15 @@
       </div>
 
 
-<div class="form-actions">
+<div class="form-actions d-flex justify-content-between">
         <button 
           type="submit"  
           class="btn btn-primary" 
           [disabled]="productForm.invalid">
           Submit 
         </button>
+        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
       </div>
-
-
-      <pre>{{ productForm.value | json }}</pre>
-
-
     </form>
   </div>
 </div>
