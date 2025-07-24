@@ -31,10 +31,10 @@
   </div> -->
 
     <!-- Products Row -->
-    <div class="products-row">
-        <div *ngFor="let product of products" class="product-card" (click)="goToProductDetails(product.productId)">
+    <div class="products-row row">
+        <div *ngFor="let product of products" class="product-card col-6 col-md-3" (click)="goToProductDetails(product.productId)">
             <div class="product-image-wrapper">
-                <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+                <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name" class="product-image">
                 <button class="wishlist-heart">♡</button>
 
                 <!-- <div *ngIf="product.sponsored" class="sponsored-tag">Sponsored ℹ</div> -->
