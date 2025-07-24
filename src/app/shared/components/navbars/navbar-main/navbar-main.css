@@ -1,4 +1,165 @@
 /* header.component.css */
+    body {
+      font-family: 'Arial', sans-serif;
+      direction: ltr;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-header {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border-bottom: 1px solid #e9ecef;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #ff6900 !important;
+      text-decoration: none;
+    }
+
+    .navbar-brand:hover {
+      color: #e55a00 !important;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 12px 50px 12px 20px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #ff6900;
+      box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.1);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ff6900;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background: #e55a00;
+      transform: translateY(-50%) scale(1.02);
+    }
+
+    .nav-item {
+      margin: 0 10px;
+    }
+
+    .nav-link {
+      color: #6c757d !important;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link:hover {
+      color: #ff6900 !important;
+      background: rgba(255, 105, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .dropdown-toggle::after {
+      margin-right: 8px;
+    }
+
+    .dropdown-menu {
+      border: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      padding: 10px 0;
+    }
+
+    .dropdown-item {
+      padding: 8px 20px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 105, 0, 0.1);
+      color: #ff6900;
+    }
+
+    .badge-orange {
+      background: #ff6900;
+      color: white;
+      border-radius: 50%;
+      padding: 4px 8px;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+
+    .help-icon {
+      background: #17a2b8;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .search-container {
+        max-width: 100%;
+        margin: 10px 0;
+      }
+
+      .navbar-nav {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .nav-item {
+        margin: 5px 0;
+      }
+    }
+
+    .navbar-toggler {
+      border: none;
+      padding: 4px 8px;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    .navbar-collapse {
+      flex-grow: 0;
+    }
+
 :host {
     display: block;
     width: 100%;
@@ -657,110 +818,27 @@
 .mainHomeContainer {
   flex: 1;
   padding: 20px 0;
-  /* background-color: #f1f1f2; */
+  width: 100%;
 }
 
 .jumia-container {
   display: flex;
+  flex-direction: row; /* Ensure horizontal layout */
   width: 100%;
   font-family: Arial, sans-serif;
+  gap: 20px; /* Add some space between elements */
 }
-
-/* Left Sidebar Styles */
 
 /* Main Content Styles */
 .main-content {
   flex: 1;
   padding: 0px;
+  min-width: 0; /* Prevent flex item from overflowing */
 }
 
 
 /* Right Sidebar Styles */
-.wrapper-right-sidebar{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-border-radius: 8px;
-  height: 271px;
-  background-color: white;
-  /* margin: 0 20px; */
-  margin-left: 20px;
-}
-.right-sidebar {
-  width: 250px;
-  padding: 15px;
 
-}
-
-.sidebar-section {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 4px;
-  margin-bottom: 15px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-.sidebar-section:hover {
-  transform: scale(1.01);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.icon-container {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #FFF8E1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-}
-
-.star-icon, .money-icon, .warranty-icon {
-  font-size: 20px;
-  color: #FF6F00;
-}
-
-.section-content h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.section-content p {
-  margin: 3px 0 0;
-  font-size: 12px;
-  color: #777;
-}
-
-.sidebar-banner {
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-
-
-
-.banner-image {
-  width: 100%;
-  display: block;
-  cursor: default;
-}
-.sidebar-banner:hover {
-  transform: scale(1.01);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.warranty-link {
-  text-decoration: none;
-  color: inherit; /* Keeps text color the same */
-  display: block; /* Makes the link take up the full space of the div */
-  cursor: pointer;
-}
 
 
 .jumia-home-container {
@@ -1024,5 +1102,30 @@ border-radius: 8px;
   
   .section-content p {
     font-size: 11px;
+  }
+}
+@media (max-width: 1024px) {
+  .jumia-container {
+    flex-direction: row; /* Keep horizontal layout on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .jumia-container {
+    flex-direction: row; /* Keep horizontal layout on mobile */
+    overflow-x: auto; /* Add horizontal scrolling if needed */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    gap: 10px; /* Reduce gap on smaller screens */
+  }
+  
+  /* Optional: prevent wrapping and allow horizontal scrolling */
+  .main-content, app-category-list, app-center-slider {
+    flex: 0 0 auto; /* Don't grow or shrink */
+  }
+}
+
+@media (max-width: 480px) {
+  .jumia-container {
+    gap: 5px; /* Further reduce gap on very small screens */
   }
 }

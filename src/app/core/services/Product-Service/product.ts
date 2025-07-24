@@ -39,6 +39,7 @@ export class ProductService {
   }
 
   getAllUi():Observable<ProductUi[]>{
+    console.log("ppppppppppppppppppppppp");
      return this.httpClient.get<ProductUi[]>(this.apiBaseUrl+this.controller.GetAllForUI)
     .pipe(
       tap({
