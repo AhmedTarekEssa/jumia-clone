@@ -64,7 +64,7 @@ export const environment = {
 
   },
   Orders: {
-    GetAll: "Order",
+    GetAll: "/Order/getall",
     GetById: (id: number) => `Order/get-by-id/${id}`,
     Create: "Order",
     UpdateStatus: (id: number) => `Order/${id}/status`,
