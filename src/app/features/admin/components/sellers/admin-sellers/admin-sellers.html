@@ -1,12 +1,101 @@
- <div id="sellers-section" class="content-section" >
-                <h1 class="page-title">Seller Management</h1>
-                <div class="chart-placeholder" style="height: 400px;">
-                    Seller Management Interface
-                    <br><br>
-                    Features to implement:
-                    <br>• Seller onboarding and verification
-                    <br>• Seller performance metrics
-                    <br>• Commission and payout management
-                    <br>• Seller communication tools
-                </div>
-            </div>
+ <div class="sellers-container">
+      <div class="header">
+        <h2>Sellers Management</h2>
+        <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
+          Add New Seller
+        </button>
+      </div>
+
+      <div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search sellers..." 
+          [(ngModel)]="searchTerm"
+          class="search-input">
+        <select [(ngModel)]="statusFilter" class="filter-select">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+          <option value="Pending">Pending</option>
+        </select>
+        <select [(ngModel)]="categoryFilter" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Home">Home</option>
+          <option value="Books">Books</option>
+        </select>
+      </div>
+
+      <div *ngIf="showAddForm" class="add-form">
+        <h3>Add New Seller</h3>
+        <form (ngSubmit)="addSeller()">
+          <div class="form-row">
+            <input type="text" placeholder="Seller Name" [(ngModel)]="newSeller.name" name="name" required>
+            <input type="email" placeholder="Email" [(ngModel)]="newSeller.email" name="email" required>
+          </div>
+          <div class="form-row">
+            <input type="tel" placeholder="Phone" [(ngModel)]="newSeller.phone" name="phone" required>
+            <input type="text" placeholder="Business Name" [(ngModel)]="newSeller.businessName" name="businessName" required>
+          </div>
+          <div class="form-row">
+            <select [(ngModel)]="newSeller.category" name="category" required>
+              <option value="">Select Category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Home">Home</option>
+              <option value="Books">Books</option>
+            </select>
+            <select [(ngModel)]="newSeller.status" name="status" required>
+              <option value="Pending">Pending</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">Add Seller</button>
+            <button type="button" class="btn btn-secondary" (click)="showAddForm = false">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="sellers-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Business</th>
+              <th>Category</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Products</th>
+              <th>Sales</th>
+              <th>Commission</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let seller of filteredSellers">
+              <td>{{seller.id}}</td>
+              <td>{{seller.name}}</td>
+              <td>{{seller.businessName}}</td>
+              <td>{{seller.category}}</td>
+              <td>{{seller.email}}</td>
+              <td>
+                <span class="status" [class]="seller.status.toLowerCase()">
+                  {{seller.status}}
+                </span>
+              </td>
+              <td>{{seller.totalProducts}}</td>
+              <td>\${{seller.totalSales}}</td>
+              <td>{{seller.commission}}%</td>
+              <td>
+                <button class="btn btn-sm btn-primary">Edit</button>
+                <button class="btn btn-sm btn-success" *ngIf="seller.status === 'Pending'">Approve</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>

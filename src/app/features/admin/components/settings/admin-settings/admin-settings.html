@@ -1,12 +1,134 @@
-<div id="settings-section" class="content-section" >
-                <h1 class="page-title">Settings</h1>
-                <div class="chart-placeholder" style="height: 400px;">
-                    Settings Interface
-                    <br><br>
-                    Features to implement:
-                    <br>• General store settings
-                    <br>• Payment gateway configuration
-                    <br>• Shipping and tax settings
-                    <br>• User roles and permissions
-                </div>
-            </div>
+<div class="settings-container">
+  <h2>Settings</h2>
+  
+  <div class="settings-tabs">
+    <button 
+      *ngFor="let tab of tabs" 
+      class="tab-button" 
+      [class.active]="activeTab === tab.id"
+      (click)="activeTab = tab.id">
+      {{tab.label}}
+    </button>
+  </div>
+
+  <div class="settings-content">
+    <!-- General Settings -->
+    <div *ngIf="activeTab === 'general'" class="settings-section">
+      <h3>General Settings</h3>
+      <div class="setting-group">
+        <label>Site Name</label>
+        <input type="text" [(ngModel)]="settings.siteName" class="form-control">
+      </div>
+      <div class="setting-group">
+        <label>Site Description</label>
+        <textarea [(ngModel)]="settings.siteDescription" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="setting-group">
+        <label>Default Currency</label>
+        <select [(ngModel)]="settings.currency" class="form-control">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="EGP">EGP (£E)</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label>Time Zone</label>
+        <select [(ngModel)]="settings.timezone" class="form-control">
+          <option value="UTC">UTC</option>
+          <option value="Africa/Cairo">Africa/Cairo</option>
+          <option value="Europe/London">Europe/London</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Payment Settings -->
+    <div *ngIf="activeTab === 'payment'" class="settings-section">
+      <h3>Payment Settings</h3>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="settings.paymentMethods.creditCard">
+          Enable Credit Card Payments
+        </label>
+      </div>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="settings.paymentMethods.paypal">
+          Enable PayPal Payments
+        </label>
+      </div>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="settings.paymentMethods.bankTransfer">
+          Enable Bank Transfer
+        </label>
+      </div>
+      <div class="setting-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="settings.paymentMethods.cashOnDelivery">
+          Enable Cash on Delivery
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>Default Commission Rate (%)</label>
+        <input type="number" [(ngModel)]="settings.defaultCommission" class="form-control" min="0" max="100">
+      </div>
+    </div>
+
+    <!-- Shipping Settings -->
+    <div *ngIf="activeTab === 'shipping'" class="settings-section">
+      <h3>Shipping Settings</h3>
+      <div class="setting-group">
+        <label>Free Shipping Minimum Order</label>
+        <input type="number" [(ngModel)]="settings.freeShippingMinimum" class="form-control" min="0">
+      </div>
+      <div class="setting-group">
+        <label>Standard Shipping Cost</label>
+        <input type="number" [(ngModel)]="settings.standardShippingCost" class="form-control" min="0">
+      </div>
+      <div class="setting-group">
+        <label>Express Shipping Cost</label>
+        <input type="number" [(ngModel)]="settings.expressShippingCost" class="form-control" min="0">
+      </div>
+    </div>
+
+    <!-- Enhanced Stats Section -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <h4>Total Orders</h4>
+        <p>{{orders.length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Pending</h4>
+        <p>{{getOrdersByStatus('Pending').length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Processing</h4>
+        <p>{{getOrdersByStatus('Processing').length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Shipped</h4>
+        <p>{{getOrdersByStatus('Shipped').length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Delivered</h4>
+        <p>{{getOrdersByStatus('Delivered').length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Cancelled</h4>
+        <p>{{getOrdersByStatus('Cancelled').length}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Total Revenue</h4>
+        <p>{{totalRevenue | currency:settings.currency}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Avg. Order Value</h4>
+        <p>{{averageOrderValue | currency:settings.currency}}</p>
+      </div>
+      <div class="stat-card">
+        <h4>Cancellation Rate</h4>
+        <p>{{cancellationRate | number:'1.1-1'}}%</p>
+      </div>
+    </div>
+  </div>
+</div>

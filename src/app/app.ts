@@ -31,7 +31,11 @@ import { VendorCenter } from "./features/seller-auth/components/vendor-center/ve
 
 import { LiveChat } from "./shared/components/live-chat/live-chat";
 import { AddProduct } from "./features/seller/components/add-product/add-product";
+
+import { SellerContainer } from "./features/seller/seller-container/seller-container";
+
 import { AddressListComponent } from "./features/address/components/address-list/address-list";
+
 
 
 
@@ -40,7 +44,11 @@ import { AddressListComponent } from "./features/address/components/address-list
 
 
 
-  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, SellerCheckEmail, Verification, Step3Documents, SellerWelcome, VendorCenter],
+
+
+  imports: [RouterOutlet, NavbarMain, HomeContainer, DashboardComponent, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, Dashboard, AdminSidebar, AdminHeader, AdminSettings, AdminStats, AdminCategories, AdminContainer, SellerContainer],
+
+
 
 
 

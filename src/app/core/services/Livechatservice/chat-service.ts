@@ -27,11 +27,11 @@ export class ChatService {
 
     this.hubConnection.start()
       .then(()=>console.log("signalr connected"))
-      .catch(err=> console.error('signalr error' , err));
+      .catch((err: any)=> console.error('signalr error' , err));
 
-    this.hubConnection.on('ReceiveMessage',(message)=>this.newMessage$.next(message));
+    this.hubConnection.on('ReceiveMessage',(message: any)=>this.newMessage$.next(message));
 
-    this.hubConnection.on('ChatClosed',(chat)=>this.chatClosed$.next(chat));
+    this.hubConnection.on('ChatClosed',(chat: any)=>this.chatClosed$.next(chat));
   }
 
   async joinChatGroup(conversationId: string) {
