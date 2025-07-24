@@ -25,7 +25,7 @@ export interface Variant {
   discountPercentage: number
   stockQuantity: number
   sku: string
-  variantImageUrl: string
+  variantImageUrl: File|null
   isDefault: boolean
   isAvailable: boolean
   attributes: Attribute2[]
@@ -44,6 +44,9 @@ export interface ProductUi {
   discountPercentage: string
   imageUrl: any
   discount?: number
+  isAvailable:boolean
+  approvalStatus:string
+  stockQuantity:number
   variants:Variant[]
 
 }
@@ -54,7 +57,7 @@ export interface CreateProduct {
   name: string
   description: string
   basePrice: number
-  mainImageUrl: string
+  mainImageUrl: File|null
   additionalImageUrls: string[]
   attributes: Attribute[]
   variants: Variant[]

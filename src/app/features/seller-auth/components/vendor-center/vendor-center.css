@@ -1,0 +1,419 @@
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px;
+        }
+        
+        .login-section {
+            padding: 60px 50px;
+            background: white;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f68b1e, #ff9f43);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .logo-icon::before {
+            content: 'VC';
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .logo-text .jumia {
+            color: #2c3e50;
+        }
+        
+        .logo-text .vendor {
+            color: #f68b1e;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .signin-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .signin-btn {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .signin-btn:hover {
+            border-color: #f68b1e;
+            background: #fff8f0;
+            color: #2c3e50;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .google-icon {
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIyLjU2IDEyLjI1YzAtLjc4LS4wNy0xLjUzLS4yLTIuMjVIMTJ2NC4yNmg1LjkyYy0uMjYgMS4zNy0xLjA0IDIuNTMtMi4yMSAzLjMxdjIuNzdoMy41N2MyLjA4LTEuOTIgMy4yOC00Ljc0IDMuMjgtOC4wOXoiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTEyIDIzYzIuOTcgMCA1LjQ2LS45OCA3LjI4LTIuNjZsLTMuNTctMi43N2MtLjk4LjY2LTIuMjMgMS4wNi0zLjcxIDEuMDYtMi44NiAwLTUuMjktMS45My02LjE2LTQuNTNIMi4xOHYyLjg0QzMuOTkgMjAuNTMgNy43IDIzIDEyIDIzeiIgZmlsbD0iIzM0QTg1MyIvPgo8cGF0aCBkPSJNNS44NCAxNC4wOWMtLjIyLS42Ni0uMzUtMS4zNi0uMzUtMi4wOXMuMTMtMS40My4zNS0yLjA5VjcuMDdIMi4xOEMxLjQzIDguNTUgMSA5Ljc0IDEgMTJzLjQzIDMuNDUgMS4xOCA0LjkzbDIuODUtMi4yMnoiIGZpbGw9IiNGQkJDMDUiLz4KPHBhdGggZD0iTTEyIDUuMzhjMS42MiAwIDMuMDYuNTYgNC4yMSAxLjY0bDMuMTUtMy4xNUMxNy40NSAyLjA5IDE0Ljk3IDEgMTIgMSA3LjcgMSAzLjk5IDMuNDcgMi4xOCA3LjA3bDMuNjYgMi44NEMxMi43MSA3LjI0IDE1LjE0IDUuMzEgMTkgNS4zMXoiIGZpbGw9IiNFQTQzMzUiLz4KPC9zdmc+') center center no-repeat;
+            background-size: contain;
+        }
+        
+        .email-icon {
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .jumia-star {
+            color: #f68b1e;
+            font-size: 18px;
+        }
+        
+        .sell-btn {
+            padding: 15px 20px;
+            border: 2px solid #f68b1e;
+            border-radius: 8px;
+            background: white;
+            color: #f68b1e;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .sell-btn:hover {
+            background: #f68b1e;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(246, 139, 30, 0.3);
+        }
+        
+        .illustration-section {
+            background: linear-gradient(135deg, #f68b1e 0%, #ff9f43 100%);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 600px;
+        }
+        
+        .illustration-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+        
+        .phone-mockup {
+            position: absolute;
+            left: 20px;
+            top: 50px;
+            width: 120px;
+            height: 180px;
+            background: #e8f4fd;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: rotateY(-15deg) rotateX(5deg);
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            position: relative;
+        }
+        
+        .phone-header {
+            height: 15px;
+            background: #f68b1e;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+        }
+        
+        .phone-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            height: calc(100% - 20px);
+        }
+        
+        .product-item {
+            background: #f8f9fa;
+            border-radius: 3px;
+            font-size: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .box-3d {
+            position: absolute;
+            right: 80px;
+            top: 30px;
+            width: 80px;
+            height: 80px;
+            transform: rotateX(20deg) rotateY(30deg);
+        }
+        
+        .box-face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .box-front {
+            background: #ff6b6b;
+            transform: translateZ(40px);
+        }
+        
+        .box-right {
+            background: #ff5252;
+            transform: rotateY(90deg) translateZ(40px);
+        }
+        
+        .box-top {
+            background: #ff8a80;
+            transform: rotateX(90deg) translateZ(40px);
+        }
+        
+        .delivery-truck {
+            position: absolute;
+            right: 30px;
+            bottom: 80px;
+            width: 100px;
+            height: 50px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transform: rotateY(-10deg);
+        }
+        
+        .truck-icon {
+            color: #f68b1e;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        .truck-text {
+            font-size: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .person {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: #333;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .person::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #fdbcb4;
+            border-radius: 50%;
+        }
+        
+        .person1 {
+            bottom: 100px;
+            left: 100px;
+        }
+        
+        .person2 {
+            bottom: 60px;
+            right: 150px;
+        }
+        
+        .person3 {
+            top: 80px;
+            right: 200px;
+        }
+        
+        .shopping-cart {
+            position: absolute;
+            bottom: 120px;
+            left: 80px;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .dotted-line {
+            position: absolute;
+            border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 50px;
+        }
+        
+        .line1 {
+            top: 100px;
+            left: 150px;
+            width: 100px;
+            height: 2px;
+            transform: rotate(15deg);
+        }
+        
+        .line2 {
+            top: 200px;
+            right: 100px;
+            width: 80px;
+            height: 2px;
+            transform: rotate(-20deg);
+        }
+        
+        .connection-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .dot1 {
+            top: 120px;
+            right: 120px;
+        }
+        
+        .dot2 {
+            top: 200px;
+            left: 180px;
+        }
+        
+        .dot3 {
+            bottom: 100px;
+            right: 80px;
+        }
+        
+        .background-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+        }
+        
+        .bg-icon {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .bg-icon:nth-child(1) { top: 20px; left: 50px; }
+        .bg-icon:nth-child(2) { top: 40px; right: 40px; }
+        .bg-icon:nth-child(3) { bottom: 150px; left: 30px; }
+        .bg-icon:nth-child(4) { bottom: 80px; right: 200px; }
+        .bg-icon:nth-child(5) { top: 120px; left: 200px; }
+        .bg-icon:nth-child(6) { bottom: 200px; right: 60px; }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                margin: 10px;
+            }
+            
+            .login-section {
+                padding: 40px 30px;
+            }
+            
+            .illustration-section {
+                min-height: 300px;
+                padding: 20px;
+            }
+            
+            .illustration-container {
+                height: 250px;
+            }
+            
+            .phone-mockup {
+                width: 80px;
+                height: 120px;
+                left: 10px;
+                top: 30px;
+            }
+            
+            .box-3d {
+                width: 50px;
+                height: 50px;
+                right: 40px;
+                top: 20px;
+            }
+            
+            .delivery-truck {
+                width: 70px;
+                height: 35px;
+                bottom: 40px;
+                right: 20px;
+            }
+        }

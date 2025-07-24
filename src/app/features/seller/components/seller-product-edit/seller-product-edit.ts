@@ -1,383 +1,257 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectorRef } from '@angular/core'; 
 import { OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { signal } from '@angular/core';
+
+interface ProductForm {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  comparePrice?: number;
+  stock: number;
+  sku: string;
+  brand: string;
+  weight?: number;
+  dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  images: string[];
+  tags: string[];
+  status: 'active' | 'inactive' | 'out_of_stock';
+}
 
 @Component({
   selector: 'app-seller-product-edit',
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './seller-product-edit.html',
   styleUrl: './seller-product-edit.css'
 })
-export class SellerProductEdit {
+export class SellerProductEdit implements OnInit {
+  productId: string = '';
+  productForm: ProductForm = {
+    id: '',
+    name: '',
+    description: '',
+    category: '',
+    price: 0,
+    stock: 0,
+    sku: '',
+    brand: '',
+    images: [],
+    tags: [],
+    status: 'active'
+  };
 
-    // Component state
-  isEditMode = false;
+  categories = [
+    'Electronics',
+    'Fashion',
+    'Home & Garden',
+    'Sports & Outdoors',
+    'Books',
+    'Health & Beauty',
+    'Toys & Games',
+    'Automotive'
+  ];
+
+  newTag = '';
   isLoading = false;
-  isCollapsed = false;
-  showSidebar = false;
-  maxAdditionalImages = 4; // Max number of additional images allowed
+  isLoadingProduct = false;
 
-  // Form groups
-  productForm: FormGroup;
-  approvalForm: FormGroup;
-
-  // Image handling
-  imagePreview: string | ArrayBuffer | null = null;
-  additionalImageInputs: number[] = []; // Tracks additional image inputs
-  additionalImagePreviews: (string | ArrayBuffer | null)[] = [];
-
-  // Data lists
-  categories: any[] = []; // Replace 'any' with your Category interface
-  filteredCategories: any[] = [];
-  subcategories: any[] = []; // Replace 'any' with your Subcategory interface
-  filteredSellers: any[] = []; // Replace 'any' with your Seller interface
-  productAttributes: any[] = []; // Replace 'any' with your Attribute interface
-
-  // Signals for reactive state
-  searchQuery = signal('');
+  // Mock product data
+  mockProducts: { [key: string]: ProductForm } = {
+    'PROD-001': {
+      id: 'PROD-001',
+      name: 'Wireless Bluetooth Headphones',
+      description: 'High-quality wireless headphones with noise cancellation and long battery life. Perfect for music lovers and professionals.',
+      category: 'Electronics',
+      price: 99.99,
+      comparePrice: 129.99,
+      stock: 25,
+      sku: 'SKU-001',
+      brand: 'TechSound',
+      weight: 0.3,
+      dimensions: { length: 20, width: 18, height: 8 },
+      images: [
+        'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=400'
+      ],
+      tags: ['wireless', 'bluetooth', 'headphones', 'audio'],
+      status: 'active'
+    },
+    'PROD-002': {
+      id: 'PROD-002',
+      name: 'Smartphone Protective Case',
+      description: 'Durable protective case for smartphones with shock absorption and premium materials.',
+      category: 'Accessories',
+      price: 29.99,
+      comparePrice: 39.99,
+      stock: 0,
+      sku: 'SKU-002',
+      brand: 'ProtectPro',
+      weight: 0.1,
+      dimensions: { length: 15, width: 8, height: 1 },
+      images: [
+        'https://images.pexels.com/photos/47261/pexels-photo-47261.jpeg?auto=compress&cs=tinysrgb&w=400'
+      ],
+      tags: ['case', 'protection', 'smartphone', 'accessories'],
+      status: 'out_of_stock'
+    },
+    'PROD-003': {
+      id: 'PROD-003',
+      name: 'Portable Bluetooth Speaker',
+      description: 'Compact and powerful Bluetooth speaker with excellent sound quality and waterproof design.',
+      category: 'Electronics',
+      price: 79.99,
+      stock: 15,
+      sku: 'SKU-003',
+      brand: 'SoundWave',
+      weight: 0.5,
+      dimensions: { length: 12, width: 12, height: 6 },
+      images: [
+        'https://images.pexels.com/photos/3394651/pexels-photo-3394651.jpeg?auto=compress&cs=tinysrgb&w=400'
+      ],
+      tags: ['speaker', 'bluetooth', 'portable', 'waterproof'],
+      status: 'active'
+    }
+  };
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      categoryId: ['', Validators.required],
-      subcategoryId: ['', Validators.required],
-      sellerId: ['', Validators.required],
-      hasVariants: [false],
-      basePrice: [0, [Validators.required, Validators.min(0)]],
-      discountPercentage: [0, [Validators.min(0), Validators.max(100)]],
-      stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      isAvailable: [true],
-      mainImageFile: [null, Validators.required],
-      mainImageBase64: [''],
-      additionalImages: this.fb.array([]),
-      attributeValues: this.fb.array([]),
-      variants: this.fb.array([]),
-      approvalStatus: ['pending']
-    });
-
-    this.approvalForm = this.fb.group({
-      adminNotes: ['']
-    });
-  }
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    // Initialize component
-    this.checkEditMode();
-    this.loadCategories();
-    this.loadSubcategories();
-    this.loadSellers();
-    this.loadProductAttributes();
-  }
-
-  // Form array getters
-  get variants(): FormArray {
-    return this.productForm.get('variants') as FormArray;
-  }
-
-  get attributeValues(): FormArray {
-    return this.productForm.get('attributeValues') as FormArray;
-  }
-
-  get additionalImages(): FormArray {
-    return this.productForm.get('additionalImages') as FormArray;
-  }
-
-  // Helper methods
-  checkEditMode(): void {
     this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.isEditMode = true;
-        this.loadProduct(params['id']);
-      }
+      this.productId = params['id'];
+      this.loadProduct();
     });
   }
 
-  loadProduct(productId: string): void {
-    // Implement product loading logic
-    this.isLoading = true;
-    // API call to get product details
-    this.isLoading = false;
+  loadProduct(): void {
+    this.isLoadingProduct = true;
+    this.cdr.detectChanges();
+
+
+    setTimeout(() => {
+      const product = this.mockProducts[this.productId];
+      if (product) {
+        this.productForm = { ...product };
+        if (!this.productForm.dimensions) {
+          this.productForm.dimensions = { length: 0, width: 0, height: 0 };
+        }
+      } else {
+        alert('Product not found!');
+        this.router.navigate(['/seller/products']);
+      }
+      this.isLoadingProduct = false;
+      this.cdr.detectChanges();
+    }, 1000);
   }
 
-  loadCategories(): void {
-    // Implement category loading
+  addTag(): void {
+    if (this.newTag.trim() && !this.productForm.tags.includes(this.newTag.trim())) {
+      this.productForm.tags.push(this.newTag.trim());
+      this.newTag = '';
+      this.cdr.detectChanges();
+    }
   }
 
-  loadSubcategories(): void {
-    // Implement subcategory loading
+  removeTag(index: number): void {
+    this.productForm.tags.splice(index, 1);
+    this.cdr.detectChanges();
   }
 
-  loadSellers(): void {
-    // Implement seller loading
+  onTagKeyPress(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.addTag();
+    }
   }
 
-  loadProductAttributes(): void {
-    // Implement attribute loading
+  addImageUrl(): void {
+    const url = prompt('Enter image URL:');
+    if (url && url.trim()) {
+      this.productForm.images.push(url.trim());
+      this.cdr.detectChanges();
+    }
   }
 
-  // Form methods
-  onSubmit(): void {
-    if (this.productForm.invalid) {
-      this.markAllAsTouched();
+  removeImage(index: number): void {
+    this.productForm.images.splice(index, 1);
+    this.cdr.detectChanges();
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.productForm.name &&
+      this.productForm.description &&
+      this.productForm.category &&
+      this.productForm.price > 0 &&
+      this.productForm.stock >= 0 &&
+      this.productForm.sku &&
+      this.productForm.brand
+    );
+  }
+
+  updateProduct(): void {
+    if (!this.isFormValid()) {
+      alert('Please fill in all required fields.');
       return;
     }
 
     this.isLoading = true;
-    if (this.isEditMode) {
-      this.updateProduct();
-    } else {
-      this.createProduct();
+    this.cdr.detectChanges();
+
+
+    setTimeout(() => {
+      console.log('Product updated:', this.productForm);
+      this.isLoading = false;
+      alert('Product updated successfully!');
+      this.router.navigate(['/seller/products']);
+      this.cdr.detectChanges();
+    }, 1500);
+  }
+
+  saveDraft(): void {
+    console.log('Product saved as draft:', this.productForm);
+    alert('Product saved as draft!');
+    this.cdr.detectChanges();
+  }
+
+  deleteProduct(): void {
+    if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+      this.isLoading = true;
+      this.cdr.detectChanges();
+
+
+      setTimeout(() => {
+        console.log('Product deleted:', this.productId);
+        this.isLoading = false;
+        alert('Product deleted successfully!');
+        this.router.navigate(['/seller/products']);
+        this.cdr.detectChanges();
+      }, 1000);
     }
   }
 
-  createProduct(): void {
-    // Implement create product logic
-  }
-
-  updateProduct(): void {
-    // Implement update product logic
-  }
-
-  onApprove(): void {
-    if (this.approvalForm.valid) {
-      // Implement approval logic
+  cancel(): void {
+    if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+      this.router.navigate(['/seller/products']);
     }
   }
 
-  onReject(): void {
-    if (this.approvalForm.valid && this.approvalForm.value.adminNotes) {
-      // Implement rejection logic
-    }
+  getStatusClass(status: string): string {
+    const statusClasses: { [key: string]: string } = {
+      'active': 'status-active',
+      'inactive': 'status-inactive',
+      'out_of_stock': 'status-out-of-stock'
+    };
+    return statusClasses[status] || '';
   }
-
-  // Image handling
-  onMainImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.productForm.patchValue({ mainImageFile: file });
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result;
-        this.productForm.patchValue({ mainImageBase64: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  onAdditionalImageSelected(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.additionalImagePreviews[index] = reader.result;
-        // Store in form array
-        if (this.additionalImages.at(index)) {
-          this.additionalImages.at(index).patchValue({
-            file: file,
-            base64: reader.result
-          });
-        } else {
-          this.additionalImages.push(this.fb.group({
-            file: file,
-            base64: reader.result
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  addImageInput(): void {
-    if (this.additionalImageInputs.length < this.maxAdditionalImages) {
-      this.additionalImageInputs.push(this.additionalImageInputs.length);
-      this.additionalImagePreviews.push(null);
-      this.additionalImages.push(this.fb.group({
-        file: [null],
-        base64: ['']
-      }));
-    }
-  }
-
-  removeAdditionalImageInput(index: number): void {
-    this.additionalImageInputs.splice(index, 1);
-    this.additionalImagePreviews.splice(index, 1);
-    this.additionalImages.removeAt(index);
-  }
-
-  // Variant methods
-  addVariant(): void {
-    this.variants.push(this.fb.group({
-      variantName: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
-      discountPercentage: [0, [Validators.min(0), Validators.max(100)]],
-      stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      sku: ['', Validators.required],
-      variantImageFile: [null],
-      variantImageBase64: [''],
-      isDefault: [false],
-      isAvailable: [true],
-      attributeValues: this.fb.array([])
-    }));
-  }
-
-  removeVariant(index: number): void {
-    if (this.variants.length > 1) {
-      this.variants.removeAt(index);
-    }
-  }
-
-  onDefaultVariantChange(index: number): void {
-    this.variants.controls.forEach((variant, i) => {
-      variant.get('isDefault')?.setValue(i === index);
-    });
-  }
-
-  onVariantImageSelected(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const variantGroup = this.getVariantFormGroup(index);
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        variantGroup.patchValue({
-          variantImageFile: file,
-          variantImageBase64: reader.result
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  // Attribute methods
-  addAttribute(): void {
-    this.attributeValues.push(this.fb.group({
-      attributeName: ['', Validators.required],
-      attributeType: ['text', Validators.required],
-      value: [''],
-      options: [[]],
-      isRequired: [false]
-    }));
-  }
-
-  // Search methods
-  onCategorySearch(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const searchTerm = input.value.toLowerCase();
-    this.filteredCategories = this.categories.filter(category =>
-      category.name.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  onSellerSearch(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const searchTerm = input.value.toLowerCase();
-    this.filteredSellers = this.filteredSellers.filter(seller =>
-      seller.name.toLowerCase().includes(searchTerm)
-    );
-  }
-
-  // Helper getters
-  getVariantFormGroup(index: number): FormGroup {
-    return this.variants.at(index) as FormGroup;
-  }
-
-  getVariantAttributeValues(index: number): FormArray {
-    return this.getVariantFormGroup(index).get('attributeValues') as FormArray;
-  }
-
-  getAttributeFormGroup(index: number): FormGroup {
-    return this.attributeValues.at(index) as FormGroup;
-  }
-
-  getAttributeControl(variantIndex: number, attributeIndex: number): FormGroup {
-    return this.getVariantAttributeValues(variantIndex).at(attributeIndex) as FormGroup;
-  }
-
-  // Field validation
-  isFieldInvalid(field: string): boolean {
-    const control = this.productForm.get(field);
-    return !!control && control.invalid && (control.dirty || control.touched);
-  }
-
-  isVariantFieldInvalid(variantIndex: number, field: string): boolean {
-    const variantGroup = this.getVariantFormGroup(variantIndex);
-    const control = variantGroup.get(field);
-    return !!control && control.invalid && (control.dirty || control.touched);
-  }
-
-  isVariantAttributeInvalid(variantIndex: number, attributeIndex: number): boolean {
-    const attributeGroup = this.getAttributeControl(variantIndex, attributeIndex);
-    return attributeGroup.invalid && (attributeGroup.dirty || attributeGroup.touched);
-  }
-
-  getErrorMessage(field: string): string {
-    const control = this.productForm.get(field);
-    if (!control) return '';
-
-    if (control.hasError('required')) {
-      return 'This field is required';
-    } else if (control.hasError('min')) {
-      return `Value must be at least ${control.errors?.['min'].min}`;
-    } else if (control.hasError('max')) {
-      return `Value must be at most ${control.errors?.['max'].max}`;
-    }
-    return 'Invalid value';
-  }
-
-  getVariantAttributeErrorMessage(variantIndex: number, attributeIndex: number): string {
-    const attributeGroup = this.getAttributeControl(variantIndex, attributeIndex);
-    if (attributeGroup.hasError('required')) {
-      return 'This attribute is required';
-    }
-    return 'Invalid attribute value';
-  }
-
-  // Data lookup
-  getCategoryName(categoryId: string): string {
-    const category = this.categories.find(c => c.categoryId === categoryId);
-    return category ? category.name : 'Unknown category';
-  }
-
-  getSubcategoryName(subcategoryId: string): string {
-    const subcategory = this.subcategories.find(s => s.subcategoryId === subcategoryId);
-    return subcategory ? subcategory.name : 'Unknown subcategory';
-  }
-
-  getVariantAttributeValue(variantIndex: number, attributeIndex: number, field: string): any {
-    const attributeGroup = this.getAttributeControl(variantIndex, attributeIndex);
-    return attributeGroup.get(field)?.value;
-  }
-
-  getAttributeValue(attributeIndex: number, field: string): any {
-    const attributeGroup = this.getAttributeFormGroup(attributeIndex);
-    return attributeGroup.get(field)?.value;
-  }
-
-  // Utility methods
-  markAllAsTouched(): void {
-    Object.values(this.productForm.controls).forEach(control => {
-      control.markAsTouched();
-    });
-  }
-
-  toggleSidebar(): void {
-    this.isCollapsed = !this.isCollapsed;
-    this.showSidebar = !this.showSidebar;
-  }
-
 }

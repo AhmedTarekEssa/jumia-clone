@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { UserInfo, LoginDto, AuthResponse, PasswordSetupDto, EmailCheckDto, OtpVerifyDto } from '../../../app/shared/models/auth.model';
+import { UserInfo, LoginDto, AuthResponse, PasswordSetupDto, EmailCheckDto, OtpVerifyDto, CreateSellerDto } from '../../../app/shared/models/auth.model';
 
 import { environment } from '../../../environments/environment.development';
 
@@ -44,6 +44,16 @@ export  class AuthService {
   register(dto: PasswordSetupDto): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
       this.apiUrl + environment.authRoutes.register,
+      dto, {withCredentials: true})
+      .pipe(tap( () => {
+        const user =  this.getUserInfoFromCookie();
+        this.currentUserSubject.next(user);
+      }))
+  }
+
+    registerSeller(dto: FormData): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      this.apiUrl + environment.authRoutes.SellerRegister,
       dto, {withCredentials: true})
       .pipe(tap( () => {
         const user =  this.getUserInfoFromCookie();
