@@ -7,6 +7,7 @@ import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
 import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
 
 export const routes: Routes = [
+
  {
     path: '',
     component: MainLayout,
@@ -41,6 +42,7 @@ export const routes: Routes = [
         loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
       }
     ]
+
   },
   {
     path: '',
@@ -62,9 +64,11 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+
     component: SimpleLayout,
     canActivate: [adminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes)
+
   },
   {
     path: 'seller',
@@ -85,6 +89,14 @@ export const routes: Routes = [
   {
     path:'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
+  },
+  {
+    path: 'address',
+    loadChildren: () => import('../app/features/address/address.routes').then(m => m.routes)
+  },
+{
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 

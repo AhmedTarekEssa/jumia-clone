@@ -1,1 +1,74 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h2>Dashboard Overview</h2>
+    <p>Welcome back! Here's what's happening with your store today.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <h3>{{stats.totalOrders}}</h3>
+        <p>Total Orders</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <h3>${{stats.totalRevenue | number:'1.2-2'}}</h3>
+        <p>Total Revenue</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🛍️</div>
+      <div class="stat-content">
+        <h3>{{stats.totalProducts}}</h3>
+        <p>Total Products</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-content">
+        <h3>{{stats.pendingOrders}}</h3>
+        <p>Pending Orders</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="recent-section">
+    <div class="section-header">
+      <h3>Recent Orders</h3>
+      <button class="view-all-btn" (click)="navigatetoorders()">View All Orders</button>
+    </div>
+
+    <div class="orders-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of recentOrders">
+            <td>{{order.id}}</td>
+            <td>{{order.customerName}}</td>
+            <td>${{order.amount | number:'1.2-2'}}</td>
+            <td>
+              <span class="status-badge" [class]="getStatusClass(order.status)">
+                {{order.status | titlecase}}
+              </span>
+            </td>
+            <td>{{order.date | date:'short'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

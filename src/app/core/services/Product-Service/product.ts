@@ -39,6 +39,7 @@ export class ProductService {
   }
 
   getAllUi():Observable<ProductUi[]>{
+    console.log("ppppppppppppppppppppppp");
      return this.httpClient.get<ProductUi[]>(this.apiBaseUrl+this.controller.GetAllForUI)
     .pipe(
       tap({
@@ -58,7 +59,7 @@ export class ProductService {
     )
   }
 
-  AddProduct(product:CreateProduct){
+  AddProduct(product:FormData){
     return this.httpClient.post(this.apiBaseUrl+this.controller.CreateProduct,product,{withCredentials:true})
     .pipe(
       tap({

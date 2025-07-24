@@ -9,9 +9,11 @@ export const environment = {
         SellerRegister:'/seller/SellerRegister',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
+
         logout: '/auth/logout',
     }
 ,
+
 
     BaseUrlPath : "http://localhost:5087/api",
     ImageUrlBase:`http://localhost:5087`,
@@ -82,6 +84,14 @@ export const environment = {
     assignToChat: (chatId: string) => `/Chat/${chatId}/assign`,
     closeChat: (chatId: string) => `/Chat/${chatId}/close`,
     markChatAsRead: (chatId: string) => `/Chat/${chatId}/mark-read`,
+  },
+  Address:{
+    getAddress:'/Adsress',
+    addAddress:'/Address',
+    getAddressByUserId:'/Address/user',
+    getAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
+    updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
+    deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
   }
 
   };
