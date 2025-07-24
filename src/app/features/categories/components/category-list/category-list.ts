@@ -68,6 +68,8 @@ export class CategoryList implements OnInit {
 
   private loadCategoryData(): void {
     const categoryId = this.route.snapshot.paramMap.get('id');
+    console.log('Category ID from route:', categoryId);
+    console.log('Route snapshot:', this.route.snapshot.paramMap);
 
     if (categoryId) {
       this.loadSpecificCategory(+categoryId);
@@ -91,7 +93,7 @@ export class CategoryList implements OnInit {
         this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('Failed to load category', err);
+        console.error('Failed to load category from the function', err);
         this.cdr.markForCheck();
       }
     });

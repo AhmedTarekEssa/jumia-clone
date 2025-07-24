@@ -13,26 +13,27 @@ export class WishlistService {
 
   // GET /api/Wishlist - Get all wishlist items
   getWishlist(): Observable<any> {
-    return this.http.get(`${this.baseUrl}${environment.Wishlist.GetAll}`);
+    return this.http.get(`${this.baseUrl}${environment.Wishlist.GetAll}`, { withCredentials: true });
   }
 
   // DELETE /api/Wishlist - Clear entire wishlist
   clearWishlist(): Observable<any> {
-    return this.http.delete(`${this.baseUrl}${environment.Wishlist.Clear}`);
+    return this.http.delete(`${this.baseUrl}${environment.Wishlist.Clear}`, { withCredentials: true });
   }
 
   // POST /api/Wishlist/items/{productId} - Add item to wishlist
   addToWishlist(productId: number): Observable<any> {
     return this.http.post(
       `${this.baseUrl}${environment.Wishlist.AddItem(productId)}`,
-      {} // empty body as no payload is required
+      {}, { withCredentials: true } // empty body as no payload is required
     );
   }
 
   // DELETE /api/Wishlist/items/{id} - Remove item from wishlist
   removeFromWishlist(id: number): Observable<any> {
     return this.http.delete(
-      `${this.baseUrl}${environment.Wishlist.RemoveItem(id)}`
+      `${this.baseUrl}${environment.Wishlist.RemoveItem(id)}`,
+      { withCredentials: true }
     );
   }
 }

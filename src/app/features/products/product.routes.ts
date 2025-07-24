@@ -11,6 +11,11 @@ export const routes: Routes = [
   {
     path:'ProductsReviews/:id',
     loadComponent: () => import('./components/product-review-show-all/product-review-show-all').then(m => m.ProductReviewShowAll),
+  },
+  {
+    path:'',
+    redirectTo: 'Products/16',
+    pathMatch: 'full'
   }
 ];
 

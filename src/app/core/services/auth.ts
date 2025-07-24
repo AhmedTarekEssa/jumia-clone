@@ -67,7 +67,7 @@ export  class AuthService {
     .pipe(tap( () => {
           // document.cookie = "UserInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       this.currentUserSubject.next(null);
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login-register']);
     })
   );
   }

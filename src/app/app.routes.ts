@@ -8,7 +8,8 @@ import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welc
 
 export const routes: Routes = [
 
- {
+  {
+
     path: '',
     component: MainLayout,
     children: [
@@ -23,8 +24,8 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'categories',
-        loadChildren: () => import('./features/categories/categories.routes').then(m => m.routes),
+        path: 'categories/:id',
+        loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
         data: { preload: true }
       },
       {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'vendor',
         loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
+      },
+      {
+        path: 'Products/:id',
+        loadComponent:() => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
       }
     ]
 
@@ -76,6 +81,7 @@ export const routes: Routes = [
     canActivate: [sellerGuard],
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
   },
+
   {
     path:'SellerAuth',
     component:SellerWelcome,
@@ -98,6 +104,7 @@ export const routes: Routes = [
     path: '',
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
   },
+
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 
