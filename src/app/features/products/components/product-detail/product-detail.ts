@@ -8,6 +8,7 @@ import { CartService } from '../../../../core/services/cart-service/cart-service
 import { AddToCart } from '../../../cart/cart-models';
 import { WishlistService } from '../../../../core/services/wishlist';
 import { environment } from '../../../../../environments/environment.development';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-product-detail',
@@ -36,7 +37,8 @@ export class ProductDetailC implements OnInit {
     private cdr: ChangeDetectorRef,
     private cartService:CartService,
     private route: ActivatedRoute,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private cookieService: CookieService
   ) {
     this.productId = Number(this.route.snapshot.paramMap.get('id'));
     console.log("Product ID from route:", this.productId);
@@ -44,9 +46,11 @@ export class ProductDetailC implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkWishlistStatus();
+    if (this.cookieService.check('UserInfo')&& this.cookieService.get('UserInfo') !== null && this.cookieService.check('JumiaAuthCookie') && this.cookieService.get('JumiaAuthCookie') !== null) {
+      this.checkWishlistStatus();
+    }
 
-
+    console.log("Fetching product details for ID:", this.productId);
     this.productService.getProductDetails(this.productId).subscribe({
       next: (data) => {
         this.product = data;
