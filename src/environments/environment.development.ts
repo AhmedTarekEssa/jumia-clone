@@ -6,6 +6,7 @@ export const environment = {
     authRoutes: {
         login: '/auth/login',
         register: '/auth/register',
+        SellerRegister:'/seller/SellerRegister',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
         logout: '/auth/logout',

@@ -4,6 +4,7 @@ import { adminGuard } from './core/guards/admin-guard';
 import { sellerGuard } from './core/guards/seller-guard';
 import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
+import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
 
 export const routes: Routes = [
  {
@@ -71,6 +72,16 @@ export const routes: Routes = [
     canActivate: [sellerGuard],
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
   },
+  {
+    path:'SellerAuth',
+    component:SellerWelcome,
+    loadChildren: () => import('./features/seller-auth/seller-auth.routes').then(m => m.routes)
+  },
+  ///////
+  // create new path called SellerAuth
+  ///Component SellerWelcomeComponent
+  //// LoadChildren      loadChildren: () => import('./features/seller/seller-auth.routes').then(m => m.routes)
+  /// من غير  gard 
   {
     path:'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
