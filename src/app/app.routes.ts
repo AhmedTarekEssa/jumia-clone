@@ -80,6 +80,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
   },
   {
+    path: 'address',
+    loadChildren: () => import('../app/features/address/address.routes').then(m => m.routes)
+  },
+{
     path: '',
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
   },
