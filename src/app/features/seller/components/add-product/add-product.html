@@ -1,0 +1,340 @@
+<div class="product-management-container">
+  <div class="header">
+    <h2>Product Category Selection</h2>
+  </div>
+
+  <div class="form-container">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+      <div class="form-section">
+        <h4>Select Product Category</h4>
+        
+        <div formArrayName="categoryIds" class="category-selects-container">
+          <div 
+            *ngFor="let categoryControl of categoryIdsArray.controls; let i = index" 
+            class="form-group">
+            <label *ngIf="i === 0">Main Category</label>
+            <label *ngIf="i > 0">Sub-Category Level {{i}}</label>
+            <select 
+              [formControlName]="i" 
+              class="form-control"
+              (change)="onCategorySelect(i)">
+              <option value="">Select {{ i === 0 ? 'a Main Category' : 'a Sub-Category' }}</option>
+              <option *ngFor="let category of displayedCategoryLevels[i]" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div class="error" *ngIf="categoryControl.invalid && categoryControl.touched">
+              {{ i === 0 ? 'Main category' : 'Sub-category' }} is required
+            </div>
+          </div>
+        </div>
+      </div>
+  
+       <div class="form-row">
+          <div class="form-group">
+            <label for="name">Product Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              formControlName="name" 
+              class="form-control"
+              placeholder="Enter product name">
+            <div class="error" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+              Product name is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="basePrice">Base Price</label>
+            <input 
+              type="number" 
+              id="basePrice" 
+              formControlName="basePrice" 
+              class="form-control"
+              placeholder="0.00"
+              step="0.01">
+            <div class="error" *ngIf="productForm.get('basePrice')?.invalid && productForm.get('basePrice')?.touched">
+              Valid base price is required
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea 
+            id="description" 
+            formControlName="description" 
+            class="form-control"
+            rows="4"
+            placeholder="Enter product description"></textarea>
+          <div class="error" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+            Description is required
+          </div>
+        </div>
+     
+      <!-- Images Section -->
+      <div class="form-section">
+        <h4>Images</h4>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mainImage">Main Image</label>
+            <input 
+              type="file" 
+              id="mainImage" 
+              (change)="onFileSelect($event, 'mainImageUrl')"
+              accept="image/*"
+              class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="additionalImages">Additional Images</label>
+            <input 
+              type="file" 
+              id="additionalImages" 
+              (change)="onMultipleFileSelect($event)"
+              accept="image/*"
+              multiple
+              class="form-control">
+          </div>
+        </div>
+      </div>
+
+
+ <div class="form-section" *ngIf="attributesArray.length > 0">
+        <div class="section-header">
+          <h4>Product Attributes</h4>
+          </div>
+
+        <div formArrayName="attributes" class="attributes-container">
+          <div 
+            *ngFor="let attributeGroup of attributesArray.controls; let i = index" 
+            [formGroupName]="i" 
+            class="attribute-group">
+            <div class="attribute-header">
+              <h5>{{ (attributeGroup.get('attributeName')?.value || 'Attribute') }}</h5>
+              </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>{{ (attributeGroup.get('attributeName')?.value || 'Attribute Name') }}</label>
+                
+                <ng-container [ngSwitch]="attributeGroup.get('attributeType')?.value">
+                  <select 
+                    *ngSwitchCase="'select'"
+                    formControlName="value" 
+                    class="form-control"
+                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false"
+                    multiple> <option value="">Select value(s)</option> <option 
+                      *ngFor="let option of (attributeGroup.get('possibleValues')?.value | jsonParse)" 
+                      [value]="option">
+                      {{ option }}
+                    </option>
+                  </select>
+
+                  <input 
+                    *ngSwitchCase="'text'"
+                    type="text" 
+                    formControlName="value" 
+                    class="form-control"
+                    placeholder="Enter text value"
+                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
+
+                  <input 
+                    *ngSwitchCase="'number'"
+                    type="number" 
+                    formControlName="value" 
+                    class="form-control"
+                    placeholder="Enter number value"
+                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
+                  
+                  <input 
+                    *ngSwitchDefault
+                    type="text" 
+                    formControlName="value" 
+                    class="form-control"
+                    placeholder="Enter value"
+                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
+                </ng-container>
+
+                <div class="error" *ngIf="attributeGroup.get('value')?.invalid && attributeGroup.get('value')?.touched">
+                  {{ attributeGroup.get('attributeName')?.value }} is required
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="form-section">
+        <div class="section-header">
+          <h4>Product Variants</h4>
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addVariant()">
+            Add Variant
+          </button>
+        </div>
+
+        <div formArrayName="variants" class="variants-container">
+          <div 
+            *ngFor="let variant of variantsArray.controls; let i = index" 
+            [formGroupName]="i" 
+            class="variant-group">
+            <div class="variant-header">
+              <h5>Variant {{ i + 1 }}</h5>
+              <button type="button" class="btn btn-sm btn-danger" (click)="removeVariant(i)">
+                Remove
+              </button>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Variant Name</label>
+                <input 
+                  type="text" 
+                  formControlName="variantName" 
+                  class="form-control"
+                  placeholder="Enter variant name">
+              </div>
+
+              <div class="form-group">
+                <label>SKU</label>
+                <input 
+                  type="text" 
+                  formControlName="sku" 
+                  class="form-control"
+                  placeholder="Enter SKU">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Price</label>
+                <input 
+                  type="number" 
+                  formControlName="price" 
+                  class="form-control"
+                  placeholder="0.00"
+                  step="0.01">
+              </div>
+
+              <div class="form-group">
+                <label>Discount %</label>
+                <input 
+                  type="number" 
+                  formControlName="discountPercentage" 
+                  class="form-control"
+                  placeholder="0"
+                  min="0"
+                  max="100">
+              </div>
+
+              <div class="form-group">
+                <label>Stock Quantity</label>
+                <input 
+                  type="number" 
+                  formControlName="stockQuantity" 
+                  class="form-control"
+                  placeholder="0"
+                  min="0">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Variant Image</label>
+                <input 
+                  type="file" 
+                  (change)="onFileSelect($event, 'variantImageUrl', i)"
+                  accept="image/*"
+                  class="form-control">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="isDefault">
+                  Is Default Variant
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="isAvailable">
+                  Is Available
+                </label>
+              </div>
+            </div>
+
+            <!-- Variant Attributes -->
+            <div class="variant-attributes-section">
+              <div class="section-header">
+                <label>Variant Attributes</label>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addVariantAttribute(i)">
+                  Add Attribute
+                </button>
+              </div>
+
+              <div formArrayName="attributes" class="variant-attributes-container">
+                <div 
+                  *ngFor="let variantAttr of getVariantAttributesArray(i).controls; let j = index" 
+                  [formGroupName]="j"
+                  class="variant-attribute-group">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <select 
+                        formControlName="attributeId" 
+                        (change)="onVariantAttributeChange(i, j)"
+                        class="form-control">
+                        <option value="">Select Attribute</option>
+                        <option *ngFor="let attr of availableCategoryAttributes" [value]="attr.attributeId">
+                          {{ attr.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <input 
+                        type="text" 
+                        formControlName="attributeName" 
+                        class="form-control"
+                        placeholder="Attribute Name"
+                        readonly>
+                    </div>
+
+                    <div class="form-group">
+                      <input 
+                        type="text" 
+                        formControlName="attributeValue" 
+                        class="form-control"
+                        placeholder="Attribute Value">
+                    </div>
+
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-outline-danger" 
+                      (click)="removeVariantAttribute(i, j)">
+                      ×
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<div class="form-actions d-flex justify-content-between">
+        <button 
+          type="submit"  
+          class="btn btn-primary" 
+          [disabled]="productForm.invalid">
+          Submit 
+        </button>
+        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

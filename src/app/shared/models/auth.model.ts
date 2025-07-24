@@ -23,6 +23,20 @@ export interface PasswordSetupDto {
     confirmPassword: string;
     otpCode: string;
 }
+export interface CreateSellerDto {
+     firstName: string;
+  lastName: string;
+  birthDate: string;      // string in ISO format (e.g., '2000-01-01')
+  gender: string;
+  address: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    BussinessDiscreption: string;
+    BussinessLogo: string;
+    otpCode: string;
+
+}
 
 export interface User {
     token: string;

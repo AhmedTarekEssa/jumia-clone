@@ -1,22 +1,73 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { Chat } from '../../../shared/models/Livechatmodels/chat';
 import { SendMessageRequest } from '../../../shared/models/Livechatmodels/send-message-request';
 import { Message } from '../../../shared/models/Livechatmodels/message';
+import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   private apiUrl = `${environment.BaseUrlPath}`;
+  private hubUrl = `http://localhost:5087/chathub`
+  private hubConnection!: HubConnection;
+  public newMessage$ = new BehaviorSubject<any>(null);
+  public chatClosed$ = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) { }
 
+  startConnection(){
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(this.hubUrl)
+      .build();
+
+    this.hubConnection.start()
+      .then(()=>console.log("signalr connected"))
+      .catch(err=> console.error('signalr error' , err));
+
+    this.hubConnection.on('ReceiveMessage',(message)=>this.newMessage$.next(message));
+
+    this.hubConnection.on('ChatClosed',(chat)=>this.chatClosed$.next(chat));
+  }
+
+  async joinChatGroup(conversationId: string) {
+  if (!this.hubConnection) {
+    console.warn('hubConnection is undefined. Starting connection...');
+    await this.startConnection();
+  }
+
+  // Wait for connection to be in Connected state
+  while (this.hubConnection.state !== HubConnectionState.Connected) {
+    console.log('Waiting for SignalR to connect...');
+    await new Promise(resolve => setTimeout(resolve, 100)); // wait 100ms
+  }
+
+  try {
+    console.log(`Joining group: ${conversationId}`);
+    await this.hubConnection.invoke("JoinChatGroup", conversationId);
+    console.log(`Successfully joined group: ${conversationId}`);
+  } catch (err) {
+    console.error('Failed to join group', err);
+  }
+}
+
+  leaveChatGroup(chatId: string) {
+    return this.hubConnection.invoke('LeaveChatGroup', chatId);
+  }
+
+  markMessagesAsRead(chatId: string) {
+    return this.hubConnection.invoke('MarkMessagesAsRead', chatId);
+  }
+
+
+// Rest Api  
+
   createChat(): Observable<Chat> {
-    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.createchat}`, {});
+    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.createchat}`,{ initialMessage: "Hi there" });
   }
 
   getChatById(id: string): Observable<Chat> {
@@ -27,8 +78,8 @@ export class ChatService {
     return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getAllChatsByUserId(userId)}`);
   }
 
-  getMyChat(): Observable<Chat> {
-    return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getmychat}`);
+  getMyChat(): Observable<Chat[]> {
+    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getmychat}`);
   }
 
   getActiveChats(): Observable<Chat[]> {

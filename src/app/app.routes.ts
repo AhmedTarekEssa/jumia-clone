@@ -4,9 +4,12 @@ import { adminGuard } from './core/guards/admin-guard';
 import { sellerGuard } from './core/guards/seller-guard';
 import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
+import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
 
 export const routes: Routes = [
- {
+
+  {
+
     path: '',
     component: MainLayout,
     children: [
@@ -21,8 +24,8 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'categories',
-        loadChildren: () => import('./features/categories/categories.routes').then(m => m.routes),
+        path: 'categories/:id',
+        loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
         data: { preload: true }
       },
       {
@@ -38,8 +41,13 @@ export const routes: Routes = [
       {
         path: 'vendor',
         loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
+      },
+      {
+        path: 'Products/:id',
+        loadComponent:() => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
       }
     ]
+
   },
   {
     path: '',
@@ -61,9 +69,11 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+
     component: SimpleLayout,
     canActivate: [adminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes)
+
   },
   {
     path: 'seller',
@@ -71,10 +81,30 @@ export const routes: Routes = [
     canActivate: [sellerGuard],
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
   },
+
+  {
+    path:'SellerAuth',
+    component:SellerWelcome,
+    loadChildren: () => import('./features/seller-auth/seller-auth.routes').then(m => m.routes)
+  },
+  ///////
+  // create new path called SellerAuth
+  ///Component SellerWelcomeComponent
+  //// LoadChildren      loadChildren: () => import('./features/seller/seller-auth.routes').then(m => m.routes)
+  /// من غير  gard 
   {
     path:'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
   },
+  {
+    path: 'address',
+    loadChildren: () => import('../app/features/address/address.routes').then(m => m.routes)
+  },
+{
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
+  },
+
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 

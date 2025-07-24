@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { WishlistService } from '../../../../core/services/wishlist';
 import { DecimalPipe } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 // import { CartService } from '../../services/cart.service'; // Assuming you have a CartService
 
 interface WishlistItem {
@@ -24,7 +25,7 @@ interface WishlistResponse {
 
 @Component({
   selector: 'app-wishlist',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe,RouterModule],
   templateUrl: './wishlist.html',
   styleUrl: './wishlist.css'
 })
@@ -110,7 +111,8 @@ export class Wishlist implements OnInit {
 
   constructor(
     private wishlistService: WishlistService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -130,11 +132,17 @@ export class Wishlist implements OnInit {
       },
       error: (err) => {
         this.errorMessage = 'Failed to load wishlist. Please try again later.';
+        this.wishlist = undefined;
         this.isLoading = false;
+
         this.cdr.detectChanges(); // Trigger change detection on error
-        console.error('Error loading wishlist:', err);
+
       }
     });
+  }
+  navigateToHome(): void {
+    this.router.navigate(['/']);
+    this.cdr.markForCheck(); // Mark for check after navigation
   }
 
   removeFromWishlist(wishlistItemId: number): void {

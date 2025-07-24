@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumia Seller Navigation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="jumia-navbar">
+        <div class="navbar-container">
+            <div class="navbar-left">
+                <a href="#" class="register-btn">Register Now</a>
+
+                <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="navbar-menu" id="mobileMenu">
+                    <li><a href="#">Start Now</a></li>
+                    <li><a href="#">Shipping and delivery</a></li>
+                    <li><a href="#">Selling expenses on Jumia</a></li>
+                </ul>
+            </div>
+
+            <div class="navbar-right">
+                <a href="#" class="language-selector">
+                    <span class="egypt-flag"></span>
+                    العربية
+                </a>
+
+                <div class="logo-container">
+                    <svg class="jumia-logo" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                        <!-- JUMIA text -->
+                        <text x="10" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold"
+                            fill="#2c3e50">JUMIA</text>
+                        <!-- hub text -->
+                        <text x="110" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold"
+                            fill="#f68b1e">hub</text>
+                        <!-- Vendor text -->
+                        <text x="110" y="45" font-family="Arial, sans-serif" font-size="10" fill="#666">Vendor</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-1 order-2">
+                    <div class="laptop-container">
+                        <div class="laptop-frame">
+                            <div class="laptop-screen">
+                                <div class="screen-content">
+                                    <div class="jumia-interface">
+                                        <div class="interface-header">
+                                            JUMIA - Free Shipping & Returns
+                                        </div>
+                                        <div class="interface-content">
+                                            <div class="product-card featured">
+                                                Weekend Clearance
+                                                <br>Limited Stock
+                                            </div>
+                                            <div class="product-card">
+                                                Fashion
+                                            </div>
+                                            <div class="product-card">
+                                                Electronics
+                                            </div>
+                                            <div class="product-card">
+                                                Home & Garden
+                                            </div>
+                                            <div class="product-card">
+                                                Beauty
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="laptop-base"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 order-lg-2 order-1">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Sell on Jumia and grow your business all over Egypt</h1>
+
+                        <div class="cta-section">
+                            <div class="cta-group">
+                                <span class="cta-label">New Seller?</span>
+                                <button class="btn btn-register" [routerLink]="['/SellerAuth/VendorCenter']"
+                                    type="button">Register Here</button>
+
+                            </div>
+                            <div class="cta-group">
+                                <span class="cta-label">Already have an account</span>
+                                <button class="btn btn-login" [routerLink]="['/SellerAuth/login']">Log In</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Sell Section -->
+    <div class="why-section">
+        <div class="already-seller">Already On Jumia?</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="why-content">
+                        <h2 class="why-title">Why sell on Jumia?</h2>
+                        <p class="why-subtitle">The advantages of selling on Jumia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>
