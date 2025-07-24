@@ -46,7 +46,7 @@ export class ProductDetailC implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.cookieService.check('UserInfo')&& this.cookieService.get('UserInfo') !== null && this.cookieService.check('JumiaAuthCookie') && this.cookieService.get('JumiaAuthCookie') !== null) {
+    if (this.cookieService.check('UserInfo')&& this.cookieService.get('UserInfo') !== null ) {
       this.checkWishlistStatus();
     }
 
