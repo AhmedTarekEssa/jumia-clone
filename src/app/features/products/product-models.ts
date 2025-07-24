@@ -1,6 +1,7 @@
 export interface ProductDetails {
   productId: number
   name: string
+  categoryId:number
   description: string
   basePrice: number
   discountPercentage: string

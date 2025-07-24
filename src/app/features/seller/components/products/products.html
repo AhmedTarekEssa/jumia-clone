@@ -51,7 +51,7 @@
   </div>
 
   <div class="products-grid row justify-content-center" *ngIf="filteredProducts.length > 0">
-    <div class="product-card col-3 mx-3 my-2" *ngFor="let product of filteredProducts">
+    <div class="product-card  col-lg-3 mx-3 my-2" *ngFor="let product of filteredProducts">
       <div class="product-image">
         <img [src]=" baseImageUrl + product.imageUrl" [alt]="product.name">
         <div class="product-status">
@@ -74,7 +74,7 @@
             ✏️ Edit
           </button>
           <button
-            *ngIf="product.approvalStatus ==='Deleted'"
+            *ngIf="product.approvalStatus ==='Deleted' && product.stockQuantity>0"
             class="btn-toggle active"
          
             (click)="toggleProductStatus(product.productId)">

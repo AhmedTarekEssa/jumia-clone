@@ -29,8 +29,8 @@ export const environment = {
         Activate:(id:number)=>`/Product/Activate/${id}`,
         Deactivate:(id:number)=>`/Product/Deactivate/${id}`,
         GetVariantByAttributes:(id:number)=>`/Product/${id}/variant`,
-        GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`
-
+        GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`,
+        UpdateProduct:'/Product/update'
     },
     Cart:{
         GetCart:"/Cart",
