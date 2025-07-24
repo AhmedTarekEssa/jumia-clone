@@ -6,7 +6,7 @@ import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
 
 export const routes: Routes = [
- {
+  {
     path: '',
     component: MainLayout,
     children: [
@@ -21,8 +21,8 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'categories',
-        loadChildren: () => import('./features/categories/categories.routes').then(m => m.routes),
+        path: 'categories/:id',
+        loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
         data: { preload: true }
       },
       {
@@ -38,6 +38,10 @@ export const routes: Routes = [
       {
         path: 'vendor',
         loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
+      },
+      {
+        path: 'Products/:id',
+        loadComponent:() => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
       }
     ]
   },
@@ -70,10 +74,6 @@ export const routes: Routes = [
     component: SimpleLayout, // or create a separate SellerLayoutComponent
     canActivate: [sellerGuard],
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
-  },
-  {
-    path:'Products',
-    loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 

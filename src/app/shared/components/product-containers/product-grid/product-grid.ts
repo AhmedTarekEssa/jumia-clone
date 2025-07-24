@@ -64,7 +64,10 @@ export class ProductGrid implements OnInit {
 
 
  goToProductDetails(productId: number) {
-    this.router.navigate(['/product', productId]);
+  console.log("Navigating to product details for ID:", productId);
+
+  
+    this.router.navigate(['/Products', productId]);
   }
  
   addToWishlist(productId: number): void {

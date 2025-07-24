@@ -1,1 +1,60 @@
-<router-outlet></router-outlet>
+<div class="account-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-content">
+      <!-- Account Header -->
+      <div class="account-header">
+        <div class="account-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <span class="account-title">My Jumia Account</span>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="nav-menu">
+        <div class="nav-section">
+          <a
+            *ngFor="let item of mainMenuItems"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            class="nav-item"
+            (click)="onMenuClick(item)"
+          >
+            <div class="nav-icon" [innerHTML]="item.icon"></div>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        </div>
+
+        <!-- Account Management Section -->
+        <div class="nav-section">
+          <div class="section-divider"></div>
+          <a
+            *ngFor="let item of accountMenuItems"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            class="nav-item"
+            (click)="onMenuClick(item)"
+          >
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        </div>
+
+        <!-- Logout -->
+        <div class="nav-section">
+          <div class="section-divider"></div>
+          <button class="logout-btn" (click)="onLogout()">
+            <span class="logout-text">Logout</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
