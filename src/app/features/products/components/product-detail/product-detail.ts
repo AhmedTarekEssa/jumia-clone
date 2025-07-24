@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { AddToCart } from '../../../cart/cart-models';
+import { WishlistService } from '../../../../core/services/wishlist';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })
@@ -26,20 +27,22 @@ export class ProductDetailC implements OnInit {
   currentVariantImageIndex:number=0;
   item!:AddToCart;
   productId!:number;
-  
+
 
   constructor(
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
     private cartService:CartService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private wishlistService: WishlistService
   ) {
     this.productId = Number(this.route.snapshot.paramMap.get('id'));
     console.log("Product ID from route:", this.productId);
-    
+
   }
 
   ngOnInit(): void {
+    this.checkWishlistStatus();
 
 
     this.productService.getProductDetails(this.productId).subscribe({
@@ -95,15 +98,41 @@ export class ProductDetailC implements OnInit {
       .filter(v => v.isAvailable && v.stockQuantity > 0)
       .map(v => ({productId:this.product.productId, variant: v, quantity: 0 }));
   }
+  checkWishlistStatus() {
+  this.wishlistService.isInWishlist(this.productId).subscribe({
+    next: (isWishlisted) => {
+      this.isWishlisted = isWishlisted;
+      this.cdr.detectChanges(); // If needed for change detection
+    },
+    error: (err) => console.error('Error checking wishlist', err)
+  });
+}
 
   closeCartPopup(): void {
     this.showCartPopup = false;
   }
 
   toggleWishlist(): void {
-    this.isWishlisted = !this.isWishlisted;
-    console.log('Wishlist status:', this.isWishlisted);
+  if (this.isWishlisted) {
+    this.wishlistService.removeFromWishlist(this.product.productId).subscribe({
+      next: () => {
+        this.isWishlisted = false;
+        console.log('Removed from wishlist');
+        this.cdr.detectChanges(); // Trigger change detection if needed
+      },
+      error: (err) => console.error('Error removing from wishlist', err)
+    });
+  } else {
+    this.wishlistService.addToWishlist(this.product.productId).subscribe({
+      next: () => {
+        this.isWishlisted = true;
+        console.log('Added to wishlist');
+        this.cdr.detectChanges(); // Trigger change detection if needed
+      },
+      error: (err) => console.error('Error adding to wishlist', err)
+    });
   }
+}
 
   updateVariantQuantity(variantId: number, change: number): void {
     const selection = this.cartSelections.find(s => s.variant.variantId === variantId);
@@ -157,3 +186,4 @@ export class ProductDetailC implements OnInit {
     this.closeCartPopup();
   }
 }
+
