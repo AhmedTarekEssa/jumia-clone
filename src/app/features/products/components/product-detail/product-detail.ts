@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { AddToCart } from '../../../cart/cart-models';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-product-detail',
@@ -26,6 +27,7 @@ export class ProductDetailC implements OnInit {
   currentVariantImageIndex:number=0;
   item!:AddToCart;
   productId!:number;
+  baseImageUrl = environment.ImageUrlBase;
   
 
   constructor(
@@ -109,6 +111,7 @@ export class ProductDetailC implements OnInit {
     const selection = this.cartSelections.find(s => s.variant.variantId === variantId);
     if (selection) {
       const newQty = selection.quantity + change;
+      
       if (newQty >= 0 && newQty <= selection.variant.stockQuantity) {
         selection.quantity = newQty;
       }

@@ -60,7 +60,7 @@ export class CartItems implements OnInit {
    
     this.cdr.detectChanges();
    
-    this.cartService.UpdateCartItem(itemId,{quantity :item?.quantity}).subscribe(
+    this.cartService.UpdateCartItem(itemId,{quantity :1}).subscribe(
       {
         next:(data)=>{
           item!.subtotal = data.subtotal
