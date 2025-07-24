@@ -7,14 +7,14 @@
       <!-- Product Images -->
       <div class="product-images">
         <div class="main-image-container">
-          <img [src]="allImages[currentImageIndex]" class="main-image" />
+          <img [src]="baseImageUrl + allImages[currentImageIndex]" class="main-image" />
           <!-- <button class="nav-btn prev-btn" (click)="previousImage()">‹</button>
           <button class="nav-btn next-btn" (click)="nextImage()">›</button> -->
         </div>
         <div class="image-thumbnails">
           <div class="thumbnail" *ngFor="let img of allImages; let i = index" [class.active]="i === currentImageIndex"
             (click)="selectImage(i)">
-            <img [src]="img" />
+            <img [src]="baseImageUrl + img" />
           </div>
         </div>
         <div class="share-section">
