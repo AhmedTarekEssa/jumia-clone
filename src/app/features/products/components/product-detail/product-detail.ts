@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { AddToCart } from '../../../cart/cart-models';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-product-detail',
@@ -25,15 +26,25 @@ export class ProductDetailC implements OnInit {
   variantImages: any[] = [];
   currentVariantImageIndex:number=0;
   item!:AddToCart;
+  productId!:number;
+  baseImageUrl = environment.ImageUrlBase;
+  
 
   constructor(
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
-    private cartService:CartService
-  ) {}
+    private cartService:CartService,
+    private route: ActivatedRoute
+  ) {
+    this.productId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log("Product ID from route:", this.productId);
+    
+  }
 
   ngOnInit(): void {
-    this.productService.getProductDetails(16).subscribe({
+
+
+    this.productService.getProductDetails(this.productId).subscribe({
       next: (data) => {
         this.product = data;
         console.log("-------------------------");
@@ -100,6 +111,7 @@ export class ProductDetailC implements OnInit {
     const selection = this.cartSelections.find(s => s.variant.variantId === variantId);
     if (selection) {
       const newQty = selection.quantity + change;
+      
       if (newQty >= 0 && newQty <= selection.variant.stockQuantity) {
         selection.quantity = newQty;
       }
@@ -137,7 +149,7 @@ export class ProductDetailC implements OnInit {
     quantity: i.quantity
     }));
      console.log(items)
-    
+
     this.cartService.addToCart(items).subscribe(
       {
         next:()=>console.log("added to cart"),

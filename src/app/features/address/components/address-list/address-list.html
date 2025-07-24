@@ -1,0 +1,30 @@
+<div class="container mt-4">
+  <h3>Select Delivery Address</h3>
+
+  <div *ngFor="let address of addresses" class="card mb-3" [class.border-warning]="address.addressId === selectedAddressId">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <div>
+        <div><strong>{{ address.addressName }}</strong></div>
+        <div>{{ address.streetAddress }}, {{ address.city }} - {{ address.state }}, {{ address.country }}</div>
+        <div>{{ address.phoneNumber }}</div>
+      </div>
+
+      <div class="text-end">
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="editAddress(address.addressId!)">
+  Edit
+</button>
+
+        <input type="radio"
+               name="selected"
+               [checked]="selectedAddressId === address.addressId"
+               (change)="selectAddress(address.addressId!)" />
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mt-4">
+    <button class="btn btn-warning" (click)="confirmSelection()">Select Address</button>
+    <button class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+    <button class="btn btn-outline-success ms-auto" (click)="goToAddPage()">Add Address</button>
+  </div>
+</div>

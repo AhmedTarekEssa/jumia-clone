@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumia Vendor Center</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <div class="row g-0 h-100">
+            <!-- Login Section -->
+            <div class="col-lg-6">
+                <div class="login-section">
+                    <div class="logo-container">
+                        <div class="logo">
+                            <div class="logo-icon"></div>
+                            <div class="logo-text">
+                                <span class="jumia">JUMIA</span><span class="vendor">VendorCenter</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="signin-buttons">
+                        <a href="#" class="signin-btn">
+                            <div class="google-icon"></div>
+                            Sign in with Google
+                        </a>
+                        
+                        <a href="#" class="signin-btn">
+                            <i class="fas fa-envelope email-icon"></i>
+                            Sign in with Email
+                        </a>
+                        
+                        <a [routerLink]="['/SellerAuth/login']" class="signin-btn">
+                            <i class="fas fa-star jumia-star"></i>
+                            Sign in with JUMIA
+                        </a>
+                    </div>
+                    
+                    <div class="sell-btn" [routerLink]="['/SellerAuth/email-check']">
+                        Sell on Jumia
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Illustration Section -->
+            <div class="col-lg-6">
+                <div class="illustration-section">
+                    <div class="background-icons">
+                        <i class="fas fa-shopping-cart bg-icon"></i>
+                        <i class="fas fa-truck bg-icon"></i>
+                        <i class="fas fa-box bg-icon"></i>
+                        <i class="fas fa-mobile-alt bg-icon"></i>
+                        <i class="fas fa-heart bg-icon"></i>
+                        <i class="fas fa-star bg-icon"></i>
+                    </div>
+                    
+                    <div class="illustration-container">
+                        <!-- Phone Mockup -->
+                        <div class="phone-mockup">
+                            <div class="phone-screen">
+                                <div class="phone-header"></div>
+                                <div class="phone-content">
+                                    <div class="product-item">Fashion</div>
+                                    <div class="product-item">Tech</div>
+                                    <div class="product-item">Home</div>
+                                    <div class="product-item">Beauty</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 3D Box -->
+                        <div class="box-3d">
+                            <div class="box-face box-front"></div>
+                            <div class="box-face box-right"></div>
+                            <div class="box-face box-top"></div>
+                        </div>
+                        
+                        <!-- Delivery Truck -->
+                        <div class="delivery-truck">
+                            <i class="fas fa-truck truck-icon"></i>
+                            <div class="truck-text">JUMIA<br>Delivery</div>
+                        </div>
+                        
+                        <!-- People -->
+                        <div class="person person1"></div>
+                        <div class="person person2"></div>
+                        <div class="person person3"></div>
+                        
+                        <!-- Shopping Cart -->
+                        <i class="fas fa-shopping-cart shopping-cart"></i>
+                        
+                        <!-- Connection Lines -->
+                        <div class="dotted-line line1"></div>
+                        <div class="dotted-line line2"></div>
+                        
+                        <!-- Connection Dots -->
+                        <div class="connection-dot dot1"></div>
+                        <div class="connection-dot dot2"></div>
+                        <div class="connection-dot dot3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add click handlers for buttons
+        document.querySelectorAll('.signin-btn, .sell-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Add your authentication logic here
+                console.log('Button clicked:', this.textContent.trim());
+            });
+        });
+    </script>
+</body>
+</html>

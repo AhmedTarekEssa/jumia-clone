@@ -44,6 +44,9 @@ export interface ProductUi {
   discountPercentage: string
   imageUrl: any
   discount?: number
+  isAvailable:boolean
+  approvalStatus:string
+  stockQuantity:number
   variants:Variant[]
 
 }

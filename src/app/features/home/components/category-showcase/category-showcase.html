@@ -1,14 +1,13 @@
-<!-- Top-Picks-Container.component.html -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<div class="flash-sales-container">
-    <!-- Top banner with timer -->
+<div class="flash-sales-container" *ngIf="products && products.length > 0">
+    <!-- Top banner with category name -->
     <div class="flash-sales-header">
         <div class="flash-sales-title">
             <i class="flash-icon"></i>
-            <span><b>Trendy Outfits</b> | Starting 15EGP</span>
+            <span><b>{{category?.name || 'Category'}}</b></span>
         </div>
         <div class="see-all">
             <a style="cursor: pointer;">See All <i class="ms-2 fas fa-chevron-right"></i></a>
@@ -18,26 +17,26 @@
     <!-- Products carousel -->
     <div class="products-carousel-container">
         <!-- Left scroll arrow -->
-        <button class="scroll-arrow left-arrow">
+        <button class="scroll-arrow left-arrow" (click)="scrollLeft(productsContainer)">
             <i class="fas fa-chevron-left"></i>
         </button>
 
         <!-- Products container -->
-        <div *ngFor="let product of products" (click)="goToProductDetails(product.productId)" class="products-container">
-            <div class="product-card">
+        <div #productsContainer class="products-container">
+            <div *ngFor="let product of products"
+                 (click)="goToProductDetails(product.productId)"
+                 class="product-card">
                 <a class="text-decoration-none">
                     <!-- Discount badge -->
-                     @if (product.discount) {
-
-                         <div class="discount-badge">
-                             {{product.discountPercentage}}
-                         </div>
-                     }
+                    @if (product.discount) {
+                        <div class="discount-badge">
+                            {{product.discountPercentage}}
+                        </div>
+                    }
 
                     <!-- Product image -->
                     <div class="product-image">
-                        <img [src]="base+product.imageUrl"
-                            [alt]="">
+                        <img [src]="base + product.imageUrl" [alt]="product.name">
                     </div>
 
                     <!-- Product info -->
@@ -50,32 +49,14 @@
                             <br>
                             <span class="base-price">EGP {{product.basePrice}}</span>
                         </div>
-
                     </div>
-
-
                 </a>
             </div>
         </div>
 
         <!-- Right scroll arrow -->
-        <button class="scroll-arrow right-arrow">
+        <button class="scroll-arrow right-arrow" (click)="scrollRight(productsContainer)">
             <i class="fas fa-chevron-right"></i>
         </button>
     </div>
-
-    <!-- Add this to your template to show loading and error states -->
-    <!-- <div  class="loading-indicator">
-  Loading products...
-</div>
-
-<div  class="error-message">
-  
-</div> -->
-
-    <!-- Show this when no products are available and not loading -->
-    <!-- <div class="no-products">
-  No Trendy Outfits products available at the moment.
-</div> -->
-
 </div>
