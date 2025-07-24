@@ -7,6 +7,7 @@ import { Category } from '../../../../shared/models/category-';
 import { CategoryAttribute } from '../../../../shared/models/category-attribute';
 import { JsonParsePipe } from "../../../../shared/pipes/json-parse-pipe";
 import { CreateProduct } from '../../../products/product-models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -21,6 +22,7 @@ export class AddProduct implements OnInit{
   private categoryService = inject(CategoryService);
   private productService = inject(ProductService);
    public readonly validators = Validators;
+   private router = inject(Router)
 
   productForm!: FormGroup;
 
@@ -376,178 +378,6 @@ addVariant(): void {
 
   // Submits the form, logging the selected category IDs.
   onSubmit(): void {
-    // if (this.productForm.valid) {
-    //    const selectedCategoryIds = this.productForm.value.categoryIds;
-    //   const finalCategoryId = selectedCategoryIds[selectedCategoryIds.length - 1];
-    //   const productPayload :CreateProduct = {
-    //     sellerId:1,
-    //     name: this.productForm.value.name,
-    //     basePrice: this.productForm.value.basePrice,
-    //     description: this.productForm.value.description,
-    //     categoryId: finalCategoryId, // The ID of the last selected category
-    //     mainImageUrl: this.productForm.value.mainImageUrl,
-    //     additionalImageUrls: this.productForm.value.additionalImageUrls, // Array of URLs
-
-    //     // Map product attributes to match backend expected format (e.g., Array of { attributeId, value })
-    //     attributes: this.productForm.value.attributes.map((attr: any) => ({
-    //       attributeId: attr.attributeId,
-    //       value: attr.value // This is the chosen value (string, number, or array for multi-select)
-    //     })),
-
-    //     // Map product variants to match backend expected format
-    //     variants: this.productForm.value.variants.map((variant: any) => ({
-    //       variantName: variant.variantName,
-    //       sku: variant.sku,
-    //       price: variant.price,
-    //       discountPercentage: variant.discountPercentage,
-    //       stockQuantity: variant.stockQuantity,
-    //       variantImageUrl: variant.variantImageUrl,
-    //       isDefault: variant.isDefault,
-    //       isAvailable: variant.isAvailable,
-    //       // Map variant attributes
-    //       attributes: variant.attributes.map((vAttr: any) => ({
-          
-    //         attributeName: vAttr.attributeName, 
-    //         attributeValue: vAttr.attributeValue
-    //       }))
-    //     }))
-    //   };
-
-    //   console.log(productPayload)
-      
-    //   this.productService.AddProduct(productPayload).subscribe({
-    //     next:()=>{
-    //       console.log("sucssessssssssssssssssssss")
-    //     this.productForm.reset();
-    //       this.clearProductAttributes();
-    //       this.clearProductVariants();
-    //       // Reset category dropdowns to initial state
-    //       this.categoryIdsArray.clear();
-    //       this.categoryIdsArray.push(this.fb.control('', this.validators.required));
-    //       this.displayedCategoryLevels[0] = this.categories;
-    //       this.cdr.detectChanges();
-    //     },
-    //     error:(err)=>console.error("errorroror" , err)
-    //   })
-
-
-    // } else {
-    //   console.log('Form is invalid. Please check the fields.');
-    //   this.markAllAsTouched(this.productForm); // Mark fields to show validation errors
-    // }
-
-  //    if (this.productForm.valid) {
-  //   const selectedCategoryIds = this.productForm.value.categoryIds;
-  //   const finalCategoryId = selectedCategoryIds[selectedCategoryIds.length - 1];
-
-  //   // Create a FormData object
-  //   const formData = new FormData();
-
-  //   // 1. Append simple properties directly
-  //   formData.append('sellerId', '1'); // Assuming fixed sellerId for now
-  //   formData.append('categoryId', finalCategoryId.toString()); // Ensure it's a string
-  //   formData.append('name', this.productForm.value.name);
-  //   formData.append('description', this.productForm.value.description);
-  //   formData.append('basePrice', this.productForm.value.basePrice.toString());
-
-  //   // 2. Append MainImageUrl (the actual File object)
-  //   if (this.selectedMainImageFile) {
-  //     formData.append('mainImageUrl', this.selectedMainImageFile, this.selectedMainImageFile.name);
-  //   } else {
-  //     // If mainImageUrl is optional, you might not append anything if null.
-  //     // If it's required, you'd add validation or ensure a default.
-  //     // For now, let's append an empty string or nothing if it's not selected.
-  //     // formData.append('mainImageUrl', ''); // Or skip if optional and not present
-  //   }
-
-
-  //   // 3. Append AdditionalImageUrls (array of File objects)
-  //   if (this.selectedAdditionalImageFiles && this.selectedAdditionalImageFiles.length > 0) {
-  //     this.selectedAdditionalImageFiles.forEach((file: File, index: number) => {
-  //       // The key for array of files should be `propertyName[index]`
-  //       formData.append(`additionalImageUrls[${index}]`, file, file.name);
-  //     });
-  //   }
-
-
-  //   // 4. Append Product Attributes (JSON string)
-  //   // Map your form attributes to the DTO structure and stringify
-  //   const productAttributes = this.productForm.value.attributes.map((attr: any) => ({
-  //     attributeId: attr.attributeId,
-  //     // 'Values' is a List<string> in C#. 'value' from your form maps to it.
-  //     // If your attribute.value is a single string, it will become List<string> with one item.
-  //     // If it's an array of strings, it will be the List<string>.
-  //     values: Array.isArray(attr.value) ? attr.value : [attr.value]
-  //   }));
-  //   formData.append('attributes', JSON.stringify(productAttributes));
-
-
-  //   // 5. Append Product Variants (JSON string and Variant Image Files)
-  //   const variantsForApi: any[] = [];
-  //   this.productForm.value.variants.forEach((variantFormValue: any, variantIndex: number) => {
-  //     // Find the corresponding File object for this variant's image
-  //     const variantImageFile = this.selectedVariantImageFiles.find(f => f.index === variantIndex)?.file;
-
-  //     // Construct the variant DTO data (excluding the file itself for JSON part)
-  //     const variantDto = {
-  //       variantId: variantFormValue.variantId, // If you have a hidden variantId for existing variants
-  //       variantName: variantFormValue.variantName,
-  //       sku: variantFormValue.sku,
-  //       price: variantFormValue.price,
-  //       discountPercentage: variantFormValue.discountPercentage,
-  //       stockQuantity: variantFormValue.stockQuantity,
-  //       isDefault: variantFormValue.isDefault,
-  //       isAvailable: variantFormValue.isAvailable,
-  //       // Map variant attributes
-  //       attributes: variantFormValue.attributes.map((vAttr: any) => ({
-  //         attributeId: vAttr.attributeId, // Ensure attributeId is included if backend needs it
-  //         attributeName: vAttr.attributeName,
-  //         attributeValue: vAttr.attributeValue
-  //       }))
-  //     };
-  //     variantsForApi.push(variantDto); // Add to a list that will be stringified
-
-  //     // Append the variant image file separately to FormData
-  //     if (variantImageFile) {
-  //       // Use a distinct key for each variant image, e.g., 'variants[0].variantImageUrl'
-  //       formData.append(`variants[${variantIndex}].variantImageUrl`, variantImageFile, variantImageFile.name);
-  //     }
-  //   });
-
-  //   // Append the JSON string of all variant data (excluding files which are appended above)
-  //   formData.append('variants', JSON.stringify(variantsForApi));
-
-
-  //   // Log the FormData content (for debugging)
-  //   // Note: You cannot directly inspect FormData content with console.log(formData) in all browsers.
-  //   // Use an iterator to see entries:
-  //   formData.forEach((value, key) => {
-  //     console.log(`${key}:`, value);
-  //   });
-
-  //   // Call your service with the FormData object
-  //   this.productService.AddProduct(formData).subscribe({
-  //     next: () => {
-  //       console.log('Product added successfully!');
-  //       this.productForm.reset();
-  //       this.clearProductAttributes();
-  //       this.clearProductVariants();
-  //       // Reset category dropdowns to initial state
-  //       this.categoryIdsArray.clear();
-  //       this.categoryIdsArray.push(this.fb.control('', this.validators.required));
-  //       this.displayedCategoryLevels = [this.categories]; // Reset display levels
-  //       this.selectedMainImageFile = null; // Clear selected files
-  //       this.selectedAdditionalImageFiles = [];
-  //       this.selectedVariantImageFiles = [];
-  //       this.cdr.detectChanges();
-  //     },
-  //     error: (err) => console.error('Error adding product:', err)
-  //   });
-
-  // } else {
-  //   console.log('Form is invalid. Please check the fields.');
-  //   this.markAllAsTouched(this.productForm); // Mark fields to show validation errors
-  // }
 
   if (this.productForm.valid) {
     const selectedCategoryIds = this.productForm.value.categoryIds;
@@ -654,6 +484,7 @@ addVariant(): void {
         this.selectedAdditionalImageFiles = [];
         this.selectedVariantImageFiles = [];
         this.cdr.detectChanges();
+        this.router.navigate(['/seller/products']);
       },
       error: (err) => console.error('Error adding product:', err)
     });
@@ -673,6 +504,12 @@ addVariant(): void {
         control.markAsTouched();
       }
     });
+  }
+
+  cancel(): void {
+    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
+      this.router.navigate(['/seller/products']);
+    }
   }
 
   }

@@ -50,36 +50,39 @@
     </div>
   </div>
 
-  <div class="products-grid" *ngIf="filteredProducts.length > 0">
-    <div class="product-card" *ngFor="let product of filteredProducts">
+  <div class="products-grid row justify-content-center" *ngIf="filteredProducts.length > 0">
+    <div class="product-card col-3 mx-3 my-2" *ngFor="let product of filteredProducts">
       <div class="product-image">
-        <img [src]="product.image" [alt]="product.name">
+        <img [src]=" baseImageUrl + product.imageUrl" [alt]="product.name">
         <div class="product-status">
-          <span class="status-badge" [class]="getStatusClass(product.status)">
-            {{product.status | titlecase}}
+          <span class="status-badge" [class]="getStatusClass(product.approvalStatus)">
+            {{product.approvalStatus | titlecase}}
           </span>
         </div>
       </div>
 
       <div class="product-content">
         <h3>{{product.name}}</h3>
-        <p class="product-category">{{product.category}}</p>
+        <!-- <p class="product-category">{{product.category}}</p> -->
         <div class="product-details">
-          <span class="product-price">${{product.price | number:'1.2-2'}}</span>
-          <span class="product-stock">Stock: {{product.stock}}</span>
+          <span class="product-price">${{product.basePrice | number:'1.2-2'}}</span>
+          <span class="product-stock">Stock: {{product.stockQuantity}}</span>
         </div>
 
         <div class="product-actions">
-          <button class="btn-edit" (click)="editProduct(product.id)">
+          <button class="btn-edit" (click)="editProduct(product.productId)">
             ✏️ Edit
           </button>
           <button
-            class="btn-toggle"
-            [class.active]="product.status === 'active'"
-            (click)="toggleProductStatus(product.id)">
-            {{product.status === 'active' ? '⏸️ Deactivate' : '▶️ Activate'}}
+            *ngIf="product.approvalStatus ==='Deleted'"
+            class="btn-toggle active"
+         
+            (click)="toggleProductStatus(product.productId)">
+           ▶️ Activate
           </button>
-          <button class="btn-delete" (click)="deleteProduct(product.id)">
+          <button 
+           *ngIf="product.approvalStatus !=='Deleted'"
+          class="btn-delete" (click)="deleteProduct(product.productId)">
             🗑️ Delete
           </button>
         </div>
