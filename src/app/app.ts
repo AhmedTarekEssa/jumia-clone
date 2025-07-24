@@ -14,12 +14,13 @@ import { CategoryShowcase } from "./features/home/components/category-showcase/c
 import { ProductReviews } from "./features/products/components/product-reviews/product-reviews";
 import { LiveChat } from "./shared/components/live-chat/live-chat";
 import { AddProduct } from "./features/seller/components/add-product/add-product";
+import { AddressListComponent } from "./features/address/components/address-list/address-list";
 
 @Component({
   selector: 'app-root',
 
 
-  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, LiveChat, AddProduct],
+  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, LiveChat, AddProduct, AddressListComponent],
 
 
 

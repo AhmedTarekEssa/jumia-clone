@@ -9,10 +9,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home-container/home-container').then(m => m.HomeContainer),
     pathMatch: 'full'
   },
-  {
-    path: '',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
-  },
+  // {
+  //   path: '',
+  //   loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
+  // },
   {
     path: 'categories',
     loadChildren: () => import('./features/categories/categories.routes').then(m => m.routes),
@@ -53,5 +53,9 @@ export const routes: Routes = [
     path:'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  {
+    path: 'address',
+    loadChildren: () => import('../app/features/address/address.routes').then(m => m.routes)
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
