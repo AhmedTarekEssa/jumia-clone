@@ -39,4 +39,7 @@ export class OrderService {
   getOrdersByUserId(userId: string): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`,{withCredentials: true});
   }
+  getSubOrdersBySellerId(sellerId: number): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetSubOrdersBySellerId(sellerId)}`, { withCredentials: true });
+  }
 }
