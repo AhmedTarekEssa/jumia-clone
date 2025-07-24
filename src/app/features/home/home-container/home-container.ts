@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavbarMain } from "../../../shared/components/navbars/navbar-main/navbar-main";
 import { FlashSale } from "../components/flash-sale/flash-sale";
 import { AllEssentials } from "../components/all-essentials/all-essentials";
@@ -25,7 +25,10 @@ export class HomeContainer implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private cdr:ChangeDetectorRef
+      
+    
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +45,7 @@ export class HomeContainer implements OnInit {
           id: category.id,
           name: category.name
         });
+        this.cdr.detectChanges()
         console.log(`Category: ${category.name} (ID: ${category.id})`);
         console.log(this.categoriesWithProducts)
 
