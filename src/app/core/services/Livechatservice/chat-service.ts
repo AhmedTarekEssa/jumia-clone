@@ -67,52 +67,52 @@ export class ChatService {
 // Rest Api  
 
   createChat(): Observable<Chat> {
-    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.createchat}`,{ initialMessage: "Hi there" });
+    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.createchat}`,{ initialMessage: "Hi there" },{withCredentials:true});
   }
 
   getChatById(id: string): Observable<Chat> {
-    return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getChatById(id)}`);
+    return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getChatById(id)}`,{withCredentials:true});
   }
 
   getAllChatsByUserId(userId: string): Observable<Chat> {
-    return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getAllChatsByUserId(userId)}`);
+    return this.http.get<Chat>(`${this.apiUrl}${environment.Chat.getAllChatsByUserId(userId)}`,{withCredentials:true});
   }
 
   getMyChat(): Observable<Chat[]> {
-    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getmychat}`);
+    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getmychat}`,{withCredentials:true});
   }
 
   getActiveChats(): Observable<Chat[]> {
-    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getactivechat}`);
+    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getactivechat}`,{withCredentials:true});
   }
 
   getAdminChats(adminId: string): Observable<Chat[]> {
-    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getadminchat(adminId)}`);
+    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getadminchat(adminId)}`,{withCredentials:true});
   }
 
   getMyAdminChats(): Observable<Chat[]> {
-    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getmyadminchat}`);
+    return this.http.get<Chat[]>(`${this.apiUrl}${environment.Chat.getmyadminchat}`,{withCredentials:true});
   }
 
   sendMessage(messageData: SendMessageRequest): Observable<Message> {
-    return this.http.post<Message>(`${this.apiUrl}${environment.Chat.sendmessage}`, messageData);
+    return this.http.post<Message>(`${this.apiUrl}${environment.Chat.sendmessage}`, messageData,{withCredentials:true});
   }
 
   getMessagesByChatId(chatId: string, page: number = 1, pageSize: number = 50): Observable<Message[]> {
     return this.http.get<Message[]>(
-      `${this.apiUrl}${environment.Chat.getmessagesByChatId(chatId, page, pageSize)}`
+      `${this.apiUrl}${environment.Chat.getmessagesByChatId(chatId, page, pageSize)}`,{withCredentials:true}
     );
   }
 
   assignToChat(chatId: string): Observable<Chat> {
-    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.assignToChat(chatId)}`, {});
+    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.assignToChat(chatId)}`, {},{withCredentials:true});
   }
 
   closeChat(chatId: string): Observable<Chat> {
-    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.closeChat(chatId)}`, {});
+    return this.http.post<Chat>(`${this.apiUrl}${environment.Chat.closeChat(chatId)}`, {},{withCredentials:true});
   }
 
   markChatAsRead(chatId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}${environment.Chat.markChatAsRead(chatId)}`, {});
+    return this.http.post<void>(`${this.apiUrl}${environment.Chat.markChatAsRead(chatId)}`, {},{withCredentials:true});
   }
 }
