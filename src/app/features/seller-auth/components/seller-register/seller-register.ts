@@ -1,18 +1,17 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../../../core/services/auth';
+import { AuthService } from '../../../../core/services/auth';
 
 @Component({
-  selector: 'app-step3-documents',
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './step3-documents.html',
-  styleUrl: './step3-documents.css'
+  selector: 'app-seller-register',
+  imports: [FormsModule,CommonModule,ReactiveFormsModule],
+  templateUrl: './seller-register.html',
+  styleUrl: './seller-register.css'
 })
-export class Step3Documents {
-
-    registerForm!: FormGroup;
+export class SellerRegister {
+ registerForm!: FormGroup;
   submitted = false;
   errorMessage = '';
   
@@ -96,10 +95,6 @@ onFileSelected(event: Event): void {
     this.selectedImageFile = fileInput.files[0];
   }
 }
-
-
-
-
 
 
 }
