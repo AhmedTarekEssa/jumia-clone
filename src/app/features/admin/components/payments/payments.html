@@ -1,12 +1,59 @@
-<div id="payments-section" class="content-section" >
-                <h1 class="page-title">Payment Management</h1>
-                <div class="chart-placeholder" style="height: 400px;">
-                    Payment Management Interface
-                    <br><br>
-                    Features to implement:
-                    <br>• Payment transaction history
-                    <br>• Payment method configuration
-                    <br>• Refund processing
-                    <br>• Payment analytics and reports
-                </div>
-            </div>
+<div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search payments..." 
+          [(ngModel)]="searchTerm"
+          class="search-input">
+        <select [(ngModel)]="statusFilter" class="filter-select">
+          <option value="">All Status</option>
+          <option value="Completed">Completed</option>
+          <option value="Pending">Pending</option>
+          <option value="Failed">Failed</option>
+          <option value="Refunded">Refunded</option>
+        </select>
+        <select [(ngModel)]="methodFilter" class="filter-select">
+          <option value="">All Methods</option>
+          <option value="Credit Card">Credit Card</option>
+          <option value="PayPal">PayPal</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+        </select>
+      </div>
+
+      <div class="payments-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Payment ID</th>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Transaction ID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of filteredPayments">
+              <td>#{{payment.id}}</td>
+              <td>#{{payment.orderId}}</td>
+              <td>{{payment.customer}}</td>
+              <td>\${{payment.amount}}</td>
+              <td>{{payment.method}}</td>
+              <td>
+                <span class="status" [class]="payment.status.toLowerCase()">
+                  {{payment.status}}
+                </span>
+              </td>
+              <td>{{payment.date}}</td>
+              <td>{{payment.transactionId}}</td>
+              <td>
+                <button class="btn btn-sm btn-primary">View</button>
+                <button class="btn btn-sm btn-warning" *ngIf="payment.status === 'Completed'">Refund</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
