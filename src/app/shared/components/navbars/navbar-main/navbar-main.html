@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jumia Style Header</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-
-  </style>
 </head>
+
 <body>
   <div class="top-banner">
     <div class="flash-sale">
@@ -36,69 +35,101 @@
   <header class="main-header">
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="#">
-          JUMIA<span style="color: #f0c14b;">●</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="fas fa-shopping-cart"></i>
-                Cart
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">View Cart</a></li>
-                <li><a class="dropdown-item" href="#">Checkout</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Track Order</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                <span class="help-icon">?</span>
-                Help
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">FAQs</a></li>
-                <li><a class="dropdown-item" href="#">Contact Us</a></li>
-                <li><a class="dropdown-item" href="#">Return Policy</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-user"></i>
-                Login
-              </a>
-            </li>
-          </ul>
-          <div class="search-container">
-            <form class="d-flex" role="search">
-              <input class="search-input" type="search" placeholder="Search for products, brands and categories..." aria-label="Search">
-              <button class="search-btn" type="submit">Search</button>
-            </form>
+        <div class="d-flex align-items-center">
+          <!-- Category Menu (Only shows on home page) -->
+          <div class="category-menu-wrapper me-2" *ngIf="isHome()" (mouseenter)="showCategoryMenu = true"
+            (mouseleave)="showCategoryMenu = false">
+            <button class="btn border-0 fs-5">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="category-dropdown-panel" *ngIf="showCategoryMenu">
+              <app-category-list></app-category-list>
+            </div>
+          </div>
+
+          <!-- Jumia Logo -->
+          <a class="navbar-brand d-flex align-items-center" (click)="navigateToHome()">
+            <span class="jumia-title">JUMIA</span>
+          </a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+          <form class="d-flex" role="search">
+            <input class="search-input" type="search" placeholder="Search products, brands and categories"
+              aria-label="Search">
+            <button class="search-btn" type="submit">Search</button>
+          </form>
+        </div>
+
+        <!-- Right Navigation Items -->
+        <div class="right-nav-items">
+          <!-- Account Dropdown (Logged In) -->
+<div class="nav-item account-item" *ngIf="userInfo">
+  <div class="nav-link account-link" (click)="toggleAccountDropdown()">
+    <span class="greeting">Hi, {{ getUserFirstName() }}</span>
+    <i class="fas fa-chevron-down ms-1"></i>
+  </div>
+  <div class="account-dropdown" [class.show]="showAccountDropdown">
+    <div class="dropdown-header">{{ userInfo.Email }}</div>
+    <hr class="dropdown-divider">
+    <a class="dropdown-item" (click)="navigateAndClose('/user')">
+      <i class="fas fa-user me-2"></i>
+      My Account
+    </a>
+    <a class="dropdown-item" (click)="navigateAndClose('/user/orders')">
+      <i class="fas fa-box me-2"></i>
+      Orders
+    </a>
+    <a class="dropdown-item" (click)="navigateAndClose('/user/inbox')">
+      <i class="fas fa-envelope me-2"></i>
+      Inbox
+    </a>
+    <a class="dropdown-item" (click)="navigateAndClose('/user/wishlist')">
+      <i class="fas fa-heart me-2"></i>
+      Wishlist
+    </a>
+    <a class="dropdown-item" (click)="navigateAndClose('/user/vouchers')">
+      <i class="fas fa-tag me-2"></i>
+      Vouchers
+    </a>
+    <hr class="dropdown-divider">
+    <a class="dropdown-item" (click)="logout()">
+      <i class="fas fa-sign-out-alt me-2"></i>
+      Logout
+    </a>
+  </div>
+</div>
+
+          <!-- Login (Logged Out) -->
+          <div class="nav-item" *ngIf="!userInfo">
+            <a class="nav-link" (click)="navigateAndClose('/login-register')" >
+              <i class="fas fa-user"></i>
+              Login
+            </a>
+          </div>
+
+          <!-- Help -->
+          <div class="nav-item help-item">
+            <a class="nav-link">
+              <span class="help-icon">?</span>
+              Help
+            </a>
+          </div>
+
+          <!-- Cart -->
+          <div class="nav-item cart-item">
+            <a class="nav-link" (click)="navigateAndClose('/cart')">
+              <i class="fas fa-shopping-cart"></i>
+              Cart
+            </a>
           </div>
         </div>
       </div>
     </nav>
   </header>
 
-  <div class="mainHomeContainer container">
-    <div class="jumia-container">
-      <app-category-list></app-category-list>
-
-      <div class="main-content mt-4">
-        <section class="slider-section">  
-          <app-center-slider></app-center-slider>
-        </section>
-      </div>
-
-
-    </div>
-  </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

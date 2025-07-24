@@ -4,7 +4,6 @@ import { NavbarMain } from "./shared/components/navbars/navbar-main/navbar-main"
 import { HomeContainer } from "./features/home/home-container/home-container";
 import {AuthService} from './core/services/auth';
 import { Login } from "./features/auth/components/login/login";
-import { CheckEmail } from "./features/auth/components/check-email/check-email";
 
 import { Products } from './features/seller/components/products/products';
 import { ProductDetailC } from './features/products/components/product-detail/product-detail';
@@ -22,16 +21,27 @@ import { AdminCategories } from "./features/admin/components/categories/admin-ca
 import { AdminContainer } from "./features/admin/admin-container/admin-container";
 
 import { ProductReviews } from "./features/products/components/product-reviews/product-reviews";
+
+import { CheckEmail } from './features/auth/components/check-email/check-email';
+import { SellerCheckEmail } from './features/seller-auth/components/check-email/check-email';
+import { Verification } from "./features/seller-auth/components/verification/verification";
+import { Step3Documents } from "./features/seller-auth/components/register/step3-documents/step3-documents";
+import { SellerWelcome } from "./features/seller-auth/seller-welcome/seller-welcome";
+import { VendorCenter } from "./features/seller-auth/components/vendor-center/vendor-center";
+
 import { LiveChat } from "./shared/components/live-chat/live-chat";
 import { AddProduct } from "./features/seller/components/add-product/add-product";
 import { AddressListComponent } from "./features/address/components/address-list/address-list";
+
 
 
 @Component({
   selector: 'app-root',
 
 
-  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, LiveChat, AddProduct, AddressListComponent],
+
+  imports: [RouterOutlet, NavbarMain, HomeContainer, ProductDetailC, Login, CheckEmail, CartItems, ProductGrid, CategoryShowcase, SellerCheckEmail, Verification, Step3Documents, SellerWelcome, VendorCenter],
+
 
 
 

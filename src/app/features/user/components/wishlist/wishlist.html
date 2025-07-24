@@ -4,7 +4,29 @@
   @if (isLoading) {
     <div class="loading">Loading wishlist...</div>
   } @else if (errorMessage) {
-    <div class="error">{{ errorMessage }}</div>
+      <div class="empty-state">
+    <div class="heart-icon-container">
+      <div class="heart-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                fill="#F97316" stroke="#F97316" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+
+    <h2 class="empty-title">You haven't saved an item yet!</h2>
+
+    <p class="empty-description">
+      Found something you like? Tap on the heart shaped icon next to
+      the item to add it to your wishlist! All your saved items will appear
+      here.
+    </p>
+
+    <button class="continue-shopping-btn" (click)="navigateToHome()">
+      Continue Shopping
+    </button>
+  </div>
+
   } @else {
     <div class="wishlist-items">
       @for (item of wishlist?.wishlistItems; track item.wishlistItemId) {

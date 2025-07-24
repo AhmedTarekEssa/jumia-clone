@@ -9,7 +9,7 @@ import { ProductDetails,CreateProduct, ProductFilterRequest, ProductUi, Variant,
   providedIn: 'root'
 })
 export class ProductService {
-  
+
  private httpClient = inject(HttpClient);
  private apiBaseUrl= environment.BaseUrlPath;
  private controller = environment.Product
@@ -48,9 +48,11 @@ export class ProductService {
       })
     )
   }
+
   
   getBySellerIdUi(sellerId:number,role:string):Observable<ProductUi[]>{
     return this.httpClient.get<ProductUi[]>(this.apiBaseUrl+this.controller.GetBySellerIdForUI(sellerId,role),{withCredentials:true})
+
     .pipe(
       tap({
         next:(data)=>console.log("products ui number is " + data.length),
@@ -71,7 +73,7 @@ export class ProductService {
 
   productsByFilters(filters:ProductFilterRequest,pageNumber:number,pageSize:number):Observable<pagedModelUi>{
     return this.httpClient.post<pagedModelUi>(this.apiBaseUrl+this.controller.GetProductsByFilters('customer',pageNumber,pageSize),filters,{withCredentials:true})
-  
+
     .pipe(
       tap({
         next:(data)=>console.log("products ui number is " + data.items.length),
@@ -79,6 +81,25 @@ export class ProductService {
       })
     )
   }
+//   productsByFilters(filters: ProductFilterRequest, pageNumber: number, pageSize: number): Observable<pagedModelUi> {
+//   return this.httpClient.post<pagedModelUi>(
+//     this.apiBaseUrl + this.controller.GetProductsByFilters,
+//     filters,
+//     {
+//       params: {
+//         role: 'customer',
+//         pageNumber: pageNumber.toString(),
+//         pageSize: pageSize.toString()
+//       },
+//       withCredentials: true
+//     }
+//   ).pipe(
+//     tap({
+//       next: (data) => console.log("products ui number is " + data.items.length),
+//       error: (e) => console.log("error occurred while fetching product ui list by filters", e)
+//     })
+//   );
+// }
 
   activateProduct(id:number):Observable<{message:string}>{
     return this.httpClient.put<{message:string}>(this.apiBaseUrl+this.controller.Activate(id),null,{withCredentials:true})
@@ -88,7 +109,7 @@ export class ProductService {
         error:(e)=>console.log("error occured while activating the product" + e)
       })
     )
-  
+
   }
 
   dactivateProduct(id:number):Observable<{message:string}>{
@@ -99,7 +120,7 @@ export class ProductService {
         error:(e)=>console.log("error occured while dactivating the product" + e)
       })
     )
-  
+
   }
 
   search(keyword:string):Observable<ProductUi[]>{
@@ -120,7 +141,7 @@ export class ProductService {
         error:(e)=>console.log("error occured while searching" + e)
       })
     )
-  
+
   }
 
  getNextAttributesOptions(id:number,opt:varinatOptions):Observable<Variant>{
@@ -131,6 +152,6 @@ export class ProductService {
         error:(e)=>console.log("error occured while searching" + e)
       })
     )
-  
+
   }
 }
