@@ -10,7 +10,7 @@
     </div>
       <div class="cart-item" *ngFor="let item of cartItems">
         <div class="item-image">
-          <img [src]="item.variantImageUrl??item.mainImageUrl" [alt]="item.productName" />
+          <img [src]="baseImageUrl + (item.variantImageUrl??item.mainImageUrl)" [alt]="item.productName" />
         </div>
         
         <div class="item-details">

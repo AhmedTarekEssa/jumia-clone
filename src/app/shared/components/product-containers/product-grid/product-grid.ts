@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../core/services/Product-Service/product';
-import { ProductUi, Variant } from '../../../../features/products/product-models';
+import { ProductFilterRequest, ProductUi, Variant } from '../../../../features/products/product-models';
 import { DiscountPricePipe } from '../../../pipes/discount-price-pipe';
 import { Router } from '@angular/router';
 import { AddToCart } from '../../../../features/cart/cart-models';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-product-grid',
@@ -14,12 +15,14 @@ import { CartService } from '../../../../core/services/cart-service/cart-service
   templateUrl: './product-grid.html',
   styleUrl: './product-grid.css'
 })
-export class ProductGrid implements OnInit {
+export class ProductGrid implements OnInit,OnChanges {
+ 
   
   private productService = inject(ProductService)
   private cdr = inject(ChangeDetectorRef)
   private router = inject(Router)
   private cartService = inject(CartService)
+  baseImageUrl = environment.ImageUrlBase;
   products!:ProductUi[];
   product!:ProductUi;
   lowStock: boolean = false;
@@ -31,9 +34,10 @@ export class ProductGrid implements OnInit {
   cartSelections: {productId:number, variant: Variant; quantity: number }[]|undefined = [];
   cartQuantities: { [variantId: number]: number } = {};
   item!:AddToCart;
+  @Input() productsFilters!:ProductFilterRequest;
   
   ngOnInit(): void {
-  this.productService.productsByFilters({ categoryIds: [15] },1,2).subscribe({
+  this.productService.productsByFilters(this.productsFilters,1,10).subscribe({
     next: (data) => {
       this.products = data.items;
       this.cdr.detectChanges();
@@ -58,7 +62,15 @@ export class ProductGrid implements OnInit {
 }
  
         
-      
+  ngOnChanges(changes: SimpleChanges): void {
+     this.productService.productsByFilters(this.productsFilters,1,10).subscribe({
+      next:(data)=>{
+        console.log(data)
+        this.products = data.items
+        this.cdr.detectChanges();
+      }
+     })
+  }
  
 
 

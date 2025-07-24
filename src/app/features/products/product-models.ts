@@ -67,8 +67,8 @@ export interface CreateProduct {
 
 
 export interface ProductFilterRequest {
-  categoryIds: number[];
-  attributeFilters?: Record<string, string>;
+  categoryIds?: number[];
+  attributeFilters?: { [key: string]: string };
   minPrice?: number;
   maxPrice?: number;
 }
