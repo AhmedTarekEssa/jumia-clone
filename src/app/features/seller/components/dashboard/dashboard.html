@@ -49,7 +49,6 @@
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>Customer</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Date</th>
@@ -58,14 +57,14 @@
         <tbody>
           <tr *ngFor="let order of recentOrders">
             <td>{{order.id}}</td>
-            <td>{{order.customerName}}</td>
-            <td>${{order.amount | number:'1.2-2'}}</td>
+           
+            <td>${{order.subtotal | number:'1.2-2'}}</td>
             <td>
               <span class="status-badge" [class]="getStatusClass(order.status)">
                 {{order.status | titlecase}}
               </span>
             </td>
-            <td>{{order.date | date:'short'}}</td>
+            <td>{{order.statusUpdatedAt| date:'short'}}</td>
           </tr>
         </tbody>
       </table>
