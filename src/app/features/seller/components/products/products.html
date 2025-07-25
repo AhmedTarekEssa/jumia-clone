@@ -41,12 +41,16 @@
       <span class="stat-label">Total Products</span>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{products.filter(p => p.status === 'active').length}}</span> -->
-      <span class="stat-label">Active</span>
+      <span class="stat-number">{{active.length}}</span>
+      <span class="stat-label">Activate</span>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{products.filter(p => p.status === 'out_of_stock').length}}</span> -->
-      <span class="stat-label">Out of Stock</span>
+      <span class="stat-number">{{inactive.length}}</span>
+      <span class="stat-label">Inactive</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{deleted.length}}</span>
+      <span class="stat-label">Out Of Stock</span>
     </div>
   </div>
 
@@ -76,11 +80,11 @@
           <button
             *ngIf="product.approvalStatus ==='Deleted' && product.stockQuantity>0"
             class="btn-toggle active"
-         
+
             (click)="toggleProductStatus(product.productId)">
            ▶️ Activate
           </button>
-          <button 
+          <button
            *ngIf="product.approvalStatus !=='Deleted'"
           class="btn-delete" (click)="deleteProduct(product.productId)">
             🗑️ Delete
