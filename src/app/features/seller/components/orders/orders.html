@@ -27,15 +27,15 @@
 
   <div class="orders-stats">
     <div class="stat-item">
-      <span class="stat-number">{{orders.length}}</span>
+      <span class="stat-number">{{subOrders.length}}</span>
       <span class="stat-label">Total Orders</span>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{orders.filter(o => o.status === 'pending').length}}</span> -->
+      <span class="stat-number">{{pending.length}}</span>
       <span class="stat-label">Pending</span>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{orders.filter(o => o.status === 'shipped').length}}</span> -->
+      <span class="stat-number">{{shipped.length}}</span>
       <span class="stat-label">Shipped</span>
     </div>
   </div>
@@ -45,7 +45,6 @@
       <thead>
         <tr>
           <th>Order ID</th>
-          <th>Customer</th>
           <th>Items</th>
           <th>Amount</th>
           <th>Status</th>
@@ -56,26 +55,22 @@
       <tbody>
         <tr *ngFor="let order of filteredOrders">
           <td class="order-id">{{order.id}}</td>
-          <td>
-            <div class="customer-info">
-              <strong>{{order.customerName}}</strong>
-              <small>{{order.customerEmail}}</small>
-            </div>
+          <td class="clickable-cell" (click)="openItemsModal(order)">
+            View {{ order.orderItems.length }} item(s)
           </td>
-          <td>{{order.items}}</td>
-          <td class="amount">${{order.amount | number:'1.2-2'}}</td>
+          <td class="amount">${{order.subtotal | number:'1.2-2'}}</td>
           <td>
             <span class="status-badge" [class]="getStatusClass(order.status)">
               {{order.status | titlecase}}
             </span>
           </td>
-          <td>{{order.orderDate | date:'short'}}</td>
+          <td>{{order.statusUpdatedAt | date:'short'}}</td>
           <td>
             <div class="action-buttons">
               <button
                 class="btn-action view"
-                title="View Details">
-                👁️
+                title="View Details"
+                (click)="openItemsModal(order)" > 👁️
               </button>
               <button
                 *ngIf="order.status === 'pending'"
@@ -91,6 +86,20 @@
                 title="Mark as Shipped">
                 📦
               </button>
+              <button
+                *ngIf="order.status === 'shipped'"
+                class="btn-action deliver"
+                (click)="updateOrderStatus(order.id, 'delivered')"
+                title="Mark as Delivered">
+                ✅
+              </button>
+               <button
+                *ngIf="order.status !== 'delivered' && order.status !== 'cancelled'"
+                class="btn-action cancel"
+                (click)="updateOrderStatus(order.id, 'cancelled')"
+                title="Cancel Order">
+                ❌
+              </button>
             </div>
           </td>
         </tr>
@@ -99,6 +108,43 @@
 
     <div *ngIf="filteredOrders.length === 0" class="no-orders">
       <p>No orders found matching your criteria.</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showItemsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Order Items for Order #{{ selectedOrderForItems?.id }}</h3>
+        <button class="close-button" (click)="closeItemsModal()">X</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedOrderForItems && selectedOrderForItems.orderItems.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedOrderForItems.orderItems">
+                <td>{{ item.productName }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.priceAtPurchase | number:'1.2-2' }}</td>
+                <td>${{ item.quantity * item.priceAtPurchase | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!selectedOrderForItems || selectedOrderForItems.orderItems.length === 0" class="no-items-message">
+          <p>No items found for this order.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeItemsModal()">Close</button>
+      </div>
     </div>
   </div>
 </div>
