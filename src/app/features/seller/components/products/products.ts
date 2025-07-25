@@ -21,6 +21,11 @@ export class Products implements OnInit {
   selectedStatus: string = 'all';
   userInfoCookie!:string|null
   baseImageUrl = environment.ImageUrlBase;
+
+
+  active!: ProductUi[];
+  inactive!: ProductUi[];
+  deleted!: ProductUi[];
   //////////////////////services///////////////
   private productService = inject(ProductService);
 
@@ -31,11 +36,11 @@ export class Products implements OnInit {
     this.userInfoCookie = this.getCookie('UserInfo');
 
 if (this.userInfoCookie) {
-  
+
     const userInfo = JSON.parse(this.userInfoCookie);
     const userTypeId = userInfo.UserTypeId;
     console.log('UserTypeId:', userTypeId);
-  
+
 
     this.productService.getBySellerIdUi(1,"Seller").subscribe(
       {
@@ -43,7 +48,10 @@ if (this.userInfoCookie) {
           console.log(data)
           this.products = data
           this.filteredProducts = [...this.products];
-          
+          this.active = this.products.filter(p => p.approvalStatus === 'Accepted');
+          this.inactive = this.products.filter(p => p.approvalStatus === 'Deleted');
+          this.deleted = this.products.filter(p => p.approvalStatus === 'pending');
+
           this.cdr.detectChanges()
         }
       }
@@ -61,12 +69,12 @@ if (this.userInfoCookie) {
       this.cdr.detectChanges();
       return
     }
-    
+
     if (this.searchTerm) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         product.productId.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-        
+
       );
     }
 
@@ -103,7 +111,7 @@ if (this.userInfoCookie) {
         this.filterProducts();
       }
      })
-      
+
     }
   }
 
