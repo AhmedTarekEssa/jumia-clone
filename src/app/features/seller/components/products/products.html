@@ -15,22 +15,17 @@
         type="text"
         placeholder="Search products..."
         [(ngModel)]="searchTerm"
-        (input)="filterProducts()">
+        (input)="searchProducts()">
     </div>
 
     <div class="filter-group">
-      <select [(ngModel)]="selectedCategory" (change)="filterProducts()">
-        <option value="all">All Categories</option>
-        <option *ngFor="let category of getUniqueCategories()" [value]="category">
-          {{category}}
-        </option>
-      </select>
+      
 
       <select [(ngModel)]="selectedStatus" (change)="filterProducts()">
         <option value="all">All Status</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-        <option value="out_of_stock">Out of Stock</option>
+        <option value="pending">pending</option>
+        <option value="approved">approved</option>
+        <option value="rejected">rejected</option>
       </select>
     </div>
   </div>
@@ -41,16 +36,16 @@
       <span class="stat-label">Total Products</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{active.length}}</span>
-      <span class="stat-label">Activate</span>
+      <span class="stat-number">{{pending.length}}</span>
+      <span class="stat-label">pending</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{inactive.length}}</span>
-      <span class="stat-label">Inactive</span>
+      <span class="stat-number">{{approved.length}}</span>
+      <span class="stat-label">approved</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{deleted.length}}</span>
-      <span class="stat-label">Out Of Stock</span>
+      <span class="stat-number">{{rejected.length}}</span>
+      <span class="stat-label">rejected</span>
     </div>
   </div>
 
@@ -67,10 +62,10 @@
 
       <div class="product-content">
         <h3>{{product.name}}</h3>
-        <!-- <p class="product-category">{{product.category}}</p> -->
+      
         <div class="product-details">
           <span class="product-price">${{product.basePrice | number:'1.2-2'}}</span>
-          <span class="product-stock">Stock: {{product.stockQuantity}}</span>
+          <span class="product-stock">Stock: {{product.stockQuantity > 0?product.stockQuantity: "out of stock" }}</span>
         </div>
 
         <div class="product-actions">

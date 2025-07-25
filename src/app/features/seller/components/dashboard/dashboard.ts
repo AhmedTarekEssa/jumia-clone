@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { OrderService, SubOrder } from '../../../../core/services/orders-services/orders-user';
+import { ProductService } from '../../../../core/services/Product-Service/product';
+import { ProductUi } from '../../../products/product-models';
 interface DashboardStats {
   totalOrders: number;
   totalRevenue: number;
@@ -8,13 +12,7 @@ interface DashboardStats {
   pendingOrders: number;
 }
 
-interface RecentOrder {
-  id: string;
-  customerName: string;
-  amount: number;
-  status: string;
-  date: Date;
-}
+
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule],
@@ -22,32 +20,63 @@ interface RecentOrder {
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
-  constructor(private router: Router ,private cdr: ChangeDetectorRef) {}
-  stats: DashboardStats = {
-    totalOrders: 156,
-    totalRevenue: 45230,
-    totalProducts: 89,
-    pendingOrders: 12
-  };
+  constructor(private router: Router ) {}
+  stats: DashboardStats ={
+    pendingOrders:0,
+    totalOrders:0,
+    totalProducts:0,
+    totalRevenue:0
+  }
+  private orderService = inject(OrderService);
+    private cdr = inject(ChangeDetectorRef);
+    private productService = inject(ProductService);
 
-  recentOrders: RecentOrder[] = [
-    { id: 'ORD-001', customerName: 'John Doe', amount: 299.99, status: 'pending', date: new Date() },
-    { id: 'ORD-002', customerName: 'Jane Smith', amount: 149.50, status: 'completed', date: new Date() },
-    { id: 'ORD-003', customerName: 'Mike Johnson', amount: 89.99, status: 'shipped', date: new Date() }
-  ];
+  recentOrders!: SubOrder[]
+  products: ProductUi[]=[] ;
+  
+
+
+
+
+
+
 
   ngOnInit(): void {
-    // Initialize dashboard data
+    this.orderService.getSubOrdersBySellerId(1).subscribe({
+      next:(data)=>{
+        console.log(data);
+        this.recentOrders = data.reverse().slice(0,3);
+         this.stats.totalRevenue =data.filter(o=>o.status.toLowerCase()=='shipped').reduce((sum , order)=> sum  + order.subtotal,0)
+         console.log(this.stats.totalRevenue)
+        this.stats.totalOrders = data.length
+        this.stats.pendingOrders = data.filter(o=>o.status.toLowerCase()=='pending').length
+        this.cdr.detectChanges()
+      }
+    })
+      this.productService.getBySellerIdUi(1,"Seller").subscribe(
+      {
+        next:(data)=>{
+          this.stats.totalProducts = data.length
+          this.cdr.detectChanges()
+        }
+      }
+    );
+    
   }
   navigatetoorders(): void {
     this.router.navigate(['/seller/orders']);
   }
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'completed': return 'status-completed';
-      case 'pending': return 'status-pending';
-      case 'shipped': return 'status-shipped';
-      default: return '';
-    }
+ 
+ getStatusClass(status: string): string {
+    const statusClasses: { [key: string]: string } = {
+      'pending': 'status-pending',
+      'confirmed': 'status-confirmed',
+      'shipped': 'status-shipped',
+      'delivered': 'status-delivered',
+      'cancelled': 'status-cancelled'
+    };
+    return statusClasses[status] || '';
   }
+
+
 }
