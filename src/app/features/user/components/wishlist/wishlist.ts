@@ -166,6 +166,7 @@ export class Wishlist implements OnInit {
 
   addToCart(item: WishlistItem): void {
     console.log('Adding to cart:', item.productName);
+    
     this.cdr.markForCheck(); // Mark for check before async operation
     // Implement your cart service logic here
   }

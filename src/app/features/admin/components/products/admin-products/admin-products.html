@@ -1,12 +1,80 @@
-<div id="products-section" class="content-section" >
-                <h1 class="page-title">Product Management</h1>
-                <div class="chart-placeholder" style="height: 400px;">
-                    Product Management Interface
-                    <br><br>
-                    Features to implement:
-                    <br>• Product catalog with inventory
-                    <br>• Add/Edit product forms
-                    <br>• Bulk product operations
-                    <br>• Product variants and pricing
-                </div>
-            </div>
+<div class="products-container">
+  <div class="header">
+    <h2>Products Management</h2>
+    <button class="btn btn-primary" style="background-color:#e74c3c" (click)="showAddForm = !showAddForm">
+      Add New Product
+    </button>
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading products...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-state">
+    <p class="error-message">{{error}}</p>
+    <button class="btn btn-secondary" (click)="loadProducts()">Retry</button>
+  </div>
+
+  <!-- Search and Filters -->
+  <div *ngIf="!isLoading && !error" class="search-filter">
+    <input 
+      type="text" 
+      placeholder="Search products..." 
+      [(ngModel)]="searchTerm"
+      class="search-input">
+    <!-- Add other filters as needed -->
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid">
+    <div *ngIf="isLoading" class="loading-state">
+      <p>Loading products...</p>
+    </div>
+    
+    <div *ngIf="error" class="error-state">
+      <p class="error-message">{{error}}</p>
+      <button class="btn btn-secondary" (click)="loadProducts()">Retry</button>
+    </div>
+
+    <ng-container *ngIf="!isLoading && !error">
+      <div *ngIf="filteredProducts.length === 0" class="no-results">
+        <p>No products found matching your criteria.</p>
+      </div>
+
+
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="product-image">
+  <img 
+    [src]="product.imageUrl || ''" 
+    [alt]="product.name"
+    (error)="handleImageError($event)">
+</div>
+      <div class="product-info">
+        <h4>{{product.name}}</h4>
+        <p class="price">
+          ${{product.basePrice}}
+          <span *ngIf="product.discountPercentage" class="discount">
+            ({{product.discountPercentage}} off)
+          </span>
+        </p>
+        
+        <div *ngFor="let variant of product.variants" class="variant-info">
+          <p>
+            {{variant.color}} / {{variant.size}} - 
+            \${{variant.price}} - 
+            Stock: {{variant.stock}} - 
+            <span class="status" [class]="variant.status.toLowerCase()">
+              {{variant.status}}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="product-actions">
+        <button class="btn btn-sm btn-primary" style="background-color: #e74c3c">Edit</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+</div>

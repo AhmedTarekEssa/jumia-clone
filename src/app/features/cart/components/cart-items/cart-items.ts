@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { ProductService } from '../../../../core/services/Product-Service/product';
 import { NotExpr } from '@angular/compiler';
+import { environment } from '../../../../../environments/environment.development';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class CartItems implements OnInit {
   cart!:Cart;
   cartItems!: CartItem[];
   subTotal!:number
+  baseImageUrl= environment.ImageUrlBase
   private cartService = inject(CartService);
   private cdr = inject(ChangeDetectorRef)
   private productService = inject(ProductService);

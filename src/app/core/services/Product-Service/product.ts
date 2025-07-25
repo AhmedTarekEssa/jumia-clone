@@ -71,6 +71,9 @@ export class ProductService {
     )
   }
 
+  updateProduct(product:FormData){
+    return this.httpClient.put(this.apiBaseUrl+environment.Product.UpdateProduct,product,{withCredentials:true})
+  }
   productsByFilters(filters:ProductFilterRequest,pageNumber:number,pageSize:number):Observable<pagedModelUi>{
     return this.httpClient.post<pagedModelUi>(this.apiBaseUrl+this.controller.GetProductsByFilters('customer',pageNumber,pageSize),filters,{withCredentials:true})
 

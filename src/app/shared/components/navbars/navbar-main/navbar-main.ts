@@ -45,9 +45,8 @@ export class NavbarMain implements OnInit {
         // Decode the URL encoded cookie
         const decodedCookie = decodeURIComponent(userInfoCookie);
         this.userInfo = JSON.parse(decodedCookie);
-        console.log('User Info:', this.userInfo);
         this.username = this.userInfo.UserName;
-        console.log('Username:', this.username);
+
       } catch (e) {
         console.error('Error parsing user info cookie', e);
       }
@@ -55,7 +54,7 @@ export class NavbarMain implements OnInit {
   }
 
   getUserFirstName(): string {
-    console.log('Username:', this.username);
+    
     return this.username.split(' ')[0] || 'User';
   }
   navigateAndClose(route: string): void {
