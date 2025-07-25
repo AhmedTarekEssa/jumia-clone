@@ -23,9 +23,9 @@ export class Products implements OnInit {
   baseImageUrl = environment.ImageUrlBase;
 
 
-  active!: ProductUi[];
-  inactive!: ProductUi[];
-  deleted!: ProductUi[];
+  approved!: ProductUi[];
+  rejected!: ProductUi[];
+  pending!: ProductUi[];
   //////////////////////services///////////////
   private productService = inject(ProductService);
 
@@ -48,9 +48,9 @@ if (this.userInfoCookie) {
           console.log(data)
           this.products = data
           this.filteredProducts = [...this.products];
-          this.active = this.products.filter(p => p.approvalStatus === 'Accepted');
-          this.inactive = this.products.filter(p => p.approvalStatus === 'Deleted');
-          this.deleted = this.products.filter(p => p.approvalStatus === 'pending');
+          this.approved = this.products.filter(p => p.approvalStatus.toLowerCase() === 'approved');
+          this.rejected = this.products.filter(p => p.approvalStatus.toLowerCase() === 'rejected');
+          this.pending = this.products.filter(p => p.approvalStatus.toLowerCase() === 'pending');
 
           this.cdr.detectChanges()
         }
@@ -61,32 +61,13 @@ if (this.userInfoCookie) {
 }
 
   filterProducts(): void {
-    let filtered = [...this.filteredProducts];
-
-    if(!this.searchTerm){
-      this.filteredProducts = this.products
-
-      this.cdr.detectChanges();
-      return
-    }
-
-    if (this.searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.productId.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-
-      );
-    }
-
-    // if (this.selectedCategory !== 'all') {
-    //   filtered = filtered.filter(product => product.category === this.selectedCategory);
-    // }
-
+    let filtered = [...this.products];
+    
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(product => product.approvalStatus === this.selectedStatus);
-    }
+      filtered = filtered.filter(product => product.approvalStatus.toLocaleLowerCase() === this.selectedStatus.toLocaleLowerCase());
+    } 
 
-    this.filteredProducts = filtered;
+   this.filteredProducts = filtered
   }
 
   editProduct(productId: number): void {
@@ -117,9 +98,9 @@ if (this.userInfoCookie) {
 
   getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {
-      'Accepted': 'status-active',
-      'Deleted': 'status-inactive',
-      'pending': 'status-out-of-stock'
+      'pending': 'status-out-of-stock',
+      'approved': 'status-active',
+      'rejected': 'status-inactive',
     };
     return statusClasses[status] || '';
   }
@@ -147,6 +128,11 @@ if (this.userInfoCookie) {
   }
 
   return null;
+}
+
+searchProducts(){
+  this.selectedStatus = 'all';
+  this.filteredProducts = this.products.filter(p=>p.name.toLowerCase().includes(this.searchTerm.toLocaleLowerCase())||p.basePrice== +(this.searchTerm)||p.productId== +(this.searchTerm));
 }
 
 }
