@@ -200,3 +200,198 @@
     overflow-x: auto;
   }
 }
+
+
+/* Existing styles for orders management */
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+/* Modal Content Box */
+.modal-content {
+  background-color: var(--card-background); /* Use your theme variable or a solid color */
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 700px; /* Adjust max-width as needed */
+  max-height: 80vh; /* Limit height to prevent overflow on smaller screens */
+  overflow-y: auto; /* Enable scrolling if content exceeds max-height */
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5em;
+  color: var(--text-color-dark);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: var(--text-color-light);
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: var(--primary-color);
+}
+
+.modal-body {
+  flex-grow: 1; /* Allows body to take up available space */
+}
+
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.modal-body th,
+.modal-body td {
+  border: 1px solid var(--border-color);
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.modal-body th {
+  background-color: var(--table-header-background); /* Or a slightly darker shade */
+  color: var(--table-header-text-color);
+  font-weight: 600;
+}
+
+.no-items-message {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-color-light);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-footer .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.modal-footer .btn-secondary {
+  background-color: var(--secondary-button-background);
+  color: var(--secondary-button-text);
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: var(--secondary-button-hover);
+}
+
+/* Add a class for clickable cells to provide visual feedback */
+.clickable-cell {
+  cursor: pointer;
+  color: var(--primary-color); /* Or another color to indicate clickability */
+  text-decoration: underline;
+}
+
+.clickable-cell:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* Existing styles for table and buttons for reference */
+.orders-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners apply to content */
+    box-shadow: var(--shadow-small);
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.orders-table thead th {
+    background-color: var(--table-header-background);
+    color: var(--table-header-text-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 80px; /* Ensures consistent width */
+    text-align: center;
+}
+
+.status-pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+}
+
+.status-confirmed {
+    background-color: var(--status-confirmed-bg);
+    color: var(--status-confirmed-text);
+}
+
+.status-shipped {
+    background-color: var(--status-shipped-bg);
+    color: var(--status-shipped-text);
+}
+
+.status-delivered {
+    background-color: var(--status-delivered-bg);
+    color: var(--status-delivered-text);
+}
+
+.status-cancelled {
+    background-color: var(--status-cancelled-bg);
+    color: var(--status-cancelled-text);
+}

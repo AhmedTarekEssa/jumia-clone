@@ -27,15 +27,25 @@ export class Orders implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   orders: Order[] = [];
-  subOrders: SubOrder[] = [];
+  subOrders!: SubOrder[];
   loading: boolean = false;
   error: string | null = null;
 
-  filteredOrders: Order[] = [];
+  filteredOrders!: SubOrder[] 
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
   sellerId: number = 1;
+  showItemsModal: boolean = false;
+  selectedOrderForItems: SubOrder | null = null;
+
+  pending!:SubOrder[];
+  confirmed!:SubOrder[];
+  shipped!:SubOrder[];
+  canceled!:SubOrder[];
+  delivered!:SubOrder[];
+
+
 
   ngOnInit(): void {
     this.loadOrders();
@@ -46,10 +56,15 @@ export class Orders implements OnInit {
     this.error = null;
 
     this.orderService.getSubOrdersBySellerId(this.sellerId).subscribe({
-      next: (subOrders: SubOrder[]) => {
+      next: (subOrders) => {
         this.subOrders = subOrders;
-        this.orders = this.transformSubOrdersToOrders(subOrders);
-        this.filteredOrders = [...this.orders];
+        // this.subOrders = this.transformSubOrdersToOrders(subOrders);
+        this.filteredOrders = this.subOrders;
+        this.pending = subOrders.filter(s=>s.status.toLowerCase()=='pending')
+        this.delivered = subOrders.filter(s=>s.status.toLowerCase()=='delivered')
+        this.confirmed = subOrders.filter(s=>s.status.toLowerCase()=='confirmed')
+        this.canceled = subOrders.filter(s=>s.status.toLowerCase()=='canceled')
+        this.shipped = subOrders.filter(s=>s.status.toLowerCase()=='shipped')
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -62,23 +77,33 @@ export class Orders implements OnInit {
     });
   }
 
-  private transformSubOrdersToOrders(subOrders: SubOrder[]): Order[] {
-    return subOrders.map(subOrder => {
-      const totalItems = subOrder.orderItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      return {
-        id: `ORD-${subOrder.orderId}-${subOrder.id}`,
-        customerName: 'Customer', 
-        customerEmail: 'customer@example.com',
-        amount: subOrder.subtotal,
-        status: this.mapApiStatusToDisplayStatus(subOrder.status),
-        orderDate: new Date(subOrder.statusUpdatedAt),
-        items: totalItems,
-        trackingNumber: subOrder.trackingNumber,
-        shippingProvider: subOrder.shippingProvider
-      };
-    });
-  }
+//   private transformSubOrdersToOrders(subOrders: SubOrder[]): SubOrder[] {
+//     return subOrders.map(subOrder => {
+//       const totalItems = subOrder.orderItems.reduce((sum, item) => sum + item.quantity, 0);
+// //       export interface SubOrder {
+// //   id: number;
+// //   orderId: number;
+// //   sellerId: number;
+// //   subtotal: number;
+// //   status: string;
+// //   statusUpdatedAt: string;
+// //   trackingNumber: string;
+// //   shippingProvider: string;
+// //   orderItems: OrderItem[];
+// // }
+//      return {
+//         id: subOrder.id,
+//         sellerId:subOrder.sellerId,
+//         orderId: subOrder.orderId,
+//         subtotal: subOrder.subtotal,
+//         status: this.mapApiStatusToDisplayStatus(subOrder.status),
+//         statusUpdatedAt: `${new Date(subOrder.statusUpdatedAt)}`,
+//         orderItems: subOrder.ord,
+//         trackingNumber: subOrder.trackingNumber,
+//         shippingProvider: subOrder.shippingProvider
+//       };
+//     });
+//   }
 
   private mapApiStatusToDisplayStatus(apiStatus: string): Order['status'] {
     const statusMap: { [key: string]: Order['status'] } = {
@@ -94,7 +119,7 @@ export class Orders implements OnInit {
   }
 
   filterOrders(): void {
-    let filtered = [...this.orders];
+    let filtered = [...this.subOrders];
 
     if (this.selectedStatus !== 'all') {
       filtered = filtered.filter(order => order.status === this.selectedStatus);
@@ -102,8 +127,8 @@ export class Orders implements OnInit {
 
     if (this.searchTerm) {
       filtered = filtered.filter(order =>
-        order.id.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        order.customerName.toLowerCase().includes(this.searchTerm.toLowerCase())
+        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) 
+       
       );
     }
 
@@ -111,13 +136,12 @@ export class Orders implements OnInit {
     this.cdr.detectChanges();
   }
 
-  updateOrderStatus(orderId: string, newStatus: Order['status']): void {
-    const subOrderId = this.extractSubOrderId(orderId);
-    if (!subOrderId) return;
+  updateOrderStatus(orderId: number, newStatus: SubOrder['status']): void {
+   
 
-    this.orderService.updateOrderStatus(subOrderId, newStatus).subscribe({
+    this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
       next: () => {
-        const order = this.orders.find(o => o.id === orderId);
+        const order = this.subOrders.find(o => o.id === orderId);
         if (order) {
           order.status = newStatus;
           this.filterOrders();
@@ -166,4 +190,16 @@ export class Orders implements OnInit {
   get shippedOrdersCount(): number {
     return this.orders.filter(o => o.status === 'shipped').length;
   }
+
+  openItemsModal(order: SubOrder): void {
+    this.selectedOrderForItems = order;
+    this.showItemsModal = true;
+  }
+
+  closeItemsModal(): void {
+    this.showItemsModal = false;
+    this.selectedOrderForItems = null; // Clear the selected order when closing
+  }
+
+
 }
