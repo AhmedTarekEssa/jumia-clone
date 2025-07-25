@@ -64,13 +64,13 @@ export const environment = {
 
   },
   Orders: {
-    GetAll: "Order",
-    GetById: (id: number) => `Order/get-by-id/${id}`,
-    Create: "Order",
-    UpdateStatus: (id: number) => `Order/${id}/status`,
-    GetByUserId: (userId: string) => `Order/customer/${userId}`,
-    getCurrentUserOrders: "Order/current-customer",
-    GetSubOrdersBySellerId: (sellerId: number) => `Order/suborders/seller/${sellerId}`,
+    GetAll: "/Order",
+    GetById: (id: number) => `/Order/get-by-id/${id}`,
+    Create: "/Order",
+    UpdateStatus: (id: number) => `/Order/${id}/status`,
+    GetByUserId: (userId: string) => `/Order/customer/${userId}`,
+    getCurrentUserOrders: "/Order/current-customer",
+    GetSubOrdersBySellerId: (sellerId: number) => `/Order/suborders/seller/${sellerId}`,
 
   },
   Chat:{
