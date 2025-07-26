@@ -15,10 +15,9 @@ interface Order {
   shippingProvider?: string;
 }
 
-
 @Component({
   selector: 'app-orders',
-  imports: [ CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './orders.html',
   styleUrl: './orders.css'
 })
@@ -26,12 +25,11 @@ export class Orders implements OnInit {
   private orderService = inject(OrderService);
   private cdr = inject(ChangeDetectorRef);
 
-
   subOrders!: SubOrder[];
   loading: boolean = false;
   error: string | null = null;
 
-  filteredOrders!: SubOrder[] 
+  filteredOrders: SubOrder[]=[];
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
@@ -39,13 +37,15 @@ export class Orders implements OnInit {
   showItemsModal: boolean = false;
   selectedOrderForItems: SubOrder | null = null;
 
-  pending!:SubOrder[];
-  confirmed!:SubOrder[];
-  shipped!:SubOrder[];
-  canceled!:SubOrder[];
-  delivered!:SubOrder[];
+  pending!: SubOrder[];
+  confirmed!: SubOrder[];
+  shipped!: SubOrder[];
+  canceled!: SubOrder[];
+  delivered!: SubOrder[];
 
-
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 1;
 
   ngOnInit(): void {
     this.loadOrders();
@@ -58,13 +58,14 @@ export class Orders implements OnInit {
     this.orderService.getSubOrdersBySellerId(this.sellerId).subscribe({
       next: (subOrders) => {
         this.subOrders = subOrders;
-        // this.subOrders = this.transformSubOrdersToOrders(subOrders);
+        console.log('SubOrders:', this.subOrders.length);
         this.filteredOrders = this.subOrders;
-        this.pending = subOrders.filter(s=>s.status.toLowerCase()=='pending')
-        this.delivered = subOrders.filter(s=>s.status.toLowerCase()=='delivered')
-        this.confirmed = subOrders.filter(s=>s.status.toLowerCase()=='confirmed')
-        this.canceled = subOrders.filter(s=>s.status.toLowerCase()=='canceled')
-        this.shipped = subOrders.filter(s=>s.status.toLowerCase()=='shipped')
+        this.pending = subOrders.filter(s => s.status.toLowerCase() == 'pending');
+        this.delivered = subOrders.filter(s => s.status.toLowerCase() == 'delivered');
+        this.confirmed = subOrders.filter(s => s.status.toLowerCase() == 'confirmed');
+        this.canceled = subOrders.filter(s => s.status.toLowerCase() == 'canceled');
+        this.shipped = subOrders.filter(s => s.status.toLowerCase() == 'shipped');
+        this.currentPage = 1;
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -77,31 +78,74 @@ export class Orders implements OnInit {
     });
   }
 
-
-
-  
-
   filterOrders(): void {
     let filtered = [...this.subOrders];
 
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(order => order.status === this.selectedStatus);
+      filtered = filtered.filter(order => order.status.toLocaleUpperCase() === this.selectedStatus.toLowerCase());
     }
 
     if (this.searchTerm) {
       filtered = filtered.filter(order =>
-        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) 
-       
+        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
 
     this.filteredOrders = filtered;
+    this.currentPage = 1; // Reset to first page when filtering
     this.cdr.detectChanges();
   }
 
-  updateOrderStatus(orderId: number, newStatus: SubOrder['status']): void {
-   
+  // Pagination methods
+  get paginatedOrders(): SubOrder[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredOrders?.slice(startIndex, endIndex);
+  }
 
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredOrders.length / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show maximum 5 page numbers
+    let startPage = 1;
+    let endPage = this.totalPages;
+
+    if (this.totalPages > maxVisiblePages) {
+      const half = Math.floor(maxVisiblePages / 2);
+      startPage = Math.max(1, this.currentPage - half);
+      endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  updateOrderStatus(orderId: number, newStatus: SubOrder['status']): void {
     this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
       next: () => {
         const order = this.subOrders.find(o => o.id === orderId);
@@ -118,8 +162,6 @@ export class Orders implements OnInit {
     });
   }
 
-
-
   getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {
       'pending': 'status-pending',
@@ -135,7 +177,6 @@ export class Orders implements OnInit {
     this.loadOrders();
   }
 
-
   openItemsModal(order: SubOrder): void {
     this.selectedOrderForItems = order;
     this.showItemsModal = true;
@@ -145,6 +186,4 @@ export class Orders implements OnInit {
     this.showItemsModal = false;
     this.selectedOrderForItems = null;
   }
-
-
 }

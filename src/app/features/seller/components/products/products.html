@@ -19,8 +19,6 @@
     </div>
 
     <div class="filter-group">
-      
-
       <select [(ngModel)]="selectedStatus" (change)="filterProducts()">
         <option value="all">All Status</option>
         <option value="pending">pending</option>
@@ -50,9 +48,9 @@
   </div>
 
   <div class="products-grid row justify-content-center" *ngIf="filteredProducts.length > 0">
-    <div class="product-card  col-lg-3 mx-3 my-2" *ngFor="let product of filteredProducts">
+    <div class="product-card col-lg-3 mx-3 my-2" *ngFor="let product of paginatedProducts">
       <div class="product-image">
-        <img [src]=" baseImageUrl + product.imageUrl" [alt]="product.name">
+        <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name">
         <div class="product-status">
           <span class="status-badge" [class]="getStatusClass(product.approvalStatus)">
             {{product.approvalStatus | titlecase}}
@@ -62,9 +60,9 @@
 
       <div class="product-content">
         <h3>{{product.name}}</h3>
-      
+
         <div class="product-details">
-          <span class="product-price">${{product.basePrice | number:'1.2-2'}}</span>
+          <span class="product-price">EGP{{product.basePrice | number:'1.2-2'}}</span>
           <span class="product-stock">Stock: {{product.stockQuantity > 0?product.stockQuantity: "out of stock" }}</span>
         </div>
 
@@ -75,7 +73,6 @@
           <button
             *ngIf="product.approvalStatus ==='Deleted' && product.stockQuantity>0"
             class="btn-toggle active"
-
             (click)="toggleProductStatus(product.productId)">
            ▶️ Activate
           </button>
@@ -98,5 +95,57 @@
         Add Your First Product
       </button>
     </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination-controls" *ngIf="filteredProducts.length > itemsPerPage">
+    <button
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
+      class="pagination-button">
+      Previous
+    </button>
+
+    <ng-container *ngFor="let page of pageNumbers">
+      <span
+        *ngIf="page === 1 && pageNumbers[0] !== 1"
+        (click)="goToPage(1)"
+        class="page-number">
+        1
+      </span>
+      <span
+        *ngIf="page === 1 && pageNumbers[0] > 2"
+        class="page-ellipsis">
+        ...
+      </span>
+      <span
+        (click)="goToPage(page)"
+        [class.active]="page === currentPage"
+        class="page-number">
+        {{ page }}
+      </span>
+      <span
+        *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages - 1"
+        class="page-ellipsis">
+        ...
+      </span>
+      <span
+        *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages"
+        (click)="goToPage(totalPages)"
+        class="page-number">
+        {{ totalPages }}
+      </span>
+    </ng-container>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+      class="pagination-button">
+      Next
+    </button>
+
+    <span class="page-info">
+      Page {{ currentPage }} of {{ totalPages }} ({{ filteredProducts.length }} products)
+    </span>
   </div>
 </div>
