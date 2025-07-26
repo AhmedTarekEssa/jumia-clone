@@ -12,10 +12,10 @@ import { SendMessageRequest } from '../../models/Livechatmodels/send-message-req
   templateUrl: './live-chat.html',
   styleUrl: './live-chat.css'
 })
-export class LiveChat implements OnInit , OnDestroy {
+export class LiveChat implements OnInit  {
   
   isOpen = false;
-  currentView = 'list'; // 'list' or 'conversation'
+  currentView = 'list'; 
   selectedConversation!:Chat|null;
   private chatService = inject(ChatService)
   private cdr = inject(ChangeDetectorRef)
@@ -37,9 +37,6 @@ export class LiveChat implements OnInit , OnDestroy {
    )
   }
 
-ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
-  }
 
 
   experts = [

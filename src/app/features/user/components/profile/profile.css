@@ -1,0 +1,58 @@
+/* Custom styles for account overview component */
+
+.card {
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  background-color: #f8f9fa !important;
+}
+
+.card-title {
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.text-warning {
+  color: #ff6600 !important;
+}
+
+.btn-link:hover {
+  text-decoration: none !important;
+}
+
+.bg-primary {
+  background-color: #0d6efd !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Icon styling */
+.fas {
+  font-size: 1rem;
+}
+
+/* Custom spacing */
+.py-4 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.g-4 {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 1.5rem;
+}
