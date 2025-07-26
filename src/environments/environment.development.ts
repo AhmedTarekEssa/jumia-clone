@@ -9,6 +9,8 @@ export const environment = {
         SellerRegister:'/seller/SellerRegister',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
+        forgetPassword: '/Auth/forgot-password',
+        resetPassword: '/Auth/reset-password',
 
         logout: '/auth/logout',
     }
@@ -28,6 +30,7 @@ export const environment = {
                 `/Product/Products-filterd?role=${role}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
         Activate:(id:number)=>`/Product/Activate/${id}`,
         Deactivate:(id:number)=>`/Product/Deactivate/${id}`,
+        Delete:(id:number)=>`/Product/delete/${id}`,
         GetVariantByAttributes:(id:number)=>`/Product/${id}/variant`,
         GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`,
         UpdateProduct:'/Product/update'
@@ -94,6 +97,14 @@ export const environment = {
     getAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
+  },
+  User:{
+    getUserInfo:'/User/profile',
+    updateUserInfo:`/User/profile`
+  },
+  AiQuery:{
+    Ask:`/AiQuery/Ask`,
+    SemanticSearch:`/AiQuery/semantic-search`
   }
 
   };
