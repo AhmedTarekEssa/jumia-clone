@@ -154,4 +154,17 @@ export class ProductService {
     )
 
   }
+
+ deleteProduct(id:number):Observable<{message:string}>{
+    return this.httpClient.delete<{message:string}>(this.apiBaseUrl+this.controller.Delete(id))
+ .pipe(
+      tap({
+        next:(data)=>console.log(data),
+        error:(e)=>console.log("error occured while deleting the product" + e)
+      })
+    )
+
+  }
+
+
 }

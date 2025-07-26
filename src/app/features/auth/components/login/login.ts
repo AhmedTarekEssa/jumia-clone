@@ -15,23 +15,27 @@ export class Login implements OnInit{
   loginForm: FormGroup;
   errorMessage: string | null = null;
 
+
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute){
     this.loginForm = this.fb.group({
       // email: ['',[Validators.required, Validators.email]],
-      email: [{ value: '', disabled: true }],
+      email: [{ value: '', disabled: true },[Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     const email = this.authService.tempEmail;
+    
     console.log(email);
     if (!email) {
       this.router.navigate(['/auth/check-email']);
       return;
     }
 
-    this.loginForm.patchValue({email});
+    this.loginForm.patchValue({
+      email
+    });
 
 
     // this.loginForm = this.fb.group({
@@ -60,4 +64,18 @@ export class Login implements OnInit{
     });
   }
 
+  isPasswordInvalid() : boolean{
+    const passwordControl = this.loginForm.get('password');
+  
+    return passwordControl ? passwordControl.invalid && passwordControl.touched : false;
+
 }
+
+ForgetPassword(){
+    this.router.navigate(['/auth/forgot-password']);
+}
+
+
+  }
+
+
