@@ -1,18 +1,30 @@
 import { AddProduct } from './../../../../seller/components/add-product/add-product';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../../core/services/Product-Service/product';
-import { ProductDetails } from '../../../../products/product-models';
+import { ProductDetails, ProductUi } from '../../../../products/product-models';
 import { Subject, takeUntil } from 'rxjs';
+import { CategoryService } from '../../../../../core/services/Categories/category';
 
 interface Product {
-   productId: number;
+  productId: number;
   name: string;
   basePrice: number;
   discountPercentage: string;
-  imageUrl: string;
-  variants: ProductVariant[];
+  imageUrl: any;
+  discount?: number;
+  approvalStatus: string;
+  isAvailable: boolean;
+  stockQuantity: number;
+  variants: {
+    variantId: number;
+    color: string;
+    size: string;
+    price: number;
+    stock: number;
+    status: 'Active' | 'Inactive';
+  }[];
 }
 
 interface ProductVariant {
@@ -23,6 +35,35 @@ interface ProductVariant {
   price: number;
   stock: number;
   status: 'Active' | 'Inactive';
+}
+
+interface NewProduct {
+  sellerId: number;
+  categoryId: number;
+  name: string;
+  description: string;
+  basePrice: number;
+  mainImage: File | null;
+  additionalImages: File[];
+  attributes: { attributeId: number; values: string[] }[];
+  variants: {
+    variantName: string;
+    price: number;
+    stockQuantity: number;
+    sku: string;
+    image: File | null;
+  }[];
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface ProductAttribute {
+  id: number;
+  name: string;
+  values: string[];
 }
 
 
@@ -36,7 +77,7 @@ interface ProductVariant {
 export class AdminProducts implements OnInit , OnDestroy {
   private destroyed = new Subject<void>();
 
-    showAddForm = false;
+  showAddForm = false;
   searchTerm = '';
   categoryFilter = '';
   statusFilter = '';
@@ -45,12 +86,46 @@ export class AdminProducts implements OnInit , OnDestroy {
   isLoading = true;
   error = '';
 
-  constructor(private productService: ProductService , private cdr: ChangeDetectorRef){}
+  editingProduct: Product | null = null ;
+
+  newProduct: NewProduct = {
+    sellerId: 2, // Set default or get from auth
+    categoryId: 0,
+    name: '',
+    description: '',
+    basePrice: 0,
+    mainImage: null,
+    additionalImages: [],
+    attributes: [],
+    variants: [{
+      variantName: '',
+      price: 0,
+      stockQuantity: 0,
+      sku: '',
+      image: null
+    }]
+  };
+
+  categories: Category[] = [];
+  attributesForCategory: ProductAttribute[] = [];
+  isSubmitting = false;
+
+    private categoryService = inject( CategoryService);
+    // private attributeService = inject(AttributeService);
+    private cdr = inject(ChangeDetectorRef);
+
+  constructor(private productService : ProductService){
+  //   console.log(productService);
+  //   console.log('getAllWithDetails exists:', 
+  // typeof this.productService.getAllWithDetails === 'function');
+  }
 
   ngOnInit(): void {
       console.log('Component initialized'); // Debug log
 
     this.loadProducts();
+    this.loadCategories();
+    
   }
 
   ngOnDestroy(): void {
@@ -63,7 +138,7 @@ export class AdminProducts implements OnInit , OnDestroy {
     this.isLoading = true;
     this.error = '';
     
-    this.productService.getAllWithDetails().pipe(
+    this.productService.getAllUi().pipe(
       takeUntil(this.destroyed)
     ).subscribe({
       next: (apiProducts) => {
@@ -80,24 +155,291 @@ export class AdminProducts implements OnInit , OnDestroy {
     });
   }
 
+  // Add these methods to the component class
+acceptProduct(product: Product): void {
+  if (confirm('Are you sure you want to approve this product?')) {
+    this.isLoading = true;
+    
+    this.productService.activateProduct(product.productId).pipe(
+      takeUntil(this.destroyed)
+    ).subscribe({
+      next: (response) => {
+        // Update local product status
+        this.products = this.products.map(p => 
+          p.productId === product.productId ? 
+          { ...p, approvalStatus: 'Active', isAvailable: true } : 
+          p
+        );
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.error = 'Failed to approve product';
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        console.error('Approve error:', err);
+      }
+    });
+  }
+}
 
-  private mapApiProductsToUiModel(apiProducts: ProductDetails[]): Product[] {
+declineProduct(product: Product): void {
+  if (confirm('Are you sure you want to decline this product?')) {
+    this.isLoading = true;
+    
+    this.productService.dactivateProduct(product.productId).pipe(
+      takeUntil(this.destroyed))
+    .subscribe({
+      next: (response) => {
+        // Update local product status
+        this.products = this.products.map(p => 
+          p.productId === product.productId ? 
+          { ...p, approvalStatus: 'Inactive', isAvailable: false } : 
+          p
+        );
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.error = 'Failed to decline product';
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        console.error('Decline error:', err);
+      }
+    });
+  }
+}
+
+// Only show delete for non-pending products
+// deleteProduct(product: Product): void {
+//   if (confirm('Are you sure you want to permanently delete this product?')) {
+//     this.isLoading = true;
+    
+//     this.productService.deleteProduct(product.productId).pipe(
+//       takeUntil(this.destroyed))
+//     .subscribe({
+//       next: (response) => {
+//         // Remove from local array
+//         this.products = this.products.filter(p => p.productId !== product.productId);
+//         this.isLoading = false;
+//         this.cdr.detectChanges();
+//       },
+//       error: (err) => {
+//         this.error = 'Failed to delete product';
+//         this.isLoading = false;
+//         this.cdr.detectChanges();
+//         console.error('Delete error:', err);
+//       }
+//     });
+//   }
+// }
+
+
+  loadCategories():void {
+    this.categoryService.getAllCategories().pipe(
+      takeUntil(this.destroyed)
+    ).subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (err) => {
+        console.error('Error loading categories:',err);
+      }
+    });
+  }
+
+  onCategoryChange(): void {
+    if (this.newProduct.categoryId) {
+      this.categoryService.getAttributes(this.newProduct.categoryId).pipe(
+        takeUntil(this.destroyed)
+      ).subscribe({
+        next: (attributes) => {
+          this.attributesForCategory = attributes.map(
+            attr => ({
+              id: attr.categoryId,
+              name: attr.name,
+              values: this.getPossibleValues(attr.name)
+            })
+          );
+          // Initialize attributes array
+          this.newProduct.attributes = attributes.map(attr => ({
+            attributeId: attr.categoryId,
+            values: []
+          }));
+        },
+        error: (err) => {
+          console.error('Error loading attributes:', err);
+        }
+      });
+    }
+  }
+
+  getPossibleValues(attributeName: string): string[] {
+  const valueMappings: {[key: string]: string[]} = {
+    'Color': ['Red', 'Blue', 'Green', 'Black', 'White'],
+    'Size': ['S', 'M', 'L', 'XL', 'XXL'],
+    'Material': ['Cotton', 'Polyester', 'Wool', 'Silk']
+  };
+  return valueMappings[attributeName] || [];
+}
+
+onMainImageChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.newProduct.mainImage = file;
+    }
+  }
+
+  onAdditionalImagesChange(event: any): void {
+    this.newProduct.additionalImages = Array.from(event.target.files);
+  }
+
+  onVariantImageChange(event: any, index: number): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.newProduct.variants[index].image = file;
+    }
+  }
+
+ onAttributeChange(event: Event, attributeId: number, value: string): void {
+  const target = event.target as HTMLInputElement;
+  const isChecked = target.checked;
+  
+  const attribute = this.newProduct.attributes.find(a => a.attributeId === attributeId);
+  if (attribute) {
+    if (isChecked) {
+      attribute.values.push(value);
+    } else {
+      attribute.values = attribute.values.filter(v => v !== value);
+    }
+  }
+}
+
+   addVariant(): void {
+    this.newProduct.variants.push({
+      variantName: '',
+      price: 0,
+      stockQuantity: 0,
+      sku: '',
+      image: null
+    });
+  }
+
+  removeVariant(index: number): void {
+    if (this.newProduct.variants.length > 1) {
+      this.newProduct.variants.splice(index, 1);
+    }
+  }
+
+
+  onSubmit(): void {
+    if (this.isSubmitting) return;
+    
+    this.isSubmitting = true;
+    
+    const formData = new FormData();
+    
+    // Append basic product info
+    formData.append('SellerId', this.newProduct.sellerId.toString());
+    formData.append('CategoryId', this.newProduct.categoryId.toString());
+    formData.append('Name', this.newProduct.name);
+    formData.append('Description', this.newProduct.description);
+    formData.append('BasePrice', this.newProduct.basePrice.toString());
+    
+    // Append main image
+    if (this.newProduct.mainImage) {
+      formData.append('MainImageUrl', this.newProduct.mainImage);
+    }
+    
+    // Append additional images
+    this.newProduct.additionalImages.forEach((image, index) => {
+      formData.append(`AdditionalImageUrls`, image);
+    });
+    
+    // Append attributes
+    this.newProduct.attributes.forEach((attr, index) => {
+      formData.append(`Attributes[${index}].AttributeName`, 
+        this.attributesForCategory.find(a => a.id === attr.attributeId)?.name || '');
+      attr.values.forEach((value, valueIndex) => {
+        formData.append(`Attributes[${index}].Values[${valueIndex}]`, value);
+      });
+    });
+
+     // Append variants
+    this.newProduct.variants.forEach((variant, index) => {
+      formData.append(`Variants[${index}].VariantName`, variant.variantName);
+      formData.append(`Variants[${index}].Price`, variant.price.toString());
+      formData.append(`Variants[${index}].StockQuantity`, variant.stockQuantity.toString());
+      formData.append(`Variants[${index}].Sku`, variant.sku);
+      if (variant.image) {
+        formData.append(`Variants[${index}].VariantImageUrl`, variant.image);
+      }
+    });
+    
+    this.productService.AddProduct(formData).pipe(
+      takeUntil(this.destroyed)
+    ).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.showAddForm = false;
+        this.resetForm();
+        this.loadProducts(); // Refresh the product list
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.error = 'Failed to add product. Please try again.';
+        console.error('Error adding product:', error);
+      }
+    });
+  }
+
+   resetForm(): void {
+    this.newProduct = {
+      sellerId: 1,
+      categoryId: 0,
+      name: '',
+      description: '',
+      basePrice: 0,
+      mainImage: null,
+      additionalImages: [],
+      attributes: [],
+      variants: [{
+        variantName: '',
+        price: 0,
+        stockQuantity: 0,
+        sku: '',
+        image: null
+      }]
+    };
+    this.attributesForCategory = [];
+  
+  // ... rest of the existing methods
+   }
+
+
+
+
+  private mapApiProductsToUiModel(apiProducts: ProductUi[]): Product[] {
     if (!apiProducts) return [];
 
     return apiProducts.map(apiProduct => ({
-      productId: apiProduct.productId,
-      name: apiProduct.name,
-      basePrice: apiProduct.basePrice,
-      discountPercentage: apiProduct.discountPercentage,
-      imageUrl: apiProduct.mainImageUrl,
-      variants: apiProduct.variants.map(variant => ({
-        variantId: variant.variantId,
-        color: variant.variantName,
-        size: variant.sku,
-        price: variant.price,
-        stock: variant.stockQuantity,
-        status: variant.stockQuantity > 0 ? 'Active' : 'Inactive'
-      })) || []
+    productId: apiProduct.productId,
+    name: apiProduct.name,
+    basePrice: apiProduct.basePrice,
+    discountPercentage: apiProduct.discountPercentage,
+    imageUrl: apiProduct.imageUrl,
+    discount: apiProduct.discount,
+    approvalStatus: apiProduct.approvalStatus,
+    isAvailable: apiProduct.isAvailable,
+    stockQuantity: apiProduct.stockQuantity,
+    variants: apiProduct.variants?.map(variant => ({
+      variantId: variant.variantId,
+      color: variant.variantName,
+      size: variant.sku,
+      price: variant.price,
+      stock: variant.stockQuantity,
+      status: variant.stockQuantity > 0 ? 'Active' : 'Inactive'
+    })) || []
     }));
   }
 
@@ -115,48 +457,91 @@ export class AdminProducts implements OnInit , OnDestroy {
   img.parentElement!.classList.add('no-image'); // Add CSS class to parent
 }
 
-addProduct():void{
-  
+editProduct(product: Product){
+  this.editingProduct = {...product};
+  this.showAddForm = true;
 
 }
 
-  // newProduct = {
-  //   name: '',
-  //   category: '',
-  //   price: 0,
-  //   stock: 0,
-  //   seller: '',
-  //   status: 'Active' as 'Active' | 'Inactive'
-  // };
+updateProduct(): void{
+  if(!this.editingProduct) return;
 
-  // products: Product[] = [
-  //   { id: 1, name: 'iPhone 14 Pro', category: 'Electronics', price: 999, stock: 15, status: 'Active', seller: 'Apple Store', image: 'https://via.placeholder.com/200x200?text=iPhone' },
-  //   { id: 2, name: 'Samsung Galaxy S23', category: 'Electronics', price: 799, stock: 20, status: 'Active', seller: 'Samsung Official', image: 'https://via.placeholder.com/200x200?text=Samsung' },
-  //   { id: 3, name: 'Nike Air Max', category: 'Fashion', price: 129, stock: 50, status: 'Active', seller: 'Nike Store', image: 'https://via.placeholder.com/200x200?text=Nike' },
-  //   { id: 4, name: 'Coffee Maker', category: 'Home', price: 89, stock: 0, status: 'Inactive', seller: 'Home Essentials', image: 'https://via.placeholder.com/200x200?text=Coffee' }
-  // ];
+  this.products = this.products.map(p => 
+    p.productId === this.editingProduct!.productId ? this.editingProduct! : p
+  );
 
-  // get filteredProducts(): Product[] {
-  //   return this.products.filter(product => {
-  //     const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
-  //     const matchesCategory = !this.categoryFilter || product.category === this.categoryFilter;
-  //     const matchesStatus = !this.statusFilter || product.status === this.statusFilter;
-  //     return matchesSearch && matchesCategory && matchesStatus;
-  //   });
-  // }
+  this.cancelEdit();
+  this.loadProducts();
 
-  // addProduct(): void {
-  //   if (this.newProduct.name && this.newProduct.category && this.newProduct.price > 0) {
-  //     const product: Product = {
-  //       id: this.products.length + 1,
-  //       ...this.newProduct,
-  //       image: 'https://via.placeholder.com/200x200?text=New'
-  //     };
-  //     this.products.push(product);
-  //     this.newProduct = { name: '', category: '', price: 0, stock: 0, seller: '', status: 'Active' };
-  //     this.showAddForm = false;
-  //   }
-  // }
+}
+
+cancelEdit(): void {
+    this.editingProduct = null;
+    this.showAddForm = false;
+  }
+
+// DELETE PRODUCT
+  deleteProduct(product: Product): void {
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.isLoading = true;
+      
+      // Call the deactivate endpoint (assuming this is your delete functionality)
+      this.productService.dactivateProduct(product.productId).pipe(
+        takeUntil(this.destroyed)
+      ).subscribe({
+        next: () => {
+          // Remove from local array
+          this.products = this.products.filter(p => p.productId !== product.productId);
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.error = 'Failed to delete product';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          console.error('Delete error:', err);
+        }
+      });
+    }
+  }
+
+  // ACTIVATE PRODUCT
+  activateProduct(productId: number): void {
+    this.isLoading = true;
+    this.productService.activateProduct(productId).pipe(
+      takeUntil(this.destroyed)
+    ).subscribe({
+      next: () => {
+        // Update local status
+        this.products = this.products.map(p => {
+          if (p.productId === productId) {
+            p.variants.forEach(v => v.status = 'Active');
+          }
+          return p;
+        });
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.error = 'Failed to activate product';
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+
+  private handleLoadError(error: any): void {
+    this.isLoading = false;
+    this.error = 'Failed to load products. Please try again later.';
+    this.cdr.detectChanges();
+    console.error('Error loading products:', error);
+  }
+  
+
+
+
+
 
 
 }

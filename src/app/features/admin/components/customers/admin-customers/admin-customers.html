@@ -1,9 +1,9 @@
  <div class="customers-container">
       <div class="header">
         <h2>Customers Management</h2>
-        <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
+        <!-- <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
           Add New Customer
-        </button>
+        </button> -->
       </div>
 
       <div class="search-filter">
@@ -12,26 +12,26 @@
           placeholder="Search customers..." 
           [(ngModel)]="searchTerm"
           class="search-input">
-        <select [(ngModel)]="statusFilter" class="filter-select">
+        <!-- <select [(ngModel)]="statusFilter" class="filter-select">
           <option value="">All Status</option>
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
-        </select>
+        </select> -->
       </div>
 
       <div *ngIf="showAddForm" class="add-form">
         <h3>Add New Customer</h3>
         <form (ngSubmit)="addCustomer()">
           <div class="form-row">
-            <input type="text" placeholder="Customer Name" [(ngModel)]="newCustomer.name" name="name" required>
+            <input type="text" placeholder="Customer Name" [(ngModel)]="newCustomer.firstName" name="name" required>
             <input type="email" placeholder="Email" [(ngModel)]="newCustomer.email" name="email" required>
           </div>
           <div class="form-row">
-            <input type="tel" placeholder="Phone" [(ngModel)]="newCustomer.phone" name="phone" required>
-            <select [(ngModel)]="newCustomer.status" name="status" required>
+            <input type="tel" placeholder="Phone" [(ngModel)]="newCustomer.phoneNumber" name="phone" required>
+            <!-- <select [(ngModel)]="newCustomer.status" name="status" required>
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
-            </select>
+            </select> -->
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success">Add Customer</button>
@@ -44,34 +44,34 @@
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <!-- <th>ID</th> -->
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Status</th>
+              <!-- <th>Status</th> -->
               <th>Join Date</th>
-              <th>Orders</th>
-              <th>Total Spent</th>
+              <!-- <th>Orders</th>
+              <th>Total Spent</th> -->
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let customer of filteredCustomers">
-              <td>{{customer.id}}</td>
-              <td>{{customer.name}}</td>
+              <!-- <td>{{customer.id}}</td> -->
+              <td>{{customer.firstName}}</td>
               <td>{{customer.email}}</td>
-              <td>{{customer.phone}}</td>
-              <td>
+              <td>{{customer.phoneNumber}}</td>
+              <!-- <td>
                 <span class="status" [class]="customer.status.toLowerCase()">
                   {{customer.status}}
                 </span>
-              </td>
-              <td>{{customer.joinDate}}</td>
-              <td>{{customer.totalOrders}}</td>
-              <td>\${{customer.totalSpent}}</td>
+              </td> -->
+              <td>{{customer.dateOfBirth}}</td>
+              <!-- <td>{{customer.totalOrders}}</td>
+              <td>\${{customer.totalSpent}}</td> -->
               <td>
-                <button class="btn btn-sm btn-primary">Edit</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
+                <!-- <button class="btn btn-sm btn-primary" style="background-color: darkorange">Edit</button> -->
+                <button class="btn btn-sm btn-danger" >Delete</button>              
               </td>
             </tr>
           </tbody>
