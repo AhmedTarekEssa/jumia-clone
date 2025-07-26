@@ -97,6 +97,14 @@ export const environment = {
     getAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
+  },
+  User:{
+    getUserInfo:'/User/profile',
+    updateUserInfo:`/User/profile`
+  },
+  AiQuery:{
+    Ask:`/AiQuery/Ask`,
+    SemanticSearch:`/AiQuery/semantic-search`
   }
 
   };
