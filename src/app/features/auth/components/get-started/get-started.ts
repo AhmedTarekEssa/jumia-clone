@@ -15,19 +15,19 @@ export class GetStarted implements OnInit{
   constructor(private router: Router){}
 
   ngOnInit(): void {
-    this.startCountdown();
+    // this.startCountdown();
   }
 
-  startCountdown() : void {
-    this.timerId = setInterval( () => {
-      this.timeLeft--;
+  // startCountdown() : void {
+  //   this.timerId = setInterval( () => {
+  //     this.timeLeft--;
 
-      if(this.timeLeft <= 0){
-        clearInterval(this.timerId);
-        this.getStarted();
-      }
-    }, 1000);
-  }
+  //     if(this.timeLeft <= 0){
+  //       clearInterval(this.timerId);
+  //       this.getStarted();
+  //     }
+  //   }, 1000);
+  // }
 
   getStarted() : void{
     this.router.navigate(['/home']);
