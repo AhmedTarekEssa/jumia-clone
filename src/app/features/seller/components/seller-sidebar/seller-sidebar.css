@@ -134,3 +134,29 @@
     transform: translateX(0);
   }
 }
+/* logout btn */
+.logout {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s;
+}
+.logout:hover {
+  background-color: #34495e;
+}
+  .logout-icon {
+    font-size: 1.25rem;
+    width: 24px;
+    text-align: center;
+  }
+  .logout-label {
+    flex: 1;
+    font-size: 0.9rem;
+  }
+  .divider {
+    border-top: 1px solid #34495e;
+    margin: 0.5rem 0;
+  }
+

@@ -99,8 +99,14 @@
   background: #e55a2b;
 }
 
+/* Updated Orders Table Styles to match orders component */
 .orders-table {
-  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .orders-table table {
@@ -110,7 +116,7 @@
 
 .orders-table th,
 .orders-table td {
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #eee;
 }
@@ -121,17 +127,23 @@
   color: #333;
 }
 
+.order-id {
+  font-family: monospace;
+  font-weight: bold;
+  color: #666;
+}
+
+.amount {
+  font-weight: bold;
+  color: #27ae60;
+}
+
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   text-transform: uppercase;
-}
-
-.status-completed {
-  background: #d4edda;
-  color: #155724;
 }
 
 .status-pending {
@@ -139,9 +151,43 @@
   color: #856404;
 }
 
-.status-shipped {
+.status-confirmed {
   background: #d1ecf1;
   color: #0c5460;
+}
+
+.status-shipped {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-delivered {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-action:hover {
+  background: #f8f9fa;
 }
 
 @media (max-width: 768px) {
@@ -154,4 +200,116 @@
     gap: 1rem;
     align-items: stretch;
   }
+
+  .orders-table {
+    overflow-x: auto;
+  }
+}
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: #ff6b35;
+}
+
+.modal-body {
+  flex-grow: 1;
+}
+
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.modal-body th,
+.modal-body td {
+  border: 1px solid #eee;
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.modal-body th {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+}
+
+.no-items-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.modal-footer {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-footer .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #5a6268;
 }

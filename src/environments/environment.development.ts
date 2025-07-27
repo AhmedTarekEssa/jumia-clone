@@ -1,3 +1,5 @@
+import { OrderPayload } from "../app/shared/models/delivery-option";
+
 export const environment = {
 
 
@@ -9,6 +11,8 @@ export const environment = {
         SellerRegister:'/seller/SellerRegister',
         checkEmail: '/Auth/email-check',
         verifyOtp: '/auth/verify-otp',
+        forgetPassword: '/Auth/forgot-password',
+        resetPassword: '/Auth/reset-password',
 
         logout: '/auth/logout',
     }
@@ -28,9 +32,10 @@ export const environment = {
                 `/Product/Products-filterd?role=${role}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
         Activate:(id:number)=>`/Product/Activate/${id}`,
         Deactivate:(id:number)=>`/Product/Deactivate/${id}`,
+        Delete:(id:number)=>`/Product/delete/${id}`,
         GetVariantByAttributes:(id:number)=>`/Product/${id}/variant`,
-        GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`
-
+        GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`,
+        UpdateProduct:'/Product/update'
     },
     Cart:{
         GetCart:"/Cart",
@@ -64,12 +69,18 @@ export const environment = {
 
   },
   Orders: {
+
     GetAll: "/Order/getall",
-    GetById: (id: number) => `Order/get-by-id/${id}`,
-    Create: "Order",
-    UpdateStatus: (id: number) => `Order/${id}/status`,
-    GetByUserId: (userId: string) => `Order/customer/${userId}`,
-    getCurrentUserOrders: "Order/current-customer"
+
+    GetById: (id: number) => `/Order/get-by-id/${id}`,
+    Create: "/Order",
+    UpdateStatus: (id: number) => `/Order/${id}/status`,
+    GetByUserId: (userId: string) => `/Order/customer/${userId}`,
+
+    getCurrentUserOrders: "/Order/current-customer",
+    GetSubOrdersBySellerId: () => `/Order/suborders/seller`,
+
+
   },
   Chat:{
     createchat:'/Chat',
@@ -92,6 +103,21 @@ export const environment = {
     getAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
+  },
+
+  Payment:{
+    initiate: `/Payment/initiate`,
+    callback: `/Payment/callback`
+
+  },
+  User:{
+    getUserInfo:'/User/profile',
+    updateUserInfo:`/User/profile`
+  },
+  AiQuery:{
+    Ask:`/AiQuery/Ask`,
+    SemanticSearch:(query:string)=>`/AiQuery/semantic-search?query=${query}`
+
   }
 
   };

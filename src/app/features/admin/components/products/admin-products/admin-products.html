@@ -6,6 +6,105 @@
     </button>
   </div>
 
+  <!-- ////////////////////////////////////////////////////////////////////////////////// -->
+
+  <div *ngIf="showAddForm" class="add-form">
+  <h3>{{editingProduct ? 'Edit Product' : 'Add New Product'}}</h3>
+  <form (ngSubmit)="onSubmit()" #productForm="ngForm" enctype="multipart/form-data">
+    <!-- Basic Product Info -->
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input type="text" id="name" name="name" [(ngModel)]="newProduct.name" required class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" [(ngModel)]="newProduct.description" required class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="categoryId">Category</label>
+      <select id="categoryId" name="categoryId" [(ngModel)]="newProduct.categoryId" required class="form-control">
+        <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="basePrice">Base Price</label>
+      <input type="number" id="basePrice" name="basePrice" [(ngModel)]="newProduct.basePrice" required class="form-control" min="0" step="0.01">
+    </div>
+
+    <!-- Images -->
+    <div class="form-group">
+      <label for="mainImage">Main Image</label>
+      <input type="file" id="mainImage" name="mainImage" (change)="onMainImageChange($event)" required class="form-control" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label for="additionalImages">Additional Images</label>
+      <input type="file" id="additionalImages" name="additionalImages" (change)="onAdditionalImagesChange($event)" multiple class="form-control" accept="image/*">
+    </div>
+
+    <!-- Attributes -->
+    <div class="form-group" *ngIf="attributesForCategory.length > 0">
+      <h4>Attributes</h4>
+      <div *ngFor="let attribute of attributesForCategory" class="attribute-group">
+        <label>{{attribute.name}}</label>
+        <div *ngFor="let value of attribute.values">
+          <input type="checkbox" 
+                 [id]="'attr_'+attribute.id+'_'+value" 
+                 [name]="'attr_'+attribute.id" 
+                 [value]="value"
+                 (change)="onAttributeChange($event, attribute.id, value)"
+                 >
+          <label [for]="'attr_'+attribute.id+'_'+value">{{value}}</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variants -->
+    <div class="form-group">
+      <h4>Variants</h4>
+      <div *ngFor="let variant of newProduct.variants; let i = index" class="variant-group">
+        <h5>Variant {{i + 1}}</h5>
+        <div class="form-group">
+          <label [for]="'variantName_'+i">Variant Name</label>
+          <input type="text" [id]="'variantName_'+i" [(ngModel)]="variant.variantName" name="variantName" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label [for]="'price_'+i">Price</label>
+          <input type="number" [id]="'price_'+i" [(ngModel)]="variant.price" name="price" required class="form-control" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label [for]="'stockQuantity_'+i">Stock Quantity</label>
+          <input type="number" [id]="'stockQuantity_'+i" [(ngModel)]="variant.stockQuantity" name="stockQuantity" required class="form-control" min="0">
+        </div>
+        <div class="form-group">
+          <label [for]="'sku_'+i">SKU</label>
+          <input type="text" [id]="'sku_'+i" [(ngModel)]="variant.sku" name="sku" required class="form-control">
+        </div>
+        <div class="form-group">
+          <label [for]="'variantImage_'+i">Variant Image</label>
+          <input type="file" [id]="'variantImage_'+i" (change)="onVariantImageChange($event, i)" class="form-control" accept="image/*">
+        </div>
+        <button type="button" class="btn btn-danger" (click)="removeVariant(i)">Remove Variant</button>
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="addVariant()">Add Variant</button>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="submit" style="background-color:#e74c3c" class="btn btn-success" [disabled]="productForm.invalid || isSubmitting">
+        {{isSubmitting ? 'Processing...' : (editingProduct ? 'Update' : 'Add')}} Product
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////// -->
   <!-- Loading and Error States -->
   <div *ngIf="isLoading" class="loading-state">
     <p>Loading products...</p>
@@ -62,7 +161,7 @@
         <div *ngFor="let variant of product.variants" class="variant-info">
           <p>
             {{variant.color}} / {{variant.size}} - 
-            \${{variant.price}} - 
+            ${{variant.price}} - 
             Stock: {{variant.stock}} - 
             <span class="status" [class]="variant.status.toLowerCase()">
               {{variant.status}}
@@ -70,10 +169,42 @@
           </p>
         </div>
       </div>
-      <div class="product-actions">
-        <button class="btn btn-sm btn-primary" style="background-color: #e74c3c">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </div>
+     <div class="product-actions">
+  <!-- Accept Button (only shows for pending products) -->
+  <button class="btn btn-sm btn-success" 
+          (click)="acceptProduct(product)"
+          *ngIf="product.approvalStatus === 'Pending'">
+    Accept
+  </button>
+
+  <!-- Decline Button (only shows for pending products) -->
+  <button class="btn btn-sm btn-warning" 
+          (click)="declineProduct(product)"
+          *ngIf="product.approvalStatus === 'Pending'">
+    Decline
+  </button>
+
+  <!-- Delete Button (shows for all products) -->
+  <button class="btn btn-sm btn-danger" 
+          (click)="deleteProduct(product)">
+    Delete
+  </button>
+
+  <!-- Status Badge -->
+  <span class="status-badge" 
+        [class.pending]="product.approvalStatus === 'Pending'"
+        [class.active]="product.approvalStatus === 'Active'"
+        [class.inactive]="product.approvalStatus === 'Inactive'">
+    {{product.approvalStatus}}
+  </span>
+  
+  <!-- Availability Badge -->
+  <span class="availability-badge" [class.available]="product.isAvailable">
+    {{product.isAvailable ? 'Available' : 'Unavailable'}}
+  </span>
+</div>
+      
+
     </div>
   </ng-container>
 </div>

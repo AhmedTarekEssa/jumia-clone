@@ -1,9 +1,40 @@
 import { Order } from './../../../shared/models/order';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment.development'; // Adjust the path as necessary
+import { environment } from '../../../../environments/environment.development';
 import { Observable } from 'rxjs';
 
+import { Order, OrderItem } from '../../../shared/models/order'; // Assuming you have an Order model
+import { OrderPayload } from '../../../shared/models/delivery-option';
+// =======
+// import { Order } from '../../../shared/models/order';
+// export interface OrderItem {
+//   id: number;
+//   subOrderId: number;
+//   productId: number;
+//   variationId: number;
+//   quantity: number;
+//   priceAtPurchase: number;
+//   totalPrice: number;
+//   productName: string;
+//   productImageUrl: string | null;
+//   productSlug: string | null;
+//   productBrand: string | null;
+//   productCategory: string | null;
+// }
+// >>>>>>> master
+
+export interface SubOrder {
+  id: number;
+  orderId: number;
+  sellerId: number;
+  subtotal: number;
+  status: string;
+  statusUpdatedAt: string;
+  trackingNumber: string;
+  shippingProvider: string;
+  orderItems: OrderItem[];
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -26,8 +57,10 @@ export class OrderService {
   }
 
 
-  createOrder(order: any): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}${environment.Orders.Create}`, order, { withCredentials: true });
+
+  createOrder(order: any): Observable<OrderPayload> {
+    return this.http.post<OrderPayload>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
+
   }
 
 
@@ -39,6 +72,7 @@ export class OrderService {
   getOrdersByUserId(userId: string): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`, { withCredentials: true });
   }
+
 
   UpdateOrderStatus(orderID: number, status: string): Observable<boolean> {
     return this.http.put<boolean>(
@@ -62,5 +96,10 @@ export class OrderService {
     );
   }
 
+
+
+  getSubOrdersBySellerId(): Observable<SubOrder[]> {
+    return this.http.get<SubOrder[]>(`${this.baseUrl}${environment.Orders.GetSubOrdersBySellerId()}`, { withCredentials: true });
+  }
 
 }

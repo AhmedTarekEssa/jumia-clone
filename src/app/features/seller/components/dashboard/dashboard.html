@@ -16,7 +16,7 @@
     <div class="stat-card">
       <div class="stat-icon">💰</div>
       <div class="stat-content">
-        <h3>${{stats.totalRevenue | number:'1.2-2'}}</h3>
+        <h3>EGP{{stats.totalRevenue | number:'1.2-2'}}</h3>
         <p>Total Revenue</p>
       </div>
     </div>
@@ -48,27 +48,72 @@
       <table>
         <thead>
           <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th class="text-center">Items Count</th>
+            <th class="text-center">Amount</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Order Date</th>
+            <th class="text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let order of recentOrders">
-            <td>{{order.id}}</td>
-            <td>{{order.customerName}}</td>
-            <td>${{order.amount | number:'1.2-2'}}</td>
-            <td>
-              <span class="status-badge" [class]="getStatusClass(order.status)">
+            <td class="text-center">{{ order.orderItems?.length || 0 }}</td>
+            <td class="amount text-center">EGP{{order.subtotal | number:'1.2-2'}}</td>
+            <td class="text-center">
+              <span class="status-badge text-center" [class]="getStatusClass(order.status)">
                 {{order.status | titlecase}}
               </span>
             </td>
-            <td>{{order.date | date:'short'}}</td>
+            <td class="text-center">{{order.statusUpdatedAt | date:'short'}}</td>
+            <td class="text-center">
+              <div class="action-buttons d-flex justify-content-center">
+                <button
+                  class="btn-action view"
+                  title="View Details"
+                  (click)="openItemsModal(order)">
+                  👁️ Details
+                </button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+     <div class="modal-overlay" *ngIf="showItemsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Order Items for Order #{{ selectedOrderForItems?.id }}</h3>
+        <button class="close-button" (click)="closeItemsModal()">X</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedOrderForItems && selectedOrderForItems.orderItems.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedOrderForItems.orderItems">
+                <td>{{ item.productName }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.priceAtPurchase | number:'1.2-2' }}</td>
+                <td>${{ item.quantity * item.priceAtPurchase | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="!selectedOrderForItems || selectedOrderForItems.orderItems.length === 0" class="no-items-message">
+          <p>No items found for this order.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeItemsModal()">Close</button>
+      </div>
+    </div>
+  </div>
   </div>
 </div>

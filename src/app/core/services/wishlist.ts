@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,15 @@ export class WishlistService {
   getWishlist(): Observable<any> {
     return this.http.get(`${this.baseUrl}${environment.Wishlist.GetAll}`, { withCredentials: true });
   }
+  isInWishlist(productId: number): Observable<boolean> {
+  return this.getWishlist().pipe(
+    map((response: any) => {
+      const wishlistItems = response.wishlistItems; // correct property
+      return Array.isArray(wishlistItems) && wishlistItems.some(item => item.productId === productId);
+    })
+  );
+}
+
 
   // DELETE /api/Wishlist - Clear entire wishlist
   clearWishlist(): Observable<any> {

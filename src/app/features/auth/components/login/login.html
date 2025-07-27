@@ -25,6 +25,7 @@
     </button>
   </form>
 </div> -->
+
 <div class="center-wrapper">
 <div class="login-container">
         <div class="logo"></div>
@@ -45,15 +46,31 @@
             <div class="form-group">
                 <label for="password">Password<span class="required">*</span></label>
                 <input type="text" id="password" name="password" formControlName="password">
-                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
-                    Valid Password is required.
+                <div *ngIf="isPasswordInvalid()" class="invalid-feedback">
+                  <div *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</div>
+                  <div *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 6 characters long.</div>
                 </div>
             </div>
+
+              <!-- <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button> -->
+
+              <div *ngIf="errorMessage" class="alert alert-danger m-3">
+                {{ errorMessage }}
+              </div>
+
             
             <button type="submit" class="continue-btn">Continue</button>
             
             <p class="terms">By continuing you agree to Jumia's <a href="#">Terms and Conditions</a></p>
-        </form>
+        
+             <!-- Forgot Password Link -->
+              <div class="forgot-password-link">
+                      <button class="forget-password" (click)="ForgetPassword()"> Forget Password</button>
+
+              </div>
+        
+        
+          </form>
         
         <p class="support-text">For further support, you may visit the Help Center or contact our customer service team.</p>
         

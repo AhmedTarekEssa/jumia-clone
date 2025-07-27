@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,6 +19,7 @@ export  class AuthService {
 
   tempEmail: string = '';
   otpCodeFromBackend: string = '';
+
 
   constructor(){}
 
@@ -131,6 +132,24 @@ export  class AuthService {
     return user.role === role;
   }
 
+
+  forgotPassword(email: string): Observable<{successed:boolean,message:string}> {
+    const url = this.apiUrl + environment.authRoutes.forgetPassword;
+
+    // Set the headers to indicate JSON payload
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    // Send the email as JSON
+    const body = { email };  // Wrap the email in an object
+    
+    return this.http.post<{successed:boolean,message:string}>(url, body, { headers });
+  }
+
+resetPassword(data: { email: string, token: string, newPassword: string }): Observable<any> {
+  return this.http.post(this.apiUrl + environment.authRoutes.resetPassword, data);
+}
 
 
 
