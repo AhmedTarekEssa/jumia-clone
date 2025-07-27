@@ -15,7 +15,7 @@ import { SendMessageRequest } from '../../models/Livechatmodels/send-message-req
 export class LiveChat implements OnInit  {
 
   isOpen = false;
-  currentView = 'list'; // 'list' or 'conversation'
+  currentView = 'list'; 
   selectedConversation!:Chat|null;
   private chatService = inject(ChatService)
   private cdr = inject(ChangeDetectorRef)

@@ -1,1 +1,81 @@
-<p>profile works!</p>
+<div class="container-fluid py-4">
+  <h2 class="mb-4 text-dark">Account Overview</h2>
+  
+  <div class="row g-4">
+    <!-- Account Details Card -->
+    <div class="col-md-6">
+      <div class="card h-100 border-light shadow-sm">
+        <div class="card-header bg-transparent border-bottom-0 py-3">
+          <h5 class="card-title mb-0 text-uppercase text-muted fw-normal">Account Details</h5>
+        </div>
+        <div class="card-body pt-2">
+          <h6 class="fw-bold mb-1">{{ accountDetails.firstName + ' ' + accountDetails.lastName }}</h6>
+          <p class="text-muted mb-0">{{ accountDetails.email }}</p>
+          <p class="text-muted mb-0">{{ accountDetails.gender }}</p>
+          <p class="text-muted mb-0">{{ accountDetails.dateOfBirth |  date:'short' }}</p>
+          <p class="text-muted mb-0">{{ accountDetails.gender }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Book Card -->
+    <div class="col-md-6">
+      <div class="card h-100 border-light shadow-sm">
+        <div class="card-header bg-transparent border-bottom-0 py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 text-uppercase text-muted fw-normal">Address Book</h5>
+          <button class="btn btn-link p-0 text-warning" [routerLink]="['/address/edit',shippingAddress?.addressId]" routerLinkActive="router-link-active" >
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="card-body pt-2">
+          <p class="fw-semibold mb-2">Your default shipping address:</p>
+          <div class="text-muted small">
+            <div>{{ shippingAddress?.addressName }}</div>
+            <div>{{ shippingAddress?.streetAddress }}</div>
+            <div>{{ shippingAddress?.state }}</div>
+            <div>{{ shippingAddress?.city }}</div>
+            <div>{{ shippingAddress?.country }}</div>
+            <div class="mt-1">{{ shippingAddress?.postalCode }}</div>
+            <div class="mt-1">{{ shippingAddress?.phoneNumber }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jumia Store Credit Card -->
+    <div class="col-md-6">
+      <div class="card h-100 border-light shadow-sm">
+        <div class="card-header bg-transparent border-bottom-0 py-3">
+          <h5 class="card-title mb-0 text-uppercase text-muted fw-normal">Jumia Store Credit</h5>
+        </div>
+        <div class="card-body pt-2">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary text-white rounded p-2 me-3">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <div>
+              <span class="fw-bold">Jumia store credit balance:</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Preferences Card -->
+    <div class="col-md-6">
+      <div class="card h-100 border-light shadow-sm">
+        <div class="card-header bg-transparent border-bottom-0 py-3">
+          <h5 class="card-title mb-0 text-uppercase text-muted fw-normal">Newsletter Preferences</h5>
+        </div>
+        <div class="card-body pt-2">
+          <p class="text-muted mb-3">
+            Manage your email communications to stay updated with the latest news and offers.
+          </p>
+          <a href="#" class="text-warning text-decoration-none fw-semibold" (click)="editNewsletterPreferences($event)">
+            Edit Newsletter preferences
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,11 +14,11 @@
 <div class="product-layout">
   <!-- Categories Sidebar -->
   <aside class="category-sidebar">
-      <app-Categories-list></app-Categories-list>
+      <app-Categories-list (applyingFilters)="applyingFilters($event)"></app-Categories-list>
   </aside>
 
   <!-- Product Grid Area -->
   <main class="product-grid-area">
-    <app-product-grid></app-product-grid>
+    <app-product-grid [productsFilters]="productsFilters"></app-product-grid>
   </main>
 </div>

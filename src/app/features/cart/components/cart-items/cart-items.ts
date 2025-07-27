@@ -4,8 +4,11 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { ProductService } from '../../../../core/services/Product-Service/product';
 import { NotExpr } from '@angular/compiler';
+
 import { Router, RouterModule } from '@angular/router';
 import { CartEmpty } from "../cart-empty/cart-empty";
+
+import { environment } from '../../../../../environments/environment.development';
 
 
 
@@ -19,6 +22,7 @@ export class CartItems implements OnInit {
   cart!:Cart;
   cartItems!: CartItem[];
   subTotal!:number
+  baseImageUrl= environment.ImageUrlBase
   private cartService = inject(CartService);
   private cdr = inject(ChangeDetectorRef)
   private productService = inject(ProductService);

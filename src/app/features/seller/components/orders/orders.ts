@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { OrderService, SubOrder, OrderItem } from '../../../../core/services/orders-services/orders-user';
+
 interface Order {
   id: string;
   customerName: string;
@@ -9,77 +11,155 @@ interface Order {
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
   orderDate: Date;
   items: number;
+  trackingNumber?: string;
+  shippingProvider?: string;
 }
-
 
 @Component({
   selector: 'app-orders',
-  imports: [ CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './orders.html',
   styleUrl: './orders.css'
 })
 export class Orders implements OnInit {
-  orders: Order[] = [
-    {
-      id: 'ORD-2024-001',
-      customerName: 'John Doe',
-      customerEmail: 'john@example.com',
-      amount: 299.99,
-      status: 'pending',
-      orderDate: new Date('2024-01-15'),
-      items: 2
-    },
-    {
-      id: 'ORD-2024-002',
-      customerName: 'Jane Smith',
-      customerEmail: 'jane@example.com',
-      amount: 149.50,
-      status: 'shipped',
-      orderDate: new Date('2024-01-14'),
-      items: 1
-    },
-    {
-      id: 'ORD-2024-003',
-      customerName: 'Mike Johnson',
-      customerEmail: 'mike@example.com',
-      amount: 89.99,
-      status: 'delivered',
-      orderDate: new Date('2024-01-13'),
-      items: 3
-    }
-  ];
+  private orderService = inject(OrderService);
+  private cdr = inject(ChangeDetectorRef);
 
-  filteredOrders: Order[] = [];
+  subOrders!: SubOrder[];
+  loading: boolean = false;
+  error: string | null = null;
+
+  filteredOrders: SubOrder[]=[];
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
+  sellerId: number = 1;
+  showItemsModal: boolean = false;
+  selectedOrderForItems: SubOrder | null = null;
+
+  pending!: SubOrder[];
+  confirmed!: SubOrder[];
+  shipped!: SubOrder[];
+  canceled!: SubOrder[];
+  delivered!: SubOrder[];
+
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 1;
+
   ngOnInit(): void {
-    this.filteredOrders = [...this.orders];
+    this.loadOrders();
+  }
+
+  loadOrders(): void {
+    this.loading = true;
+    this.error = null;
+
+    this.orderService.getSubOrdersBySellerId(this.sellerId).subscribe({
+      next: (subOrders) => {
+        this.subOrders = subOrders;
+        console.log('SubOrders:', this.subOrders.length);
+        this.filteredOrders = this.subOrders;
+        this.pending = subOrders.filter(s => s.status.toLowerCase() == 'pending');
+        this.delivered = subOrders.filter(s => s.status.toLowerCase() == 'delivered');
+        this.confirmed = subOrders.filter(s => s.status.toLowerCase() == 'confirmed');
+        this.canceled = subOrders.filter(s => s.status.toLowerCase() == 'canceled');
+        this.shipped = subOrders.filter(s => s.status.toLowerCase() == 'shipped');
+        this.currentPage = 1;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        this.error = 'Failed to load orders. Please try again.';
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   filterOrders(): void {
-    let filtered = [...this.orders];
+    let filtered = [...this.subOrders];
 
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(order => order.status === this.selectedStatus);
+      filtered = filtered.filter(order => order.status.toLocaleUpperCase() === this.selectedStatus.toLowerCase());
     }
 
     if (this.searchTerm) {
       filtered = filtered.filter(order =>
-        order.id.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        order.customerName.toLowerCase().includes(this.searchTerm.toLowerCase())
+        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
 
     this.filteredOrders = filtered;
+    this.currentPage = 1; // Reset to first page when filtering
+    this.cdr.detectChanges();
   }
 
-  updateOrderStatus(orderId: string, newStatus: Order['status']): void {
-    const order = this.orders.find(o => o.id === orderId);
-    if (order) {
-      order.status = newStatus;
-      this.filterOrders();
+  // Pagination methods
+  get paginatedOrders(): SubOrder[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredOrders?.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
     }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredOrders.length / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show maximum 5 page numbers
+    let startPage = 1;
+    let endPage = this.totalPages;
+
+    if (this.totalPages > maxVisiblePages) {
+      const half = Math.floor(maxVisiblePages / 2);
+      startPage = Math.max(1, this.currentPage - half);
+      endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  updateOrderStatus(orderId: number, newStatus: SubOrder['status']): void {
+    this.orderService.updateOrderStatus(orderId, newStatus).subscribe({
+      next: () => {
+        const order = this.subOrders.find(o => o.id === orderId);
+        if (order) {
+          order.status = newStatus;
+          this.filterOrders();
+        }
+      },
+      error: (error) => {
+        console.error('Error updating order status:', error);
+        this.error = 'Failed to update order status. Please try again.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   getStatusClass(status: string): string {
@@ -91,5 +171,19 @@ export class Orders implements OnInit {
       'cancelled': 'status-cancelled'
     };
     return statusClasses[status] || '';
+  }
+
+  refreshOrders(): void {
+    this.loadOrders();
+  }
+
+  openItemsModal(order: SubOrder): void {
+    this.selectedOrderForItems = order;
+    this.showItemsModal = true;
+  }
+
+  closeItemsModal(): void {
+    this.showItemsModal = false;
+    this.selectedOrderForItems = null;
   }
 }

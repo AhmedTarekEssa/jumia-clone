@@ -1,13 +1,80 @@
- 
- <div id="customers-section" class="content-section" >
-                <h1 class="page-title">Customer Management</h1>
-                <div class="chart-placeholder" style="height: 400px;">
-                    Customer Management Interface
-                    <br><br>
-                    Features to implement:
-                    <br>• Customer list with search and filters
-                    <br>• Customer details and order history
-                    <br>• Customer groups and segments
-                    <br>• Export customer data
-                </div>
-            </div>
+ <div class="customers-container">
+      <div class="header">
+        <h2>Customers Management</h2>
+        <!-- <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
+          Add New Customer
+        </button> -->
+      </div>
+
+      <div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search customers..." 
+          [(ngModel)]="searchTerm"
+          class="search-input">
+        <!-- <select [(ngModel)]="statusFilter" class="filter-select">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select> -->
+      </div>
+
+      <div *ngIf="showAddForm" class="add-form">
+        <h3>Add New Customer</h3>
+        <form (ngSubmit)="addCustomer()">
+          <div class="form-row">
+            <input type="text" placeholder="Customer Name" [(ngModel)]="newCustomer.firstName" name="name" required>
+            <input type="email" placeholder="Email" [(ngModel)]="newCustomer.email" name="email" required>
+          </div>
+          <div class="form-row">
+            <input type="tel" placeholder="Phone" [(ngModel)]="newCustomer.phoneNumber" name="phone" required>
+            <!-- <select [(ngModel)]="newCustomer.status" name="status" required>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select> -->
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">Add Customer</button>
+            <button type="button" class="btn btn-secondary" (click)="showAddForm = false">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="customers-table">
+        <table>
+          <thead>
+            <tr>
+              <!-- <th>ID</th> -->
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <!-- <th>Status</th> -->
+              <th>Join Date</th>
+              <!-- <th>Orders</th>
+              <th>Total Spent</th> -->
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let customer of filteredCustomers">
+              <!-- <td>{{customer.id}}</td> -->
+              <td>{{customer.firstName}}</td>
+              <td>{{customer.email}}</td>
+              <td>{{customer.phoneNumber}}</td>
+              <!-- <td>
+                <span class="status" [class]="customer.status.toLowerCase()">
+                  {{customer.status}}
+                </span>
+              </td> -->
+              <td>{{customer.dateOfBirth}}</td>
+              <!-- <td>{{customer.totalOrders}}</td>
+              <td>\${{customer.totalSpent}}</td> -->
+              <td>
+                <!-- <button class="btn btn-sm btn-primary" style="background-color: darkorange">Edit</button> -->
+                <button class="btn btn-sm btn-danger" >Delete</button>              
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>

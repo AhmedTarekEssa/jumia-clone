@@ -71,6 +71,9 @@ export class ProductService {
     )
   }
 
+  updateProduct(product:FormData){
+    return this.httpClient.put(this.apiBaseUrl+environment.Product.UpdateProduct,product,{withCredentials:true})
+  }
   productsByFilters(filters:ProductFilterRequest,pageNumber:number,pageSize:number):Observable<pagedModelUi>{
     return this.httpClient.post<pagedModelUi>(this.apiBaseUrl+this.controller.GetProductsByFilters('customer',pageNumber,pageSize),filters,{withCredentials:true})
 
@@ -154,4 +157,17 @@ export class ProductService {
     )
 
   }
+
+ deleteProduct(id:number):Observable<{message:string}>{
+    return this.httpClient.delete<{message:string}>(this.apiBaseUrl+this.controller.Delete(id))
+ .pipe(
+      tap({
+        next:(data)=>console.log(data),
+        error:(e)=>console.log("error occured while deleting the product" + e)
+      })
+    )
+
+  }
+
+
 }

@@ -4,56 +4,117 @@
     <p>Track your store performance and sales metrics</p>
   </div>
 
-  <div class="analytics-grid">
-    <div class="chart-card">
-      <h3>Sales Overview</h3>
-      <div class="sales-summary">
-        <div class="metric">
-          <span class="label">This Month</span>
-          <span class="value">${{salesData.thisMonth }}</span>
-        </div>
-        <div class="metric">
-          <span class="label">Last Month</span>
-          <span class="value">${{salesData.lastMonth }}</span>
-        </div>
-        <div class="metric growth">
-          <span class="label">Growth</span>
-          <span class="value positive">+{{salesData.growth}}%</span>
-        </div>
-      </div>
-      <div class="chart-placeholder">
-        <p>📈 Sales chart will be integrated here</p>
-      </div>
-    </div>
-
-    <div class="top-products-card">
-      <h3>Top Selling Products</h3>
-      <div class="products-list">
-        <div class="product-item" *ngFor="let product of topProducts">
-          <div class="product-info">
-            <h4>{{product.name}}</h4>
-            <p>{{product.sales}} units sold</p>
-          </div>
-          <div class="product-revenue">
-            ${{product.revenue }}
-          </div>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading analytics data...</p>
   </div>
 
-  <div class="metrics-row">
-    <div class="metric-card">
-      <h4>Conversion Rate</h4>
-      <div class="metric-value">3.2%</div>
+
+
+  <div *ngIf="!isLoading && !error">
+    <div class="analytics-grid">
+      <div class="chart-card">
+        <h3>Sales Overview</h3>
+        <div class="sales-summary">
+          <div class="metric">
+            <span class="label">This Month</span>
+            <span class="value">{{ formatCurrency(salesData.thisMonth) }}</span>
+          </div>
+          <div class="metric">
+            <span class="label">Last Month</span>
+            <span class="value">{{ formatCurrency(salesData.lastMonth) }}</span>
+          </div>
+          <div class="metric growth">
+            <span class="label">Growth</span>
+            <span
+              class="value"
+              [class.positive]="salesData.growth > 0"
+              [class.negative]="salesData.growth < 0"
+            >
+              {{ salesData.growth > 0 ? "+" : ""
+              }}{{ formatPercentage(salesData.growth) }}
+            </span>
+          </div>
+        </div>
+        <div class="chart-placeholder">
+          <div class="sales-trend">
+            <p>📈 Monthly Revenue Trend</p>
+            <div class="trend-bars">
+              <div class="trend-bar">
+                <div
+                  class="bar-fill"
+                  [style.height.%]="lastMonthBarHeight"
+                ></div>
+                <span class="bar-label">Last Month</span>
+              </div>
+              <div class="trend-bar">
+                <div
+                  class="bar-fill current"
+                  [style.height.%]="thisMonthBarHeight"
+                ></div>
+                <span class="bar-label">This Month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-products-card">
+        <h3>Top Selling Products</h3>
+        <div
+          class="products-list"
+          *ngIf="topProducts.length > 0; else noProducts"
+        >
+          <div class="product-item" *ngFor="let product of topProducts">
+            <div class="product-info">
+              <h4>{{ product.name }}</h4>
+              <p>{{ product.sales }} units sold</p>
+            </div>
+            <div class="product-revenue">
+              {{ formatCurrency(product.revenue) }}
+            </div>
+          </div>
+        </div>
+        <ng-template #noProducts>
+          <div class="no-data">
+            <p>No sales data available yet</p>
+          </div>
+        </ng-template>
+      </div>
     </div>
-    <div class="metric-card">
-      <h4>Average Order Value</h4>
-      <div class="metric-value">$89.50</div>
-    </div>
-    <div class="metric-card">
-      <h4>Return Rate</h4>
-      <div class="metric-value">2.1%</div>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <h4>Total Orders</h4>
+        <div class="metric-value">{{ metrics.totalOrders }}</div>
+      </div>
+      <div class="metric-card">
+        <h4>Total Revenue</h4>
+        <div class="metric-value">
+          {{ formatCurrency(metrics.totalRevenue) }}
+        </div>
+      </div>
+      <div class="metric-card">
+        <h4>Active Products</h4>
+        <div class="metric-value">{{ metrics.activeProducts }}</div>
+      </div>
+      <div class="metric-card">
+        <h4>Average Order Value</h4>
+        <div class="metric-value">
+          {{ formatCurrency(metrics.averageOrderValue) }}
+        </div>
+      </div>
+      <div class="metric-card">
+        <h4>Return Rate</h4>
+        <div class="metric-value">
+          {{ formatPercentage(metrics.returnRate) }}
+        </div>
+      </div>
+      <div class="metric-card">
+        <h4>Conversion Rate</h4>
+        <div class="metric-value">
+          {{ formatPercentage(metrics.conversionRate) }}
+        </div>
+      </div>
     </div>
   </div>
 </div>
