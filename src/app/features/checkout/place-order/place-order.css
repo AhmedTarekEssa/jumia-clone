@@ -1,0 +1,207 @@
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.checkout-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+}
+
+.checkout-steps {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.step {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.step.active .step-header {
+  background-color: white;
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+.step-number.completed {
+  background-color: #4CAF50;
+}
+
+.step.active .step-number {
+  background-color: #ff6900;
+}
+
+.step-header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.change-btn {
+  background: none;
+  border: none;
+  color: #ff6900;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.change-btn:hover {
+  color: #e55a00;
+}
+
+.step-content {
+  padding: 20px;
+}
+
+.selected-address h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.selected-address p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.selected-delivery p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.delivery-date {
+  color: #666 !important;
+  font-size: 14px !important;
+}
+
+.payment-options h4 {
+  margin: 20px 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.payment-option {
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option:hover {
+  border-color: #ff6900;
+  box-shadow: 0 2px 4px rgba(255, 105, 0, 0.1);
+}
+
+.payment-option input[type="radio"] {
+  margin-right: 10px;
+}
+
+.payment-option label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+}
+
+.payment-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.jumia-credit {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.credit-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.credit-icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.credit-description {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.back-to-shopping {
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: #0066cc;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.back-link:hover {
+  color: #0052a3;
+}
+
+.order-summary-container {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.checkmark {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .checkout-content {
+    grid-template-columns: 1fr;
+  }
+
+  .order-summary-container {
+    position: static;
+    margin-top: 20px;
+  }
+}

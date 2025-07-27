@@ -13,7 +13,7 @@ import { SendMessageRequest } from '../../models/Livechatmodels/send-message-req
   styleUrl: './live-chat.css'
 })
 export class LiveChat implements OnInit  {
-  
+
   isOpen = false;
   currentView = 'list'; 
   selectedConversation!:Chat|null;
@@ -24,7 +24,7 @@ export class LiveChat implements OnInit  {
   chat:any;
   messages:Message[]=[];
   newMessage='';
-  
+
   ngOnInit(): void {
    this.chatService.getMyChat().subscribe(
     {
@@ -36,6 +36,7 @@ export class LiveChat implements OnInit  {
     }
    )
   }
+
 
 
 
@@ -63,7 +64,7 @@ sendMessage() {
   const sendMessage:SendMessageRequest={
     message:this.newMessage,
     chatId:this.selectedConversation?.id
-    
+
   }
   this.chatService.sendMessage(sendMessage).subscribe({
     next: (msg) => {
@@ -104,7 +105,7 @@ sendMessage() {
       console.error('Failed to start conversation', err);
     }
   });
-   
+
   }
 
   openConversation(conversation: any) {
