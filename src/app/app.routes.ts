@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth-guard';
-import { adminGuard } from './core/guards/admin-guard';
-import { sellerGuard } from './core/guards/seller-guard';
 import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
 import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
+import { RoleGuard } from './core/guards/roles-guard-guard';
 
 export const routes: Routes = [
 
@@ -16,7 +14,10 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./features/home/home-container/home-container').then(m => m.HomeContainer),
-        pathMatch: 'full'
+        pathMatch: 'full',
+        canActivate: [RoleGuard],
+        data: { role: ['none', 'customer'] }
+
       },
       {
         path: '',
@@ -26,17 +27,22 @@ export const routes: Routes = [
       {
         path: 'categories/:id',
         loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
-        data: { preload: true }
+        canActivate: [RoleGuard],
+
+        data: { preload: true, role: ['none', 'customer'] },
+
       },
       {
         path: 'user',
         loadChildren: () => import('./features/user/user.routes').then(m => m.routes),
-        canActivate: [AuthGuard]
+        data: { role: 'Customer' },
+        canActivate: [RoleGuard]
       },
       {
         path: 'cart',
         loadComponent: () => import('./features/cart/components/cart-items/cart-items').then(m => m.CartItems),
-        data: { preload: true }
+        data: { preload: true, role: ['Customer'] },
+        canActivate: [RoleGuard]
       },
       {
         path: 'vendor',
@@ -44,12 +50,16 @@ export const routes: Routes = [
       },
       {
         path: 'Products/:id',
-        loadComponent:() => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
+        loadComponent: () => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
+        canActivate: [RoleGuard],
+        data: { role: ['none', 'customer'] }
+
       },
       {
-        path:'place-order',
+        path: 'place-order',
         loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
-        canActivate: [AuthGuard]
+        canActivate: [RoleGuard],
+        data: { role: ['customer'] }
       }
     ]
 
@@ -76,20 +86,24 @@ export const routes: Routes = [
     path: 'admin',
 
     component: SimpleLayout,
-    canActivate: [adminGuard],
-    loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes)
+    loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes),
+    canActivate: [RoleGuard],
+    data: { role: ['admin'] }
+
 
   },
   {
     path: 'seller',
     component: SimpleLayout, // or create a separate SellerLayoutComponent
-    canActivate: [sellerGuard],
-    loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes)
+    loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes),
+    canActivate: [RoleGuard],
+    data: { role: ['seller'] }
+
   },
 
   {
-    path:'SellerAuth',
-    component:SellerWelcome,
+    path: 'SellerAuth',
+    component: SellerWelcome,
     loadChildren: () => import('./features/seller-auth/seller-auth.routes').then(m => m.routes)
   },
   ///////
@@ -98,18 +112,9 @@ export const routes: Routes = [
   //// LoadChildren      loadChildren: () => import('./features/seller/seller-auth.routes').then(m => m.routes)
   /// من غير  gard
   {
-    path:'Products',
+    path: 'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
   },
-  {
-    path: 'address',
-    loadChildren: () => import('../app/features/address/address.routes').then(m => m.routes)
-  },
-{
-    path: '',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
-  },
-
   { path: '**', redirectTo: '', pathMatch: 'full' }
 
 
