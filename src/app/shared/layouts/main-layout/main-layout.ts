@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FooterMain } from "../../components/footers/footer-main/footer-main";
-import { NavbarMain } from "../../components/navbars/navbar-main/navbar-main";
 import { RouterOutlet } from '@angular/router';
+import { NavbarMain } from '../../components/navbars/navbar-main/navbar-main';
 
 
 @Component({

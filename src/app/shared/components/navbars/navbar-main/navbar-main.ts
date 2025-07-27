@@ -11,6 +11,7 @@ import { AuthService } from "../../../../core/services/auth";
 
 @Component({
   selector: 'app-navbar-main',
+  standalone: true,
   imports: [CommonModule, CategoryList],
   templateUrl: './navbar-main.html',
   styleUrl: './navbar-main.css'
