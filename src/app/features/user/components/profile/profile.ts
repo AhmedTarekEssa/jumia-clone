@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, inject, Pipe } from '@angular/core';
-import { User, UserInformation } from '../../../../core/services/user-service/user';
 import { AddressService } from '../../../address/services/address.service';
 import { Address } from '../../../address/models/address.model';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { User, UserInformation } from '../../../../core/services/User-Service/user';
 
 @Component({
   selector: 'app-profile',

@@ -2,21 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { Order } from '../../../shared/models/order';
-export interface OrderItem {
-  id: number;
-  subOrderId: number;
-  productId: number;
-  variationId: number;
-  quantity: number;
-  priceAtPurchase: number;
-  totalPrice: number;
-  productName: string;
-  productImageUrl: string | null;
-  productSlug: string | null;
-  productBrand: string | null;
-  productCategory: string | null;
-}
+
+import { Order } from '../../../shared/models/order'; // Assuming you have an Order model
+import { OrderPayload } from '../../../shared/models/delivery-option';
+// =======
+// import { Order } from '../../../shared/models/order';
+// export interface OrderItem {
+//   id: number;
+//   subOrderId: number;
+//   productId: number;
+//   variationId: number;
+//   quantity: number;
+//   priceAtPurchase: number;
+//   totalPrice: number;
+//   productName: string;
+//   productImageUrl: string | null;
+//   productSlug: string | null;
+//   productBrand: string | null;
+//   productCategory: string | null;
+// }
+// >>>>>>> master
 
 export interface SubOrder {
   id: number;
@@ -51,8 +56,8 @@ export class OrderService {
   }
 
 
-  createOrder(order: any): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
+  createOrder(order: any): Observable<OrderPayload> {
+    return this.http.post<OrderPayload>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
   }
 
 

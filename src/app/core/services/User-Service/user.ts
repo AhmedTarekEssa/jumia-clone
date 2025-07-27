@@ -13,6 +13,14 @@ export interface UserProfile {
 
 }
 
+export interface UserInformation {
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  dateOfBirth: "2025-07-25T22:29:28.986Z",
+  gender: string
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +29,9 @@ export class User {
  private apiBaseUrl= environment.BaseUrlPath;
  
 constructor(){}
-
+getUserInfo():Observable<UserInformation>{
+    return this.httpClient.get<UserInformation>(this.apiBaseUrl + environment.User.getUserInfo,{withCredentials:true})
+  }
 getAllCustomers(): Observable<UserProfile[]>{
   return this.httpClient.get<UserProfile[]>(`${this.apiBaseUrl}/User/customers`,{withCredentials:true})
   .pipe(
