@@ -55,7 +55,7 @@ export class NavbarMain implements OnInit {
   }
 
   getUserFirstName(): string {
-    
+
     return this.username.split(' ')[0] || 'User';
   }
   navigateAndClose(route: string): void {
@@ -97,6 +97,7 @@ export class NavbarMain implements OnInit {
         this.cookieService.delete('UserInfo');
         this.router.navigate(['/login-register']);
       }else {
+        this.router.navigate(['/login-register']);
         console.error('Logout failed', err);
       }
 

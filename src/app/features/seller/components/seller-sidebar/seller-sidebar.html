@@ -19,6 +19,12 @@
       </div>
     </li>
   </ul>
+  <hr *ngIf="!isCollapsed" class="divider">
+  <!-- logout -->
+  <div class="logout" (click)="logout()">
+    <span class="logout-icon">🚪</span>
+    <span class="logout-label" *ngIf="!isCollapsed">Logout</span>
+  </div>
 
   <div class="sidebar-footer" *ngIf="!isCollapsed">
     <div class="seller-info">
