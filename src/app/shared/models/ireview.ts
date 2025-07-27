@@ -2,7 +2,7 @@ export interface IReview {
     ratingId: number;
     customerId: number;
     customerName: string;
-    productId: number;
+    productName: string;
     stars: number;
     comment: string;
     createdAt: string;

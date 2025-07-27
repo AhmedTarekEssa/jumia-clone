@@ -1,16 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Order {
-  id: number;
-  customer: string;
-  products: string[];
-  total: number;
-  status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
-  orderDate: string;
-  shippingAddress: string;
-}
+import { Order } from '../../../../../shared/models/order';
+import { OrderService } from '../../../../../core/services/orders-services/orders-user';
 
 @Component({
   standalone: true,
@@ -19,30 +11,117 @@ interface Order {
   templateUrl: './admin-orders.html',
   styleUrl: './admin-orders.css'
 })
-export class AdminOrders {
+export class AdminOrders implements OnInit {
 
-   searchTerm = '';
+  constructor(private orderservice: OrderService, private cdr: ChangeDetectorRef) { }
+
+  searchTerm = '';
   statusFilter = '';
 
-  orders: Order[] = [
-    { id: 1847, customer: 'Ahmed Hassan', products: ['iPhone 14 Pro', 'AirPods'], total: 1189, status: 'Delivered', orderDate: '2024-07-20', shippingAddress: 'Cairo, Egypt' },
-    { id: 1848, customer: 'Fatima Ali', products: ['Samsung Galaxy S23'], total: 799, status: 'Shipped', orderDate: '2024-07-22', shippingAddress: 'Alexandria, Egypt' },
-    { id: 1849, customer: 'Mohamed Omar', products: ['Nike Air Max', 'Adidas T-Shirt'], total: 159, status: 'Processing', orderDate: '2024-07-23', shippingAddress: 'Giza, Egypt' },
-    { id: 1850, customer: 'Amira Mahmoud', products: ['Coffee Maker'], total: 89, status: 'Pending', orderDate: '2024-07-24', shippingAddress: 'Mansoura, Egypt' }
-  ];
+  readonly statusSequence = ['pending', 'processing', 'shipped', 'delivered'];
 
-  get filteredOrders(): Order[] {
-    return this.orders.filter(order => {
-      const matchesSearch = order.customer.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                           order.id.toString().includes(this.searchTerm);
-      const matchesStatus = !this.statusFilter || order.status === this.statusFilter;
+  Orders: {
+    id: number;
+    customer: string;
+    products: string[];
+    total: number;
+    status: string;
+    paymentStatus: string; // Added payment status
+    orderDate: string;
+    raw: Order;
+  }[] = [];
+
+  ngOnInit(): void {
+    this.getAllorders();
+  }
+
+  getAllorders(): void {
+    this.orderservice.getAllOrders().subscribe((orders: Order[]) => {
+      this.Orders = orders.map(order => ({
+        id: order.orderId,
+        customer: `#${order.customerId}`,
+        products: order.subOrders.flatMap(sub =>
+          sub.orderItems.map(item => item.productName)
+        ),
+        total: order.finalAmount,
+        status: this.capitalize(order.status),
+        paymentStatus: this.capitalize(order.paymentStatus), // Added payment status
+        orderDate: new Date(order.createdAt).toLocaleDateString(),
+        raw: order
+      }));
+      this.cdr.detectChanges();
+    });
+  }
+
+  get filteredOrders(): typeof this.Orders {
+    const search = this.searchTerm.toLowerCase().trim();
+    const status = this.statusFilter.toLowerCase();
+
+    return this.Orders.filter(order => {
+      const matchesSearch =
+        order.id.toString().includes(search) ||
+        order.customer.toLowerCase().includes(search) ||
+        order.products.some(p => p.toLowerCase().includes(search));
+
+      const matchesStatus = !status || order.status.toLowerCase() === status;
+
       return matchesSearch && matchesStatus;
     });
   }
 
-  getOrdersByStatus(status: string): Order[] {
-    return this.orders.filter(order => order.status === status);
+  capitalize(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  }
+
+  getNextStatusLabel(currentStatus: string): string {
+    const lower = currentStatus.toLowerCase();
+    const index = this.statusSequence.indexOf(lower);
+    if (index >= 0 && index < this.statusSequence.length - 1) {
+      return this.capitalize(this.statusSequence[index + 1]);
+    }
+    return 'Delivered';
+  }
+
+  progressStatus(order: any): void {
+    const currentStatus = order.status.toLowerCase();
+    const index = this.statusSequence.indexOf(currentStatus);
+
+    if (index >= 0 && index < this.statusSequence.length - 1) {
+      const nextStatus = this.statusSequence[index + 1];
+
+      this.orderservice.UpdateOrderStatus(order.id, nextStatus).subscribe({
+        next: (res) => {
+          if (res) {
+            order.status = this.capitalize(nextStatus);
+            this.cdr.detectChanges();
+            order = { ...order }; // trigger UI update
+          }
+        },
+        error: (err) => {
+          console.error('Failed to update status:', err);
+        }
+      });
+    }
   }
 
 
+  cancelOrder(order: any): void {
+    if (order.status.toLowerCase() === 'delivered') return;
+
+    this.orderservice.CancelOrder(order.id, 'Cancelled by admin').subscribe({
+      next: (res) => {
+        order.status = 'Cancelled';
+        order = { ...order }; // ensure change detection
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to cancel order:', err);
+      }
+    });
+  }
+
+
+  getOrdersByStatus(status: string): typeof this.Orders {
+    return this.Orders.filter(order => order.status.toLowerCase() === status.toLowerCase());
+  }
 }
