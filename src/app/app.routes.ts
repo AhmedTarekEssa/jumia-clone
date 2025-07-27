@@ -43,7 +43,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/cart/components/cart-items/cart-items').then(m => m.CartItems),
         data: { preload: true, role: ['Customer'] },
         canActivate: [RoleGuard]
-
+      },
       {
         path: 'search-products',
         component: SearchProducts,

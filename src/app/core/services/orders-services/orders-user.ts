@@ -1,28 +1,28 @@
-import { Order } from './../../../shared/models/order';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { Observable } from 'rxjs';
 
-import { Order, OrderItem } from '../../../shared/models/order'; // Assuming you have an Order model
+
 import { OrderPayload } from '../../../shared/models/delivery-option';
-// =======
-// import { Order } from '../../../shared/models/order';
-// export interface OrderItem {
-//   id: number;
-//   subOrderId: number;
-//   productId: number;
-//   variationId: number;
-//   quantity: number;
-//   priceAtPurchase: number;
-//   totalPrice: number;
-//   productName: string;
-//   productImageUrl: string | null;
-//   productSlug: string | null;
-//   productBrand: string | null;
-//   productCategory: string | null;
-// }
-// >>>>>>> master
+
+import { Order } from '../../../shared/models/order';
+export interface OrderItem {
+  id: number;
+  subOrderId: number;
+  productId: number;
+  variationId: number;
+  quantity: number;
+  priceAtPurchase: number;
+  totalPrice: number;
+  productName: string;
+  productImageUrl: string | null;
+  productSlug: string | null;
+  productBrand: string | null;
+  productCategory: string | null;
+}
+
 
 export interface SubOrder {
   id: number;
