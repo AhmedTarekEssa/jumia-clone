@@ -40,7 +40,7 @@ export class Products implements OnInit {
       const userTypeId = userInfo.UserTypeId;
       console.log('UserTypeId:', userTypeId);
 
-      this.productService.getBySellerIdUi(1, "Seller").subscribe({
+      this.productService.getBySellerIdUi(userTypeId, "Seller").subscribe({
         next: (data) => {
           console.log(data);
           this.products = data;
@@ -83,7 +83,7 @@ export class Products implements OnInit {
 
   get pageNumbers(): number[] {
     const pages = [];
-    const maxVisiblePages = 5; // Show maximum 5 page numbers
+    const maxVisiblePages = 5; 
     let startPage = 1;
     let endPage = this.totalPages;
 
@@ -111,7 +111,7 @@ export class Products implements OnInit {
     }
 
     this.filteredProducts = filtered;
-    this.currentPage = 1; // Reset to first page when filtering
+    this.currentPage = 1;
   }
 
   editProduct(productId: number): void {

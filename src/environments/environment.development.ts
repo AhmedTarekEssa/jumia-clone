@@ -78,7 +78,7 @@ export const environment = {
     GetByUserId: (userId: string) => `/Order/customer/${userId}`,
 
     getCurrentUserOrders: "/Order/current-customer",
-    GetSubOrdersBySellerId: (sellerId: number) => `/Order/suborders/seller/${sellerId}`,
+    GetSubOrdersBySellerId: () => `/Order/suborders/seller`,
 
 
   },
