@@ -34,7 +34,7 @@ export class Orders implements OnInit {
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
-  sellerId: number = 1;
+  // sellerId: number = 1;
   showItemsModal: boolean = false;
   selectedOrderForItems: SubOrder | null = null;
 
@@ -56,7 +56,7 @@ export class Orders implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.orderService.getSubOrdersBySellerId(this.sellerId).subscribe({
+    this.orderService.getSubOrdersBySellerId().subscribe({
       next: (subOrders) => {
         this.subOrders = subOrders;
         console.log('SubOrders:', this.subOrders.length);
@@ -83,12 +83,12 @@ export class Orders implements OnInit {
     let filtered = [...this.subOrders];
 
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(order => order.status.toLocaleUpperCase() === this.selectedStatus.toLowerCase());
+      filtered = filtered.filter(order => order.status.toLowerCase() === this.selectedStatus.toLowerCase());
     }
 
     if (this.searchTerm) {
       filtered = filtered.filter(order =>
-        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
+        order.status.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
 

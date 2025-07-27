@@ -37,9 +37,16 @@ export class Dashboard implements OnInit {
   products: ProductUi[] = [];
   showItemsModal: boolean = false;
   selectedOrderForItems: SubOrder | null = null;
+  userInfoCookie!: string | null;
 
   ngOnInit(): void {
-    this.orderService.getSubOrdersBySellerId(1).subscribe({
+    this.userInfoCookie = this.getCookie('UserInfo');
+
+    if (this.userInfoCookie) {
+      const userInfo = JSON.parse(this.userInfoCookie);
+      const userTypeId = userInfo.UserTypeId;
+      console.log('UserTypeId:', userTypeId);
+    this.orderService.getSubOrdersBySellerId().subscribe({
       next: (data) => {
         console.log(data);
         this.recentOrders = data.reverse().slice(0, 3);
@@ -51,12 +58,13 @@ export class Dashboard implements OnInit {
       }
     });
 
-    this.productService.getBySellerIdUi(1, "Seller").subscribe({
+    this.productService.getBySellerIdUi(userTypeId, "Seller").subscribe({
       next: (data) => {
         this.stats.totalProducts = data.length;
         this.cdr.detectChanges();
       }
     });
+  }
   }
 
   navigatetoorders(): void {
@@ -82,5 +90,18 @@ export class Dashboard implements OnInit {
       'cancelled': 'status-cancelled'
     };
     return statusClasses[status] || '';
+  }
+  getCookie(name: string): string | null {
+    const nameEQ = name + '=';
+    const cookies = document.cookie.split(';');
+
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(nameEQ)) {
+        return decodeURIComponent(cookie.substring(nameEQ.length));
+      }
+    }
+
+    return null;
   }
 }
