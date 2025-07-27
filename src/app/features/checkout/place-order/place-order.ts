@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { AddressService } from '../../../features/address/services/address.service';
 import { OrderService } from '../../../core/services/orders-services/orders-user';
@@ -64,13 +64,13 @@ export class PlaceOrder implements OnInit {
     private cartService: CartService,
     private cdr: ChangeDetectorRef,
     private cookiesService: CookieService,
-    private productService: ProductService,
-    private paymentService: paymentService
+    private productService: ProductService
   ) {
     //if cart is empty redirect to cart
 
   }
 
+    private paymentService=inject( paymentService)
   ngOnInit() {
     this.getCartItems();
     console.log('Cart items:', this.cartItems);
