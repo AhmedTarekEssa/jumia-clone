@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FooterMain } from "../../components/footers/footer-main/footer-main";
-import { NavbarMain } from "../../components/navbars/navbar-main/navbar-main";
 import { RouterOutlet } from '@angular/router';
+
+import { NavbarMain } from '../../components/navbars/navbar-main/navbar-main';
+
 import { LiveChat } from "../../components/live-chat/live-chat";
 import { CookieService } from 'ngx-cookie-service';
 import { CommonModule } from '@angular/common';
+
 
 
 

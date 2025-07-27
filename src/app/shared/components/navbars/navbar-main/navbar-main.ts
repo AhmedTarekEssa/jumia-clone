@@ -14,7 +14,9 @@ import { FormsModule } from '@angular/forms';
 @Component({
   standalone: true,
   selector: 'app-navbar-main',
+//   standalone: true,
   imports: [CommonModule, CategoryList,FormsModule],
+
   templateUrl: './navbar-main.html',
   styleUrl: './navbar-main.css'
 })
