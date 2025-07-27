@@ -1,3 +1,4 @@
+import { Order } from './../../../shared/models/order';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
@@ -44,32 +45,61 @@ export class OrderService {
 
 
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetAll}`,{withCredentials: true});
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetAll}`, { withCredentials: true });
   }
   getCurrentUserOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.getCurrentUserOrders}`,{withCredentials: true});
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.getCurrentUserOrders}`, { withCredentials: true });
   }
 
 
   getOrderById(id: number): Observable<Order> {
-    return this.http.get<Order>(`${this.baseUrl}${environment.Orders.GetById(id)}`,{withCredentials: true});
+    return this.http.get<Order>(`${this.baseUrl}${environment.Orders.GetById(id)}`, { withCredentials: true });
   }
+
 
 
   createOrder(order: any): Observable<OrderPayload> {
     return this.http.post<OrderPayload>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
+
   }
 
 
   updateOrderStatus(id: number, status: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}${environment.Orders.UpdateStatus(id)}`, { status },{withCredentials: true});
+    return this.http.put(`${this.baseUrl}${environment.Orders.UpdateStatus(id)}`, { status }, { withCredentials: true });
   }
 
 
   getOrdersByUserId(userId: string): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`,{withCredentials: true});
+    return this.http.get<Order[]>(`${this.baseUrl}${environment.Orders.GetByUserId(userId)}`, { withCredentials: true });
   }
+
+
+  UpdateOrderStatus(orderID: number, status: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `http://localhost:5087/api/Order/${orderID}/UpdateStatus?status=${status}`,
+      null, // send no body
+      {
+        withCredentials: true,
+        responseType: 'text' as 'json' // <-- Fix the parsing issue
+      }
+    );
+  }
+
+  CancelOrder(orderId: number, reason: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `http://localhost:5087/api/Order/${orderId}/cancel`, // correct endpoint
+      { reason }, // ✅ send body with 'reason' key
+      {
+        withCredentials: true,
+        responseType: 'text' as 'json' // if backend returns empty/no content
+      }
+    );
+  }
+
+
+
   getSubOrdersBySellerId(): Observable<SubOrder[]> {
     return this.http.get<SubOrder[]>(`${this.baseUrl}${environment.Orders.GetSubOrdersBySellerId()}`, { withCredentials: true });
   }
+
 }
