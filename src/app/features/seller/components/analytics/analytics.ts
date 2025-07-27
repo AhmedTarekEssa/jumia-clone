@@ -59,8 +59,19 @@ export class Analytics implements OnInit {
 
   isLoading = true;
   error: string | null = null;
+  userInfoCookie!: string | null;
 
   ngOnInit(): void {
+    this.userInfoCookie = this.getCookie('UserInfo');
+    if (this.userInfoCookie) {
+      const userInfo = JSON.parse(this.userInfoCookie);
+      const userTypeId = userInfo.UserTypeId;
+      console.log('UserTypeId:', userTypeId);
+    } else {
+      this.error = 'Unable to identify seller';
+      this.isLoading = false;
+      return;
+    }
     this.cdr.detectChanges()
     this.loadAnalyticsData();
   this.cdr.detectChanges()
@@ -70,7 +81,7 @@ export class Analytics implements OnInit {
     this.isLoading = true;
     this.error = null;
 
-    const sellerId = 1;
+    const sellerId = this.userInfoCookie ? JSON.parse(this.userInfoCookie).UserTypeId : null;
 
     if (!sellerId) {
       this.error = 'Unable to identify seller';
@@ -80,7 +91,7 @@ export class Analytics implements OnInit {
 
     forkJoin({
       products: this.productService.getBySellerIdUi(sellerId, 'seller'),
-      subOrders: this.orderService.getSubOrdersBySellerId(sellerId),
+      subOrders: this.orderService.getSubOrdersBySellerId(),
     }).subscribe({
       next: ({ products, subOrders }) => {
         console.log('Products:', products);
@@ -128,10 +139,12 @@ export class Analytics implements OnInit {
     const orderYear = orderDate.getFullYear();
     console.log('Order Month:', orderMonth, 'Order Year:', orderYear);
     if (orderMonth === currentMonth && orderYear === currentYear) {
-      thisMonthRevenue += subOrder.subtotal;
+      thisMonthRevenue += subOrders.filter(o => o.status.toLowerCase() == 'shipped' || o.status.toLowerCase() == 'delivered'|| o.status.toLowerCase() == 'confirmed')
+          .reduce((sum, order) => sum + order.subtotal, 0);
       console.log('This Month Revenue:', thisMonthRevenue);
     } else if (orderMonth === lastMonth && orderYear === currentYear) {
-      lastMonthRevenue += subOrder.subtotal;
+      lastMonthRevenue += subOrders.filter(o => o.status.toLowerCase() == 'shipped' || o.status.toLowerCase() == 'delivered'|| o.status.toLowerCase() == 'confirmed')
+          .reduce((sum, order) => sum + order.subtotal, 0);
       console.log('Last Month Revenue:', lastMonthRevenue);
     }
   });
@@ -185,10 +198,8 @@ export class Analytics implements OnInit {
 
   private calculateMetrics(products: ProductUi[], subOrders: SubOrder[]): void {
     const totalOrders = subOrders.length;
-    const totalRevenue = subOrders.reduce(
-      (sum, order) => sum + order.subtotal,
-      0
-    );
+    const totalRevenue =subOrders.filter(o => o.status.toLowerCase() == 'shipped' || o.status.toLowerCase() == 'delivered'|| o.status.toLowerCase() == 'confirmed')
+          .reduce((sum, order) => sum + order.subtotal, 0);
     console.log(totalOrders, totalRevenue);
     const activeProducts = products.filter((p) => p.approvalStatus).length;
 
@@ -221,5 +232,18 @@ export class Analytics implements OnInit {
 
   formatPercentage(value: number): string {
     return `${value.toFixed(1)}%`;
+  }
+   getCookie(name: string): string | null {
+    const nameEQ = name + '=';
+    const cookies = document.cookie.split(';');
+
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(nameEQ)) {
+        return decodeURIComponent(cookie.substring(nameEQ.length));
+      }
+    }
+
+    return null;
   }
 }

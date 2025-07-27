@@ -4,12 +4,17 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { ProductService } from '../../../../core/services/Product-Service/product';
 import { NotExpr } from '@angular/compiler';
+
+import { Router, RouterModule } from '@angular/router';
+import { CartEmpty } from "../cart-empty/cart-empty";
+
 import { environment } from '../../../../../environments/environment.development';
+
 
 
 @Component({
   selector: 'app-cart-items',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, CartEmpty],
   templateUrl: './cart-items.html',
   styleUrl: './cart-items.css'
 })
@@ -21,6 +26,7 @@ export class CartItems implements OnInit {
   private cartService = inject(CartService);
   private cdr = inject(ChangeDetectorRef)
   private productService = inject(ProductService);
+  private router = inject(Router);
   ngOnInit(): void {
     this.cartService.getCart().subscribe(
       {
@@ -53,15 +59,15 @@ export class CartItems implements OnInit {
 
   increaseQuantity(itemId: number): void {
     console.log(itemId);
-   
+
 
     const item =this.cartItems.find(i => i.cartItemId === itemId);
-    
+
     console.log(item);
-    
-   
+
+
     this.cdr.detectChanges();
-   
+
     this.cartService.UpdateCartItem(itemId,{quantity :1}).subscribe(
       {
         next:(data)=>{
@@ -69,24 +75,24 @@ export class CartItems implements OnInit {
           item!.quantity = data.quantity
           this.setSubtotal();
           this.cdr.detectChanges();
-          
+
         }
       }
     )
-    
+
   }
 
   decreaseQuantity(itemId: number): void {
    console.log(itemId);
-   
+
 
     const item =this.cartItems.find(i => i.cartItemId === itemId);
-    
+
     console.log(item);
-    
-    
+
+
     this.cdr.detectChanges();
-   
+
     this.cartService.UpdateCartItem(itemId,{quantity :-1}).subscribe(
       {
         next:(data)=>{
@@ -94,7 +100,7 @@ export class CartItems implements OnInit {
           item!.quantity = data.quantity
           this.setSubtotal();
           this.cdr.detectChanges();
-          
+
         }
       }
     )
@@ -112,11 +118,16 @@ export class CartItems implements OnInit {
         error:()=>console.log("cant remove")
       }
     )
-    
-   
+
+
   }
 
   setSubtotal() {
      this.subTotal =  this.cartItems.reduce((total, item) =>{console.log(item.subtotal);return total + (item.subtotal)}, 0);
+  }
+  goToCheckout() {
+    // Navigate to the checkout page
+    console.log("go to checkout")
+    this.router.navigate(['/place-order']);
   }
 }

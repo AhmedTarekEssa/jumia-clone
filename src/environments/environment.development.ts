@@ -1,3 +1,5 @@
+import { OrderPayload } from "../app/shared/models/delivery-option";
+
 export const environment = {
 
 
@@ -67,13 +69,17 @@ export const environment = {
 
   },
   Orders: {
+
     GetAll: "/Order/getall",
+
     GetById: (id: number) => `/Order/get-by-id/${id}`,
     Create: "/Order",
     UpdateStatus: (id: number) => `/Order/${id}/status`,
     GetByUserId: (userId: string) => `/Order/customer/${userId}`,
+
     getCurrentUserOrders: "/Order/current-customer",
-    GetSubOrdersBySellerId: (sellerId: number) => `/Order/suborders/seller/${sellerId}`,
+    GetSubOrdersBySellerId: () => `/Order/suborders/seller`,
+
 
   },
   Chat:{
@@ -98,6 +104,12 @@ export const environment = {
     updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
   },
+
+  Payment:{
+    initiate: `/Payment/initiate`,
+    callback: `/Payment/callback`
+
+  },
   User:{
     getUserInfo:'/User/profile',
     updateUserInfo:`/User/profile`
@@ -105,6 +117,7 @@ export const environment = {
   AiQuery:{
     Ask:`/AiQuery/Ask`,
     SemanticSearch:(query:string)=>`/AiQuery/semantic-search?query=${query}`
+
   }
 
   };

@@ -59,12 +59,24 @@ export const routes: Routes = [
       },
       {
         path: 'Products/:id',
+
         loadComponent: () =>
           import(
             './features/products/components/product-detail/product-detail'
           ).then((m) => m.ProductDetailC),
       },
     ],
+
+
+      },
+      {
+        path:'place-order',
+        loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
+        canActivate: [AuthGuard]
+      }
+    ]
+
+
   },
   {
     path: '',

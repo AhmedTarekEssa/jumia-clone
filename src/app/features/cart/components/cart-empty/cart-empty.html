@@ -1,0 +1,35 @@
+<div class="empty-cart-container">
+  <div class="empty-cart-content">
+    <!-- Cart Icon -->
+    <div class="cart-icon-wrapper">
+      <div class="cart-icon">
+        <div class="cart-body">
+          <div class="cart-flag">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="cart-wheels">
+          <div class="wheel wheel-left"></div>
+          <div class="wheel wheel-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty Cart Message -->
+    <div class="empty-cart-message">
+      <h2 class="empty-cart-title">Your cart is empty!</h2>
+      <p class="empty-cart-subtitle">Browse our categories and discover our best deals!</p>
+    </div>
+
+    <!-- Call to Action Button -->
+    <div class="empty-cart-action">
+      <button
+        type="button"
+        class="start-shopping-btn"
+        (click)="onStartShopping()"
+        [attr.aria-label]="'Start shopping button'">
+        Start Shopping
+      </button>
+    </div>
+  </div>
+</div>

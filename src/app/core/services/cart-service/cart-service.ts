@@ -7,7 +7,7 @@ import { AddToCart,Cart, CartItem, UpdateCart } from '../../../features/cart/car
   providedIn: 'root'
 })
 export class CartService {
-  
+
   private http = inject(HttpClient);
   private apiBaseUrl = environment.BaseUrlPath;
   private controller = environment.Cart
