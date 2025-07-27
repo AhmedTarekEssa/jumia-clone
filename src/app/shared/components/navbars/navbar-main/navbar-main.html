@@ -56,9 +56,9 @@
         <!-- Search Bar -->
         <div class="search-container">
           <form class="d-flex" role="search">
-            <input class="search-input" type="search" placeholder="Search products, brands and categories"
+            <input class="search-input" type="search" #searchInput  placeholder="Search products, brands and categories"
               aria-label="Search">
-            <button class="search-btn" type="submit">Search</button>
+            <button class="search-btn" type="submit" (click)="sementicSearch(searchInput.value.toLowerCase())">Search</button>
           </form>
         </div>
 
