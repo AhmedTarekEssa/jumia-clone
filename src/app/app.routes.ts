@@ -3,11 +3,11 @@ import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
 import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
 import { RoleGuard } from './core/guards/roles-guard-guard';
+import { AdminChat } from './features/admin/admin-chat/admin-chat';
+import { SearchProducts } from './features/search-products/search-products';
 
 export const routes: Routes = [
-
   {
-
     path: '',
     component: MainLayout,
     children: [
@@ -22,7 +22,7 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'home',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'categories/:id',
@@ -43,10 +43,15 @@ export const routes: Routes = [
         loadComponent: () => import('./features/cart/components/cart-items/cart-items').then(m => m.CartItems),
         data: { preload: true, role: ['Customer'] },
         canActivate: [RoleGuard]
+
+      {
+        path: 'search-products',
+        component: SearchProducts,
       },
       {
         path: 'vendor',
-        loadChildren: () => import('./features/vendor/vendor.routes').then(m => m.routes)
+        loadChildren: () =>
+          import('./features/vendor/vendor.routes').then((m) => m.routes),
       },
       {
         path: 'Products/:id',
@@ -63,6 +68,7 @@ export const routes: Routes = [
       }
     ]
 
+
   },
   {
     path: '',
@@ -70,17 +76,22 @@ export const routes: Routes = [
     children: [
       {
         path: 'login-register',
-        loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
+        loadChildren: () =>
+          import('./features/auth/auth.routes').then((m) => m.routes),
       },
       {
         path: 'auth',
-        loadChildren: () => import('./features/auth/auth.routes').then(m => m.routes)
+        loadChildren: () =>
+          import('./features/auth/auth.routes').then((m) => m.routes),
       },
       {
         path: 'seller-auth',
-        loadChildren: () => import('./features/seller-auth/seller-auth.routes').then(m => m.routes)
-      }
-    ]
+        loadChildren: () =>
+          import('./features/seller-auth/seller-auth.routes').then(
+            (m) => m.routes
+          ),
+      },
+    ],
   },
   {
     path: 'admin',
@@ -99,12 +110,14 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: ['seller'] }
 
+
   },
 
   {
     path: 'SellerAuth',
     component: SellerWelcome,
-    loadChildren: () => import('./features/seller-auth/seller-auth.routes').then(m => m.routes)
+    loadChildren: () =>
+      import('./features/seller-auth/seller-auth.routes').then((m) => m.routes),
   },
   ///////
   // create new path called SellerAuth
@@ -113,10 +126,29 @@ export const routes: Routes = [
   /// من غير  gard
   {
     path: 'Products',
-    loadChildren: () => import('./features/products/product.routes').then(m => m.routes)
+    loadChildren: () =>
+      import('./features/products/product.routes').then((m) => m.routes),
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  {
+    path: 'address',
+    loadChildren: () =>
+      import('../app/features/address/address.routes').then((m) => m.routes),
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then((m) => m.routes),
+  },
+  {
+    path: 'chat-dashboard',
+    component: AdminChat,
+    // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
+    // data: { roles: ['Admin'] } // Pass role data for the guard
+  },
+  {
+    path: 'search-products',
+    component: SearchProducts,
+  },
 
-
-
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

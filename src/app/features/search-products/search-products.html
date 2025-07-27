@@ -1,0 +1,92 @@
+<div class="products-row row">
+    <div *ngFor="let product of products" class="product-card col-6 col-md-3"
+        (click)="goToProductDetails(product.productId)">
+        <div class="product-image-wrapper">
+            <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name" class="product-image">
+            <button class="wishlist-heart">♡</button>
+
+            <!-- <div *ngIf="product.sponsored" class="sponsored-tag">Sponsored ℹ</div> -->
+        </div>
+
+        <div class="product-details">
+            <p class="product-title">{{ product.name }}</p>
+            <div class="price-row">
+                <span class="current-price">
+                    EGP {{ product.basePrice | discountPrice:product.discountPercentage | number:'1.2-2' }}
+                </span>
+                <div class="discount-old-price-container">
+                    <span *ngIf="(product.discountPercentage) as discount" class="old-price">
+                        EGP {{ product.basePrice | number:'1.2-2' }}
+                    </span>
+
+                    <span *ngIf="product.discountPercentage" class="discount-percent">
+                        -{{ product.discountPercentage }}
+                    </span>
+                </div>
+
+            </div>
+            <div class="brand-row">
+                <!-- <span class="brand-logo">{{ product.brand }}</span> -->
+                <!-- <span *ngIf="product.brand === 'JUMIA'" class="express-badge">⚡EXPRESS</span> -->
+            </div>
+            <div class="add-to-cart">
+                <button class="add-to-cart-btn" (click)="addToCart(product.productId,$event)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Popup Modal -->
+<div class="modal-overlay" *ngIf="showCartPopup" (click)="closeCartPopup()">
+    <div class="cart-popup" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+            <h3>Select Quantities for Variants</h3>
+            <button class="close-btn" (click)="closeCartPopup()">×</button>
+        </div>
+        <div class="popup-content">
+            <div *ngFor="let selection of cartSelections" class="variant-selection">
+                <div class="variant-card">
+                    <img [src]="selection.variant.variantImageUrl" class="variant-image">
+                    <div class="variant-info">
+
+                        <div class="variant-container">
+                            <div>
+                                <h4>{{ selection.variant.variantName }}</h4>
+                                <p class="variant-price">
+                                    EGP {{ selection.variant.price * (1 - selection.variant.discountPercentage /
+                                    100) | number:'1.2-2'
+                                    }}
+                                    <span *ngIf="selection.variant.discountPercentage > 0" class="discount">
+                                        -{{ selection.variant.discountPercentage }}%
+                                    </span>
+                                </p>
+                                <p class="variant-stock"></p>
+                                <p class="variant-stock" [ngClass]="{'low-stock':selection.variant.stockQuantity<5} ">
+                                    {{ selection.variant.stockQuantity }} in stock
+                                </p>
+
+                            </div>
+
+                            <div class="quantity-controls">
+                                <button (click)="updateVariantQuantity(selection.variant.variantId, -1)"
+                                    [disabled]="selection.quantity <= 0">-</button>
+                                <input type="number" [(ngModel)]="selection.quantity"
+                                    (blur)="setVariantQuantity(selection.variant.variantId, selection.quantity)"
+                                    [min]="0" [max]="selection.variant.stockQuantity">
+                                <button (click)="updateVariantQuantity(selection.variant.variantId, 1)"
+                                    [disabled]="selection.quantity >= selection.variant.stockQuantity">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="total-summary">
+                Total Items: {{ getTotalItems() }} | Total Price: EGP {{ getTotalPrice() | number:'1.2-2' }}
+            </div>
+        </div>
+        <div class="popup-actions">
+            <button class="continue-shopping-btn" (click)="closeCartPopup()">Continue Shopping</button>
+            <button class="add-to-cart-final-btn" (click)="addToCartApi()">Add to Cart</button>
+        </div>
+    </div>
+</div>

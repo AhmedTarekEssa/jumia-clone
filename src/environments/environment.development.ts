@@ -78,7 +78,7 @@ export const environment = {
     GetByUserId: (userId: string) => `/Order/customer/${userId}`,
 
     getCurrentUserOrders: "/Order/current-customer",
-    GetSubOrdersBySellerId: (sellerId: number) => `/Order/suborders/seller/${sellerId}`,
+    GetSubOrdersBySellerId: () => `/Order/suborders/seller`,
 
 
   },
@@ -116,7 +116,7 @@ export const environment = {
   },
   AiQuery:{
     Ask:`/AiQuery/Ask`,
-    SemanticSearch:`/AiQuery/semantic-search`
+    SemanticSearch:(query:string)=>`/AiQuery/semantic-search?query=${query}`
 
   }
 
