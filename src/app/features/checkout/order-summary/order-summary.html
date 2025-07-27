@@ -1,0 +1,57 @@
+<div class="order-summary">
+  <h3>Order summary</h3>
+
+  <div class="summary-item">
+    <span>Item's total ({{cartItems.length}})</span>
+    <span>EGP {{itemsTotal.toFixed(2)}}</span>
+  </div>
+
+  <div class="summary-item">
+    <span>Delivery fees</span>
+    <span>EGP {{deliveryFee.toFixed(2)}}</span>
+  </div>
+
+  <div class="summary-item discount" *ngIf="freeDeliveryDiscount < 0">
+    <span>Free Delivery</span>
+    <span>{{freeDeliveryDiscount.toFixed(2)}}</span>
+  </div>
+
+  <div class="summary-total">
+    <span>Total</span>
+    <span>EGP {{total.toFixed(2)}}</span>
+  </div>
+
+  <div class="coupon-section">
+    <div class="coupon-input">
+      <input
+        type="text"
+        placeholder="Enter code here"
+        [(ngModel)]="currentCouponCode"
+        class="coupon-field">
+      <button
+        class="apply-btn"
+        (click)="applyCouponCode()"
+        [disabled]="!currentCouponCode.trim()">
+        APPLY
+      </button>
+    </div>
+
+    <div class="voucher-info">
+      <span class="info-icon">ℹ️</span>
+      <span>You will be able to add a voucher when selecting your payment method.</span>
+    </div>
+  </div>
+
+  <button
+    class="confirm-order-btn"
+    [disabled]="!canConfirmOrder"
+    (click)="confirmOrder.emit()">
+    Confirm order
+  </button>
+
+  <p class="terms-text">
+    (Complete the steps in order to proceed)<br>
+    By proceeding, you are automatically accepting the
+    <a href="#" class="terms-link">Terms & Conditions</a>
+  </p>
+</div>

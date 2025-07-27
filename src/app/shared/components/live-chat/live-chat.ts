@@ -12,8 +12,8 @@ import { SendMessageRequest } from '../../models/Livechatmodels/send-message-req
   templateUrl: './live-chat.html',
   styleUrl: './live-chat.css'
 })
-export class LiveChat implements OnInit , OnDestroy {
-  
+export class LiveChat implements OnInit  {
+
   isOpen = false;
   currentView = 'list'; // 'list' or 'conversation'
   selectedConversation!:Chat|null;
@@ -24,7 +24,7 @@ export class LiveChat implements OnInit , OnDestroy {
   chat:any;
   messages:Message[]=[];
   newMessage='';
-  
+
   ngOnInit(): void {
    this.chatService.getMyChat().subscribe(
     {
@@ -37,9 +37,7 @@ export class LiveChat implements OnInit , OnDestroy {
    )
   }
 
-ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
-  }
+
 
 
   experts = [
@@ -66,7 +64,7 @@ sendMessage() {
   const sendMessage:SendMessageRequest={
     message:this.newMessage,
     chatId:this.selectedConversation?.id
-    
+
   }
   this.chatService.sendMessage(sendMessage).subscribe({
     next: (msg) => {
@@ -107,7 +105,7 @@ sendMessage() {
       console.error('Failed to start conversation', err);
     }
   });
-   
+
   }
 
   openConversation(conversation: any) {

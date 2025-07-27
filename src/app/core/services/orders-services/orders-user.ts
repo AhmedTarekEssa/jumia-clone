@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development'; // Adjust the path as necessary
 import { Observable } from 'rxjs';
 import { Order } from '../../../shared/models/order'; // Assuming you have an Order model
+import { OrderPayload } from '../../../shared/models/delivery-option';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,8 @@ export class OrderService {
   }
 
 
-  createOrder(order: any): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
+  createOrder(order: any): Observable<OrderPayload> {
+    return this.http.post<OrderPayload>(`${this.baseUrl}${environment.Orders.Create}`, order,{withCredentials: true});
   }
 
 

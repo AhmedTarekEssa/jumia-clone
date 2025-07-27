@@ -1,99 +1,104 @@
- <div *ngIf="cart&& cartItems; else loading">
+<div *ngIf="cart&& cartItems; else loading">
 
-<div class="cart-layout">
-  <div class="cart-main">
-    
-
-    <div class="cart-items">
-        <div class="cart-header">
-      <h2>Cart ({{ getCartCount() }})</h2>
-    </div>
-      <div class="cart-item" *ngFor="let item of cartItems">
-        <div class="item-image">
-          <img [src]="item.variantImageUrl??item.mainImageUrl" [alt]="item.productName" />
+  <div class="cart-layout">
+    <div class="cart-main">
+      <div class="cart-container">
+        <div *ngIf="cartItems.length === 0">
+          <app-cart-empty></app-cart-empty>
         </div>
-        
-        <div class="item-details">
-          <h3 class="item-name">{{ item.productName }}</h3>
-          
-          <div class="item-meta" *ngIf="item.variantName">
-            <span class="item-size">Size: {{ item.variantName }}</span>
+
+        <ng-template #cartContent>
+          <!-- Your cart items content here -->
+        </ng-template>
+      </div>
+
+
+      <div class="cart-items" *ngIf="cartItems.length !== 0">
+        <div class="cart-header">
+          <h2>Cart ({{ getCartCount() }})</h2>
+        </div>
+        <div class="cart-item" *ngFor="let item of cartItems">
+          <div class="item-image">
+            <img [src]="item.variantImageUrl??item.mainImageUrl" [alt]="item.productName" />
           </div>
-          
-        
-          
-          <div class="brand-info" *ngIf="item.productId === 1">
+
+          <div class="item-details">
+            <h3 class="item-name">{{ item.productName }}</h3>
+
+            <div class="item-meta" *ngIf="item.variantName">
+              <span class="item-size">Size: {{ item.variantName }}</span>
+            </div>
+
+
+
+            <div class="brand-info" *ngIf="item.productId === 1">
+              <span class="jumia-text">JUMIA</span>
+              <span class="express-text">EXPRESS</span>
+            </div>
+
+            <div class="item-actions">
+              <button class="remove-btn" (click)="removeItem(item.cartItemId)">
+                <i class="remove-icon"></i> Remove
+              </button>
+            </div>
+          </div>
+
+          <div class="item-pricing">
+            <div class="price-section">
+              <span class="current-price">EGP {{ item.finalPrice| number:'1.2-2' }}</span>
+              <div class="original-pricing" *ngIf="item.discountPercentage > 0">
+                <span class="original-price">EGP {{ item.unitPrice + (item.unitPrice * item.discountPercentage / 100) |
+                  number:'1.2-2' }}</span>
+                <span class="discount">-{{ item.discountPercentage }}%</span>
+              </div>
+            </div>
+
+            <div class="quantity-controls">
+              <button class="qty-btn minus" (click)="decreaseQuantity(item.cartItemId)" [disabled]="item.quantity <= 1">
+                -
+              </button>
+              <span class="quantity">{{ item.quantity }}</span>
+              <button class="qty-btn plus" (click)="increaseQuantity(item.cartItemId)">
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-sidebar"  *ngIf="cartItems.length !== 0">
+      <div class="cart-summary">
+        <div class="cart-title-container">
+          <h3 class="summary-title">CART SUMMARY</h3>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value">EGP {{ subTotal | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="delivery-info">
+          <div class="delivery-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2">
+              <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+          </div>
+          <div class="delivery-text">
+            <span>Jumia Express items are eligible for free</span>
+            <span>delivery</span>
+          </div>
+          <div class="jumia-logo">
             <span class="jumia-text">JUMIA</span>
             <span class="express-text">EXPRESS</span>
           </div>
-          
-          <div class="item-actions">
-            <button class="remove-btn" (click)="removeItem(item.cartItemId)">
-              <i class="remove-icon"></i> Remove
-            </button>
-          </div>
         </div>
-        
-        <div class="item-pricing">
-          <div class="price-section">
-            <span class="current-price">EGP {{ item.finalPrice| number:'1.2-2' }}</span>
-            <div class="original-pricing" *ngIf="item.discountPercentage > 0">
-              <span class="original-price">EGP {{ item.unitPrice + (item.unitPrice * item.discountPercentage / 100) | number:'1.2-2' }}</span>
-              <span class="discount">-{{ item.discountPercentage }}%</span>
-            </div>
-          </div>
-          
-          <div class="quantity-controls">
-            <button 
-              class="qty-btn minus" 
-              (click)="decreaseQuantity(item.cartItemId)"
-              [disabled]="item.quantity <= 1">
-              -
-            </button>
-            <span class="quantity">{{ item.quantity }}</span>
-            <button 
-              class="qty-btn plus" 
-              (click)="increaseQuantity(item.cartItemId)">
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="cart-sidebar">
-    <div class="cart-summary">
-        <div class="cart-title-container">
-      <h3 class="summary-title">CART SUMMARY</h3>
+        <button class="checkout-btn" (click)="goToCheckout()">
+          Checkout (EGP {{ subTotal | number:'1.2-2' }})
+        </button>
       </div>
-      <div class="summary-row">
-        <span class="summary-label">Subtotal</span>
-        <span class="summary-value">EGP {{ subTotal | number:'1.2-2' }}</span>
-      </div>
-      
-      <div class="delivery-info">
-        <div class="delivery-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2">
-            <polyline points="20,6 9,17 4,12"></polyline>
-          </svg>
-        </div>
-        <div class="delivery-text">
-          <span>Jumia Express items are eligible for free</span>
-          <span>delivery</span>
-        </div>
-        <div class="jumia-logo">
-          <span class="jumia-text">JUMIA</span>
-          <span class="express-text">EXPRESS</span>
-        </div>
-      </div>
-      
-      <button class="checkout-btn">
-        Checkout (EGP {{ subTotal | number:'1.2-2' }})
-      </button>
     </div>
   </div>
-</div>
 </div>
 <ng-template #loading>
   <p>Loading product details...</p>

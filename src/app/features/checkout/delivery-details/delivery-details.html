@@ -1,0 +1,90 @@
+<div class="delivery-details">
+  <div class="delivery-options">
+    <div
+      *ngFor="let option of deliveryOptions"
+      class="delivery-option"
+      [class.selected]="selectedOption?.type === option.type">
+
+      <div class="option-header">
+        <input
+          type="radio"
+          [id]="option.type"
+          name="delivery"
+          [value]="option.type"
+          [checked]="selectedOption?.type === option.type"
+          (change)="selectOption(option)">
+
+        <label [for]="option.type" class="option-label">
+          <div class="option-info">
+            <span class="option-name">{{option.name}}</span>
+            <span class="option-price" [class.free]="option.price === 0">
+              {{option.price === 0 ? 'FREE' : option.description}}
+            </span>
+          </div>
+          <div class="option-icon">
+            <span *ngIf="option.type === 'pickup'">📦</span>
+            <span *ngIf="option.type === 'door'">🚚</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="delivery-date">
+        Delivery scheduled on 27 July
+      </div>
+
+      <!-- Pickup Station Details -->
+      <div *ngIf="option.type === 'pickup' && selectedOption?.type === 'pickup'" class="pickup-details">
+        <div class="pickup-station-section">
+          <h5>Pickup Station</h5>
+          <button class="select-station-btn">Select pickup station</button>
+        </div>
+
+        <div class="no-station-selected">
+          <div class="warning-icon">⚠️</div>
+          <div>
+            <strong>No Pickup Station Selected</strong>
+            <p>To use this option, you will need to add a pickup station near your location.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Door Delivery Details -->
+      <div *ngIf="option.type === 'door' && selectedOption?.type === 'door'" class="door-delivery-details">
+        <div class="shipment-info">
+          <div class="shipment-header">
+            <span>Shipment 1/1</span>
+            <span class="fulfilled-by">Fulfilled by Jumia</span>
+          </div>
+
+          <div class="delivery-method">
+            <div class="method-header">
+              <span class="method-name">Door Delivery</span>
+              <span class="delivery-date">Delivery scheduled on 27 July</span>
+            </div>
+
+            <div class="jumia-express">
+              <img src="/api/placeholder/80/20" alt="Jumia Express" class="express-logo">
+            </div>
+
+            <div class="products-list">
+              <div class="product-item" *ngFor="let item of cartItems">
+                <img [src]="item.image" [alt]="item.name" class="product-image">
+                <div class="product-details">
+                  <span class="product-quantity">x{{item.quantity}}</span>
+                  <p class="product-name">{{item.name}}</p>
+                  <p class="product-price">EGP {{item.price}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-delivery-section" *ngIf="selectedOption">
+    <button class="confirm-delivery-btn" (click)="confirmDelivery.emit()">
+      Confirm delivery details
+    </button>
+  </div>
+</div>

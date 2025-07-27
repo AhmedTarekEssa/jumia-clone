@@ -45,6 +45,11 @@ export const routes: Routes = [
       {
         path: 'Products/:id',
         loadComponent:() => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
+      },
+      {
+        path:'place-order',
+        loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
+        canActivate: [AuthGuard]
       }
     ]
 
@@ -91,7 +96,7 @@ export const routes: Routes = [
   // create new path called SellerAuth
   ///Component SellerWelcomeComponent
   //// LoadChildren      loadChildren: () => import('./features/seller/seller-auth.routes').then(m => m.routes)
-  /// من غير  gard 
+  /// من غير  gard
   {
     path:'Products',
     loadChildren: () => import('./features/products/product.routes').then(m => m.routes)

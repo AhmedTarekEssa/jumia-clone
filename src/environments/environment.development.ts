@@ -1,3 +1,5 @@
+import { OrderPayload } from "../app/shared/models/delivery-option";
+
 export const environment = {
 
 
@@ -64,12 +66,12 @@ export const environment = {
 
   },
   Orders: {
-    GetAll: "Order",
-    GetById: (id: number) => `Order/get-by-id/${id}`,
-    Create: "Order",
-    UpdateStatus: (id: number) => `Order/${id}/status`,
-    GetByUserId: (userId: string) => `Order/customer/${userId}`,
-    getCurrentUserOrders: "Order/current-customer"
+    GetAll: "/Order",
+    GetById: (id: number) => `/Order/get-by-id/${id}`,
+    Create: "/Order",
+    UpdateStatus: (id: number) => `/Order/${id}/status`,
+    GetByUserId: (userId: string) => `/Order/customer/${userId}`,
+    getCurrentUserOrders: "/Order/current-customer"
   },
   Chat:{
     createchat:'/Chat',
@@ -92,6 +94,11 @@ export const environment = {
     getAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     updateAddressByAddressId:(addressId:number)=>`/Address/${addressId}`,
     deleteAddressByAddressId:(addressId:number)=>`/Address/${addressId}`
+  },
+  Payment:{
+    initiate: `/Payment/initiate`,
+    callback: `/Payment/callback`
+
   }
 
   };
