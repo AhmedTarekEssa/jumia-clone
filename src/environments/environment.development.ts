@@ -109,7 +109,7 @@ export const environment = {
     initiate: `/Payment/initiate`,
     callback: `/Payment/callback`
 
-
+  },
   User:{
     getUserInfo:'/User/profile',
     updateUserInfo:`/User/profile`

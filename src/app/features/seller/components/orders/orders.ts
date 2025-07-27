@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OrderService, SubOrder, OrderItem } from '../../../../core/services/orders-services/orders-user';
+import { OrderService, SubOrder } from '../../../../core/services/orders-services/orders-user';
+
 
 interface Order {
   id: string;

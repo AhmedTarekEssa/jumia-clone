@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { Observable } from 'rxjs';
 
-import { Order } from '../../../shared/models/order'; // Assuming you have an Order model
+import { Order, OrderItem } from '../../../shared/models/order'; // Assuming you have an Order model
 import { OrderPayload } from '../../../shared/models/delivery-option';
 // =======
 // import { Order } from '../../../shared/models/order';
