@@ -139,12 +139,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.routes),
   },
-  {
-    path: 'chat-dashboard',
-    component: AdminChat,
-    // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
-    // data: { roles: ['Admin'] } // Pass role data for the guard
-  },
+  // {
+  //   path: 'chat-dashboard',
+  //   component: AdminChat,
+  //   // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
+  //   // data: { roles: ['Admin'] } // Pass role data for the guard
+  // },
   {
     path: 'search-products',
     component: SearchProducts,
