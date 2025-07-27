@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Order } from '../../../../../shared/models/order';
 import { OrderService } from '../../../../../core/services/orders-services/orders-user';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -13,7 +14,7 @@ import { OrderService } from '../../../../../core/services/orders-services/order
 })
 export class AdminOrders implements OnInit {
 
-  constructor(private orderservice: OrderService, private cdr: ChangeDetectorRef) { }
+  constructor(private orderservice: OrderService, private cdr: ChangeDetectorRef, private router:Router) { }
 
   searchTerm = '';
   statusFilter = '';
@@ -51,6 +52,10 @@ export class AdminOrders implements OnInit {
       }));
       this.cdr.detectChanges();
     });
+  }
+  redirect(id:number){
+    this.router.navigate([`admin/orders/${id}`]);
+
   }
 
   get filteredOrders(): typeof this.Orders {
