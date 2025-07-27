@@ -9,10 +9,12 @@ import { AddToCart } from '../../../cart/cart-models';
 import { WishlistService } from '../../../../core/services/wishlist';
 import { environment } from '../../../../../environments/environment.development';
 import { CookieService } from 'ngx-cookie-service';
+import { Loading } from '../../../../shared/components/loading/loading';
+
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule, RouterLink ],
+  imports: [CommonModule, FormsModule, RouterLink , Loading  ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })

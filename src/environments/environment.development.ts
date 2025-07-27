@@ -116,7 +116,7 @@ export const environment = {
   },
   AiQuery:{
     Ask:`/AiQuery/Ask`,
-    SemanticSearch:`/AiQuery/semantic-search`
+    SemanticSearch:(query:string)=>`/AiQuery/semantic-search?query=${query}`
 
   }
 

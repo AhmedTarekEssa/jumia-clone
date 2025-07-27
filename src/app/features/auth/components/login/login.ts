@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import {AuthService} from '../../../../core/services/auth';
+import { AuthService } from '../../../../core/services/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CookieService } from 'ngx-cookie-service';
+
 
 
 @Component({
@@ -11,22 +13,24 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login implements OnInit{
+export class Login implements OnInit {
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  userRole: string = 'none';
 
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute){
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute, private cookieService: CookieService) {
     this.loginForm = this.fb.group({
       // email: ['',[Validators.required, Validators.email]],
-      email: [{ value: '', disabled: true },[Validators.required, Validators.email]],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     const email = this.authService.tempEmail;
-    
+
     console.log(email);
     if (!email) {
       this.router.navigate(['/auth/check-email']);
@@ -44,7 +48,7 @@ export class Login implements OnInit{
     // });
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.loginForm.invalid) return;
 
     // const credentials = this.loginForm.value;
@@ -55,27 +59,44 @@ export class Login implements OnInit{
 
     this.authService.login(dto).subscribe({
       next: () => {
-        this.router.navigate(['/home']);
+
+
+        const userInfoCookie = this.cookieService.get('UserInfo');
+        if (userInfoCookie) {
+          try {
+            const decodedCookie = decodeURIComponent(userInfoCookie);
+            const userInfo = JSON.parse(decodedCookie);
+            this.userRole = userInfo.UserRole?.toLowerCase() || 'none';
+          } catch (e) {
+            console.error('Error parsing user info cookie', e);
+          }
+        }
+        if (this.userRole.toLowerCase() === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+
       },
       error: (err) => {
         this.errorMessage = err?.error?.message || 'Login Failed. Please try again';
-        
+
       }
     });
   }
 
-  isPasswordInvalid() : boolean{
+  isPasswordInvalid(): boolean {
     const passwordControl = this.loginForm.get('password');
-  
+
     return passwordControl ? passwordControl.invalid && passwordControl.touched : false;
 
-}
-
-ForgetPassword(){
-    this.router.navigate(['/auth/forgot-password']);
-}
-
-
   }
+
+  ForgetPassword() {
+    this.router.navigate(['/auth/forgot-password']);
+  }
+
+
+}
 
 

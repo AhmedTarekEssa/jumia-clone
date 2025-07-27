@@ -1,101 +1,48 @@
- <div class="sellers-container">
-      <div class="header">
-        <h2>Sellers Management</h2>
-        <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
-          Add New Seller
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th style="min-width: 80px;">ID</th>
+      <th style="min-width: 150px;">Business Name</th>
+      <th style="min-width: 200px;">Description</th>
+      <th style="min-width: 80px;">Rating</th>
+      <th style="min-width: 100px;">Verified</th>
+      <th style="min-width: 100px;">Image</th>
+      <th style="min-width: 120px;">Action</th>
+      <th style="min-width: 150px;">Total Products Sold</th>
+      <th style="min-width: 150px;">Total Amount Sold</th>
+    </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let seller of filteredSellers">
+      <td>{{ seller.sellerId }}</td>
+      <td>{{ seller.businessName }}</td>
+      <td>{{ seller.businessDescription }}</td>
+      <td>{{ seller.rating }}</td>
+      <td>
+        <span [class]="seller.isVerified ? 'badge bg-success' : 'badge bg-warning'">
+          {{ seller.isVerified ? 'Verified' : 'Pending' }}
+        </span>
+      </td>
+      <td>
+        <img 
+          *ngIf="seller.imageUrl" 
+          [src]="'http://localhost:5087' + seller.imageUrl" 
+          alt="Seller Image" 
+          width="60" 
+          height="60" 
+          style="object-fit: cover; border-radius: 50%;">
+        <span *ngIf="!seller.imageUrl">No Image</span>
+      </td>
+      <td>
+        <button 
+          class="btn btn-sm" 
+          [ngClass]="seller.isVerified ? 'btn-danger' : 'btn-success'" 
+          (click)="toggleVerification(seller.sellerId)">
+          {{ seller.isVerified ? 'Deactivate' : 'Accept' }}
         </button>
-      </div>
-
-      <div class="search-filter">
-        <input 
-          type="text" 
-          placeholder="Search sellers..." 
-          [(ngModel)]="searchTerm"
-          class="search-input">
-        <select [(ngModel)]="statusFilter" class="filter-select">
-          <option value="">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Pending">Pending</option>
-        </select>
-        <select [(ngModel)]="categoryFilter" class="filter-select">
-          <option value="">All Categories</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Home">Home</option>
-          <option value="Books">Books</option>
-        </select>
-      </div>
-
-      <div *ngIf="showAddForm" class="add-form">
-        <h3>Add New Seller</h3>
-        <form (ngSubmit)="addSeller()">
-          <div class="form-row">
-            <input type="text" placeholder="Seller Name" [(ngModel)]="newSeller.name" name="name" required>
-            <input type="email" placeholder="Email" [(ngModel)]="newSeller.email" name="email" required>
-          </div>
-          <div class="form-row">
-            <input type="tel" placeholder="Phone" [(ngModel)]="newSeller.phone" name="phone" required>
-            <input type="text" placeholder="Business Name" [(ngModel)]="newSeller.businessName" name="businessName" required>
-          </div>
-          <div class="form-row">
-            <select [(ngModel)]="newSeller.category" name="category" required>
-              <option value="">Select Category</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Fashion">Fashion</option>
-              <option value="Home">Home</option>
-              <option value="Books">Books</option>
-            </select>
-            <select [(ngModel)]="newSeller.status" name="status" required>
-              <option value="Pending">Pending</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-success">Add Seller</button>
-            <button type="button" class="btn btn-secondary" (click)="showAddForm = false">Cancel</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="sellers-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Business</th>
-              <th>Category</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Products</th>
-              <th>Sales</th>
-              <th>Commission</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let seller of filteredSellers">
-              <td>{{seller.id}}</td>
-              <td>{{seller.name}}</td>
-              <td>{{seller.businessName}}</td>
-              <td>{{seller.category}}</td>
-              <td>{{seller.email}}</td>
-              <td>
-                <span class="status" [class]="seller.status.toLowerCase()">
-                  {{seller.status}}
-                </span>
-              </td>
-              <td>{{seller.totalProducts}}</td>
-              <td>\${{seller.totalSales}}</td>
-              <td>{{seller.commission}}%</td>
-              <td>
-                <button class="btn btn-sm btn-primary">Edit</button>
-                <button class="btn btn-sm btn-success" *ngIf="seller.status === 'Pending'">Approve</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      </td>
+      <td>{{ seller.totalProductsSold }}</td>
+      <td>{{ seller.totalAmountSold | currency }}</td>
+    </tr>
+  </tbody>
+</table>

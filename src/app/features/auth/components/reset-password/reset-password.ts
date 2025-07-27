@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,14 +15,13 @@ export class ResetPassword implements OnInit{
     private fb = inject(FormBuilder);
     private authService = inject(AuthService);
     private route = inject( ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef)
     private router = inject( Router);
 
     email: string | null = '';
     token:string | null = '';
 
     resetPasswordForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    token: [''],
     newPassword: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
   });
@@ -30,29 +29,32 @@ export class ResetPassword implements OnInit{
   constructor() {}
 
   ngOnInit(): void {
-    const email = this.route.snapshot.queryParamMap.get('email');
-    const token = this.route.snapshot.queryParamMap.get('token');
-    const newPassword = this.route.snapshot.queryParamMap.get('newPassword');
+   this.route.queryParams.subscribe(p=>{
+    this.token = p['token']
+    this.email = p['email']
+    this.cdr.detectChanges()
+   })
+    if(!this.email||!this.token){
 
-    if(email && token)
-    {    
-      this.resetPasswordForm.patchValue({ email, token });
     }
+   
   }
 
   onSubmit() {
     if (this.resetPasswordForm.valid) {
-      const { email, token, newPassword } = this.resetPasswordForm.value;
+      const { confirmPassword, newPassword } = this.resetPasswordForm.value;
 
       if (newPassword !== this.resetPasswordForm.get('confirmPassword')?.value) {
         alert('Passwords do not match!');
         return;
       }
-      console.log(newPassword);
-            console.log(email);
-      console.log(token);
+      
+          
+     
 
-      if (email && token && newPassword){
+      if (this.email && this.token && newPassword){
+        const email = this.email
+        const token = encodeURIComponent(this.token)
       this.authService.resetPassword({ email, token, newPassword }).subscribe(
         (response) => {
           alert('Password reset successful');
