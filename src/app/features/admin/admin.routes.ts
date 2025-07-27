@@ -13,6 +13,7 @@ export const routes: Routes = [
       { path: 'sellers', loadComponent: () => import('./components/sellers/admin-sellers/admin-sellers').then(m => m.AdminSellers) },
       { path: 'customers', loadComponent: () => import('./components/customers/admin-customers/admin-customers').then(m => m.AdminCustomers) },
       { path: 'reviews', loadComponent: () => import('./components/reviews/admin-reviews/admin-reviews').then(m => m.AdminReviews) },
+      { path: 'chats', loadComponent: () => import('./admin-chat/admin-chat').then(m => m.AdminChat) },
       { path: 'stats', loadComponent: () => import('./components/stats/admin-stats/admin-stats').then(m => m.AdminStats) },
       { path: 'settings', loadComponent: () => import('./components/settings/admin-settings/admin-settings').then(m => m.AdminSettings) },
       { path: 'Payments', loadComponent: () => import('./components/payments/payments').then(m => m.Payments)},

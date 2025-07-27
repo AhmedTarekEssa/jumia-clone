@@ -43,7 +43,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/cart/components/cart-items/cart-items').then(m => m.CartItems),
         data: { preload: true, role: ['Customer'] },
         canActivate: [RoleGuard]
-
+      },
       {
         path: 'search-products',
         component: SearchProducts,
@@ -139,12 +139,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.routes),
   },
-  {
-    path: 'chat-dashboard',
-    component: AdminChat,
-    // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
-    // data: { roles: ['Admin'] } // Pass role data for the guard
-  },
+  // {
+  //   path: 'chat-dashboard',
+  //   component: AdminChat,
+  //   // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
+  //   // data: { roles: ['Admin'] } // Pass role data for the guard
+  // },
   {
     path: 'search-products',
     component: SearchProducts,
