@@ -1,43 +1,41 @@
 <div class="analytics">
   <div class="page-header">
-    <h2>Analytics & Reports</h2>
     <p>Track your store performance and sales metrics</p>
   </div>
 
   <div *ngIf="isLoading" class="loading-state">
+    <i class="fas fa-spinner fa-spin fa-2x"></i>
     <p>Loading analytics data...</p>
   </div>
-
-
 
   <div *ngIf="!isLoading && !error">
     <div class="analytics-grid">
       <div class="chart-card">
-        <h3>Sales Overview</h3>
+        <h3><i class="fas fa-chart-area"></i> Sales Overview</h3>
         <div class="sales-summary">
           <div class="metric">
-            <span class="label">This Month</span>
+            <span class="label"><i class="fas fa-calendar-alt"></i> This Month</span>
             <span class="value">{{ formatCurrency(salesData.thisMonth) }}</span>
           </div>
           <div class="metric">
-            <span class="label">Last Month</span>
+            <span class="label"><i class="fas fa-history"></i> Last Month</span>
             <span class="value">{{ formatCurrency(salesData.lastMonth) }}</span>
           </div>
           <div class="metric growth">
-            <span class="label">Growth</span>
+            <span class="label"><i class="fas fa-trending-up"></i> Growth</span>
             <span
               class="value"
               [class.positive]="salesData.growth > 0"
               [class.negative]="salesData.growth < 0"
             >
-              {{ salesData.growth > 0 ? "+" : ""
-              }}{{ formatPercentage(salesData.growth) }}
+              <i class="fas" [class.fa-arrow-up]="salesData.growth > 0" [class.fa-arrow-down]="salesData.growth < 0"></i>
+              {{ salesData.growth > 0 ? "+" : ""}}{{ formatPercentage(salesData.growth) }}
             </span>
           </div>
         </div>
         <div class="chart-placeholder">
           <div class="sales-trend">
-            <p>📈 Monthly Revenue Trend</p>
+            <p><i class="fas fa-chart-bar"></i> Monthly Revenue Trend</p>
             <div class="trend-bars">
               <div class="trend-bar">
                 <div
@@ -59,15 +57,19 @@
       </div>
 
       <div class="top-products-card">
-        <h3>Top Selling Products</h3>
+        <h3><i class="fas fa-trophy"></i> Top Selling Products</h3>
         <div
           class="products-list"
           *ngIf="topProducts.length > 0; else noProducts"
         >
-          <div class="product-item" *ngFor="let product of topProducts">
+          <div class="product-item" *ngFor="let product of topProducts; let i = index">
             <div class="product-info">
-              <h4>{{ product.name }}</h4>
-              <p>{{ product.sales }} units sold</p>
+              <h4>
+                <i class="fas fa-medal"
+                   [style.color]="i === 0 ? '#FFD700' : (i === 1 ? '#C0C0C0' : '#CD7F32')"></i>
+                {{ product.name }}
+              </h4>
+              <p><i class="fas fa-cube"></i> {{ product.sales }} units sold</p>
             </div>
             <div class="product-revenue">
               {{ formatCurrency(product.revenue) }}
@@ -76,6 +78,7 @@
         </div>
         <ng-template #noProducts>
           <div class="no-data">
+            <i class="fas fa-chart-pie fa-2x"></i>
             <p>No sales data available yet</p>
           </div>
         </ng-template>
@@ -84,33 +87,51 @@
 
     <div class="metrics-row">
       <div class="metric-card">
-        <h4>Total Orders</h4>
+        <div class="metric-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h4><i class="fas fa-list-ol"></i> Total Orders</h4>
         <div class="metric-value">{{ metrics.totalOrders }}</div>
       </div>
       <div class="metric-card">
-        <h4>Total Revenue</h4>
+        <div class="metric-icon">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <h4><i class="fas fa-chart-line"></i> Total Revenue</h4>
         <div class="metric-value">
           {{ formatCurrency(metrics.totalRevenue) }}
         </div>
       </div>
       <div class="metric-card">
-        <h4>Active Products</h4>
+        <div class="metric-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h4><i class="fas fa-check-circle"></i> Active Products</h4>
         <div class="metric-value">{{ metrics.activeProducts }}</div>
       </div>
       <div class="metric-card">
-        <h4>Average Order Value</h4>
+        <div class="metric-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <h4><i class="fas fa-percentage"></i> Average Order Value</h4>
         <div class="metric-value">
           {{ formatCurrency(metrics.averageOrderValue) }}
         </div>
       </div>
       <div class="metric-card">
-        <h4>Return Rate</h4>
+        <div class="metric-icon">
+          <i class="fas fa-undo"></i>
+        </div>
+        <h4><i class="fas fa-exchange-alt"></i> Return Rate</h4>
         <div class="metric-value">
           {{ formatPercentage(metrics.returnRate) }}
         </div>
       </div>
       <div class="metric-card">
-        <h4>Conversion Rate</h4>
+        <div class="metric-icon">
+          <i class="fas fa-mouse-pointer"></i>
+        </div>
+        <h4><i class="fas fa-bullseye"></i> Conversion Rate</h4>
         <div class="metric-value">
           {{ formatPercentage(metrics.conversionRate) }}
         </div>

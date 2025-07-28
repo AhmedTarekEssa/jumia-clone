@@ -8,6 +8,7 @@ import { CategoryAttribute } from '../../../../shared/models/category-attribute'
 import { JsonParsePipe } from "../../../../shared/pipes/json-parse-pipe";
 import { CreateProduct, ProductDetails } from '../../../products/product-models';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-product',
@@ -16,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './add-product.css'
 })
 export class AddProduct implements OnInit{
-  
+
 ///services////
   private cdr = inject(ChangeDetectorRef);
   private categoryService = inject(CategoryService);
@@ -44,7 +45,7 @@ export class AddProduct implements OnInit{
   ngOnInit(): void {
     this.initProductForm();
     this.loadCategories();
-    
+
     this.route.paramMap.subscribe(params => {
       this.productId = Number( params.get('id'));
       this.isEditMode = !!this.productId; // Set isEditMode based on presence of ID
@@ -53,7 +54,7 @@ export class AddProduct implements OnInit{
         this.loadProductForEdit(this.productId);
       }
     });
-  
+
   }
 
 
@@ -287,7 +288,7 @@ loadProductForEdit(productId: number): void {
     }
     return undefined;
   }
-  
+
 
 
 
@@ -296,7 +297,7 @@ loadProductForEdit(productId: number): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-  
+
 
       if (controlName === 'mainImageUrl') {
         this.selectedMainImageFile = file;
@@ -396,7 +397,7 @@ fetchCategoryAttributes(categoryId: number): void {
         // Add each fetched attribute to the productForm.attributes FormArray
         attributes.forEach(attr => {
           // Determine initial value based on attribute type or if it's required
-          let initialValue: any = ''; 
+          let initialValue: any = '';
           if (attr.type === 'number') {
             initialValue = 0; // Default number value
           } else if (attr.type === 'select') {
@@ -662,9 +663,18 @@ addVariant(): void {
   }
 
   cancel(): void {
-    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'All changes will be lost!',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, cancel it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.router.navigate(['/seller/products']);
     }
-  }
+  });
+}
 
   }

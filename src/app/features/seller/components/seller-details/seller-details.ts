@@ -95,4 +95,16 @@ export class SellerDetailsComponent implements OnInit {
 
     return null;
   }
+   getStarDisplay() {
+    if (!this.seller.rating) return null;
+
+    const fullStars = Math.floor(this.seller.rating);
+    const hasHalfStar = this.seller.rating % 1 !== 0;
+
+    return {
+      value: this.seller.rating,
+      fullStars: Array(fullStars).fill(0), 
+      hasHalfStar: hasHalfStar
+    };
+  }
 }

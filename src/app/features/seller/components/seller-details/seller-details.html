@@ -1,58 +1,145 @@
 <div class="seller-details-container">
-  <h2>Seller Details</h2>
+  <!-- <h2><i class="fas fa-store"></i> Seller Details</h2> -->
 
   <div *ngIf="isLoading" class="loading-state">
+    <i class="fas fa-spinner"></i>
     <p>Loading seller details...</p>
   </div>
 
   <div *ngIf="error" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i>
     <p>{{ error }}</p>
-    <button (click)="loadSellerDetails()">Retry</button>
+    <button (click)="loadSellerDetails()">
+      <i class="fas fa-redo"></i> Retry
+    </button>
   </div>
 
   <div *ngIf="seller && !isLoading" class="seller-info">
-    <div class="info-item">
-      <span class="label">Name:</span>
-      <span class="value">{{ seller.sellerName }}</span>
+    <!-- Sales Statistics Cards -->
+    <div class="sales-stats">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div class="stat-content">
+          <h3>{{ seller.totalProductsSold || 0 }}</h3>
+          <p>Products Sold</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+          <h3>EGP{{ seller.totalAmountSold || 0 }}</h3>
+          <p>Total Sales</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="stat-content">
+          <h3>{{ seller.rating || "N/A" }}</h3>
+          <p>Rating</p>
+        </div>
+      </div>
     </div>
-    <div class="info-item">
-      <span class="label">Email:</span>
-      <span class="value">{{ seller.email }}</span>
+
+    <!-- Seller Image -->
+    <div *ngIf="seller.imageUrl" class="seller-image-container">
+      <img
+        [src]="'http://localhost:5087' + seller.imageUrl"
+        alt="Seller Image"
+        class="seller-image"
+      />
     </div>
-    <div class="info-item">
-      <span class="label">Rating:</span>
-      <span class="value">
-        {{ seller.rating }}
-        <span *ngIf="seller.rating">⭐</span>
-      </span>
-    </div>
-    <div class="info-item">
-      <span class="label">Business Name:</span>
-      <span class="value">{{ seller.businessName }}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Products Sold:</span>
-      <span class="value">{{ seller.totalProductsSold }}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Total Sales:</span>
-      <span class="value">EGP{{ seller.totalAmountSold }}</span>
-    </div>
-    <div class="info-item" *ngIf="seller.imageUrl">
-      <span class="label">Image:</span>
-      <span class="value">
-        <img [src]="'http://localhost:5087' + seller.imageUrl" alt="Seller Image" class="seller-image">
-      </span>
-    </div>
-    <div class="info-item">
-      <span class="label">Verification Status:</span>
-      <span class="value" [class.verified]="seller.isVerified" [class.not-verified]="!seller.isVerified">
-        {{ seller.isVerified ? 'Verified' : 'Not Verified' }}
-      </span>
-    </div>
-    <div class="info-item" *ngIf="seller.businessDescription">
-      <span class="label">Description:</span>
-      <span class="value">{{ seller.businessDescription }}</span>
+
+    <!-- Seller Information Grid -->
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Name</span>
+          <span class="value">{{ seller.sellerName }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Email</span>
+          <span class="value">{{ seller.email }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">
+          <i class="fas fa-building"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Business Name</span>
+          <span class="value">{{ seller.businessName }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">
+          <i class="fas fa-star-half-alt"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Rating</span>
+          <div class="value">
+            <div class="rating-stars" *ngIf="getStarDisplay()">
+              <span>{{ getStarDisplay()?.value }}</span>
+              <i
+                class="fas fa-star"
+                *ngFor="let star of getStarDisplay()?.fullStars"
+              ></i>
+              <i
+                class="fas fa-star-half-alt"
+                *ngIf="getStarDisplay()?.hasHalfStar"
+              ></i>
+            </div>
+            <span *ngIf="!getStarDisplay()">No rating yet</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Verification Status</span>
+          <span
+            class="value"
+            [class.verified]="seller.isVerified"
+            [class.not-verified]="!seller.isVerified"
+          >
+            {{ seller.isVerified ? "Verified" : "Not Verified" }}
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="info-item description-item"
+        *ngIf="seller.businessDescription"
+      >
+        <div class="info-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="info-content">
+          <span class="label">Business Description</span>
+          <div class="value">{{ seller.businessDescription }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
