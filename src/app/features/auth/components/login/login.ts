@@ -73,10 +73,11 @@ export class Login implements OnInit {
         }
         if (this.userRole.toLowerCase() === 'admin') {
           this.router.navigate(['/admin']);
-        } else {
+        } else if (this.userRole.toLowerCase() === 'seller') {
+          this.router.navigate(['/seller']);
+        } else if (this.userRole.toLowerCase() === 'customer') {
           this.router.navigate(['/home']);
         }
-
       },
       error: (err) => {
         this.errorMessage = err?.error?.message || 'Login Failed. Please try again';
