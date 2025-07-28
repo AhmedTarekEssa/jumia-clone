@@ -5,13 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DiscountPricePipe implements PipeTransform {
 
- transform(basePrice: number, discountRange: string): number {
-    const match = discountRange.match(/(\d+(\.\d+)?)%/g);
-    if (match && match.length > 0) {
-      const discount = parseFloat(match[match.length - 1].replace('%', ''));
+ transform(basePrice: number, discount: number): number {
+  
+    
       return basePrice - (basePrice * discount / 100);
-    }
-    return basePrice; 
+
   }
 
 }

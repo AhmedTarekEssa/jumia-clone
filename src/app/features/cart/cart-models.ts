@@ -23,7 +23,7 @@ export interface CartItem {
 
 export interface AddToCart {
   productId: number
-  variantId: number
+  variantId: number|null
   quantity: number
 }
 
