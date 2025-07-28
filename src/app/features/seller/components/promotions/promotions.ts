@@ -32,8 +32,8 @@ export class Promotions implements OnInit {
   loadDiscountedProducts(): void {
     this.productService.getAllUi().subscribe({
       next: (products) => {
-        this.discountedProducts = products.filter(product => 
-          product.discountPercentage && product.discountPercentage === "% - %"
+        this.discountedProducts = products.filter(product =>
+          product.discountPercentage 
         );
         this.totalPages = Math.ceil(this.discountedProducts.length / this.itemsPerPage);
         this.updatePaginatedProducts();

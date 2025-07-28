@@ -95,13 +95,13 @@
             <i class="fas fa-edit"></i> Edit Product
           </button>
           <button
-            *ngIf="product.approvalStatus === 'Deleted' && product.stockQuantity > 0"
+            *ngIf="product.isAvailable === false && product.stockQuantity > 0"
             class="btn-toggle active"
-            (click)="toggleProductStatus(product.productId)">
+            (click)="activateproduct(product.productId)">
             <i class="fas fa-play"></i> Activate
           </button>
           <button
-            *ngIf="product.approvalStatus !== 'Deleted'"
+            *ngIf="product.isAvailable === true"
             class="btn-delete"
             (click)="deleteProduct(product.productId)">
             <i class="fas fa-trash-alt"></i> Delete Product
