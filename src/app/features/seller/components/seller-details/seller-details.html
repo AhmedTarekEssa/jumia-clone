@@ -1,24 +1,58 @@
 <div class="seller-details-container">
   <h2>Seller Details</h2>
-  <div class="seller-info">
+
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading seller details...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <p>{{ error }}</p>
+    <button (click)="loadSellerDetails()">Retry</button>
+  </div>
+
+  <div *ngIf="seller && !isLoading" class="seller-info">
     <div class="info-item">
       <span class="label">Name:</span>
-      <span class="value">Seller Name</span>
+      <span class="value">{{ seller.sellerName }}</span>
     </div>
     <div class="info-item">
       <span class="label">Email:</span>
-      <span class="value">sellerexample.com</span>
+      <span class="value">{{ seller.email }}</span>
     </div>
     <div class="info-item">
-      <span class="label">Rating</span>
-      <span class="value"> 2023</span>
+      <span class="label">Rating:</span>
+      <span class="value">
+        {{ seller.rating }}
+        <span *ngIf="seller.rating">⭐</span>
+      </span>
     </div>
     <div class="info-item">
-      <span class="label">Business Name</span>
-      <span class="value">sdfgh</span>
+      <span class="label">Business Name:</span>
+      <span class="value">{{ seller.businessName }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Products Sold:</span>
+      <span class="value">{{ seller.totalProductsSold }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Total Sales:</span>
+      <span class="value">EGP{{ seller.totalAmountSold }}</span>
+    </div>
+    <div class="info-item" *ngIf="seller.imageUrl">
+      <span class="label">Image:</span>
+      <span class="value">
+        <img [src]="'http://localhost:5087' + seller.imageUrl" alt="Seller Image" class="seller-image">
+      </span>
+    </div>
+    <div class="info-item">
+      <span class="label">Verification Status:</span>
+      <span class="value" [class.verified]="seller.isVerified" [class.not-verified]="!seller.isVerified">
+        {{ seller.isVerified ? 'Verified' : 'Not Verified' }}
+      </span>
+    </div>
+    <div class="info-item" *ngIf="seller.businessDescription">
+      <span class="label">Description:</span>
+      <span class="value">{{ seller.businessDescription }}</span>
+    </div>
   </div>
-    <div class="info-item">
-      <span class="label">Image</span>
-      <span class="value">0123456789</span>
-    </div>
 </div>
