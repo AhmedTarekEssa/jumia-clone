@@ -1,7 +1,7 @@
 <nav class="sidebar" [class.collapsed]="isCollapsed">
   <div class="sidebar-header">
     <div class="logo">
-      <span class="logo-icon">🛒</span>
+      <span class="logo-icon"><i class="fas fa-shopping-cart"></i></span>
       <span class="logo-text" *ngIf="!isCollapsed">Jumia Seller</span>
     </div>
   </div>
@@ -13,14 +13,22 @@
       [class.active]="isActiveRoute(item.route)"
       (click)="navigateTo(item.route)">
       <div class="menu-link">
-        <span class="menu-icon">{{item.icon}}</span>
+        <span class="menu-icon"><i [class]="item.icon"></i></span>
         <span class="menu-label" *ngIf="!isCollapsed">{{item.label}}</span>
         <span class="menu-count" *ngIf="item.count && !isCollapsed">{{item.count}}</span>
       </div>
     </li>
   </ul>
 
-  <div class="sidebar-footer" *ngIf="!isCollapsed">
+  <hr *ngIf="!isCollapsed" class="divider">
+
+  <!-- logout -->
+  <div class="logout" (click)="logout()">
+    <span class="logout-icon"><i class="fas fa-sign-out-alt"></i></span>
+    <span class="logout-label" *ngIf="!isCollapsed">Logout</span>
+  </div>
+
+  <!-- <div class="sidebar-footer" *ngIf="!isCollapsed">
     <div class="seller-info">
       <div class="seller-avatar">S</div>
       <div class="seller-details">
@@ -28,5 +36,5 @@
         <span class="seller-status">Active</span>
       </div>
     </div>
-  </div>
+  </div> -->
 </nav>

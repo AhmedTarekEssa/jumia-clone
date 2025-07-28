@@ -27,12 +27,13 @@ export class ForgotPassword {
       const email = this.forgotPasswordForm.value.email ?? '';
       this.authService.forgotPassword(email).subscribe(
         (response) => {
-          console.log(response);
-          const token = response?.resetToken;
-          console.log(token);
-          this.authService.forgetToken = token;
-          if (token) {
-            this.router.navigate(['/auth/reset-password'],{queryParams: {email, token}});
+         
+         
+          
+          
+          if (response.successed) {
+            alert(response.message)
+            this.router.navigate(['/auth/reset-link-sent']);
           }else {
               alert('Error: Token not Found');
 

@@ -13,14 +13,16 @@ import { AdminSellers } from "../components/sellers/admin-sellers/admin-sellers"
 import { Activity } from "../components/activity/activity";
 import { AdminReviews } from "../components/reviews/admin-reviews/admin-reviews";
 import { Actions } from "../components/actions/actions";
+import { AdminChat } from '../admin-chat/admin-chat';
+
 
 @Component({
   standalone: true ,
   selector: 'app-admin-container',
-  imports: [RouterOutlet, AdminSidebar, AdminHeader, AdminSettings, AdminStats, AdminCategories, AdminCustomers, AdminProducts, AdminOrders, Payments, AdminSellers, Activity, AdminReviews, Actions],
+  imports: [RouterOutlet, AdminSidebar, AdminHeader, AdminSettings, AdminStats, AdminCategories, AdminCustomers, AdminProducts, AdminOrders, Payments, AdminSellers, Activity, AdminReviews, Actions,AdminChat],
   templateUrl: './admin-container.html',
   styleUrl: './admin-container.css'
 })
 export class AdminContainer {
-  
+
 }

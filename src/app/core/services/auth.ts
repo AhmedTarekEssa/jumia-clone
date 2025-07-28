@@ -19,7 +19,7 @@ export  class AuthService {
 
   tempEmail: string = '';
   otpCodeFromBackend: string = '';
-  forgetToken: string = '';
+
 
   constructor(){}
 
@@ -133,7 +133,7 @@ export  class AuthService {
   }
 
 
-  forgotPassword(email: string): Observable<any> {
+  forgotPassword(email: string): Observable<{successed:boolean,message:string}> {
     const url = this.apiUrl + environment.authRoutes.forgetPassword;
 
     // Set the headers to indicate JSON payload
@@ -144,7 +144,7 @@ export  class AuthService {
     // Send the email as JSON
     const body = { email };  // Wrap the email in an object
     
-    return this.http.post(url, body, { headers });
+    return this.http.post<{successed:boolean,message:string}>(url, body, { headers });
   }
 
 resetPassword(data: { email: string, token: string, newPassword: string }): Observable<any> {

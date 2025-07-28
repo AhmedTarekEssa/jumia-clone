@@ -1,0 +1,46 @@
+<div class="address-selection">
+  <div class="address-book-header">
+    <h4>ADDRESS BOOK ({{addresses.length}})</h4>
+  </div>
+
+  <div class="address-list">
+    <div
+      *ngFor="let address of addresses"
+      class="address-item"
+      [class.selected]="selectedAddress?.addressId === address.addressId"
+      (click)="selectAddress(address)">
+
+      <div class="address-radio">
+        <input
+          type="radio"
+          [id]="'addr-' + address.addressId"
+          name="address"
+          [checked]="selectedAddress?.addressId === address.addressId">
+      </div>
+
+      <div class="address-content">
+        <div class="address-header">
+          <h5>{{address.firstName}} {{address.lastName}}</h5>
+          <button class="edit-btn" (click)="editAddress(address, $event)">Edit</button>
+        </div>
+        <p class="address-details">
+          {{address.streetAddress}} | {{address.state}} - {{address.city}}
+        </p>
+        <p class="address-phone">+{{address.phoneNumber}}</p>
+        <span class="default-badge" *ngIf="address.isDefault">DEFAULT ADDRESS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="add-address-section">
+    <button class="add-address-btn" (click)="addNewAddress.emit()">
+      <span class="plus-icon">+</span>
+      Add address
+    </button>
+  </div>
+
+  <div class="address-actions" *ngIf="selectedAddress">
+    <button class="cancel-btn" (click)="cancel()">Cancel</button>
+    <button class="select-btn" (click)="confirmSelection()">Select address</button>
+  </div>
+</div>

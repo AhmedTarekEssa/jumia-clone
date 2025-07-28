@@ -71,16 +71,23 @@
                     class="form-input" />
             </div>
 
+            <div class="form-group">
+                <label for="BussinessName">Business Name*</label>
+                <input type="text" id="BussinessName" class="form-input" formControlName="BussinessName" required>
+            </div>
 
             <div class="form-group">
                 <label for="BussinessDiscreption">Business Description</label>
                 <textarea id="BussinessDiscreption" class="form-input" formControlName="BussinessDiscreption"
                     rows="2"></textarea>
             </div>
+            <!-- Business Logo Upload -->
             <div class="form-group">
-                <label for="BussinessLogo">Business Logo</label>
-                <textarea id="BussinessLogo" class="form-input" formControlName="BussinessLogo" rows="2"></textarea>
+                <label for="BussinessLogo">Business Logo*</label>
+                <input type="file" id="BussinessLogo" class="form-input" (change)="onBusinessLogoSelected($event)"
+                    accept="image/*" required />
             </div>
+
 
             <div class="form-group">
                 <input type="email" class="form-input" placeholder="Email*" id="email" formControlName="email">

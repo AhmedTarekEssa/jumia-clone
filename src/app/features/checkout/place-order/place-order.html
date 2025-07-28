@@ -1,0 +1,147 @@
+<div class="checkout-container">
+  <div class="checkout-content">
+    <div class="checkout-steps">
+      <!-- Step 1: Customer Address -->
+      <div class="step" [class.completed]="currentStep > 1" [class.active]="currentStep === 1">
+        <div class="step-header">
+          <div class="step-number" [class.completed]="selectedAddress">
+            <i class="checkmark" *ngIf="selectedAddress">✓</i>
+            <span *ngIf="!selectedAddress">1</span>
+          </div>
+          <h3>CUSTOMER ADDRESS</h3>
+          <button
+            class="change-btn"
+            *ngIf="selectedAddress && currentStep > 1"
+            (click)="goToStep(1)">
+            Change
+          </button>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 1">
+  <!-- Show address selection OR add new address -->
+  <ng-container *ngIf="!isAddingNewAddress; else addAddressForm">
+    <app-address-selection
+      [addresses]="addresses"
+      [selectedAddress]="selectedAddress"
+      (addressSelected)="onAddressSelected($event)"
+      (addNewAddress)="onAddNewAddress()">
+    </app-address-selection>
+  </ng-container>
+
+  <ng-template #addAddressForm>
+  <app-add-address
+    (addressAdded)="onAddressAdded($event)"
+    (cancelAdd)="isAddingNewAddress = false"
+    [embeddedMode]="true">
+  </app-add-address>
+</ng-template>
+
+</div>
+
+
+        <div class="step-content" *ngIf="selectedAddress && currentStep > 1">
+          <div class="selected-address">
+            <h4>{{selectedAddress.firstName}} {{selectedAddress.lastName}}</h4>
+            <p>{{selectedAddress.streetAddress}} | {{selectedAddress.city}} - {{selectedAddress.state}} | +{{selectedAddress.phoneNumber}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Delivery Details -->
+      <div class="step" [class.completed]="currentStep > 2" [class.active]="currentStep === 2">
+        <div class="step-header">
+          <div class="step-number" [class.completed]="selectedDeliveryOption">
+            <i class="checkmark" *ngIf="selectedDeliveryOption">✓</i>
+            <span *ngIf="!selectedDeliveryOption">2</span>
+          </div>
+          <h3>DELIVERY DETAILS</h3>
+          <button
+            class="change-btn"
+            *ngIf="selectedDeliveryOption && currentStep > 2"
+            (click)="goToStep(2)">
+            Change
+          </button>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 2">
+          <app-delivery-details
+            [deliveryOptions]="deliveryOptions"
+            [selectedOption]="selectedDeliveryOption"
+            [cartItems]="cartItems"
+            (optionSelected)="onDeliveryOptionSelected($event)"
+            (confirmDelivery)="confirmDeliveryDetails()">
+          </app-delivery-details>
+        </div>
+
+        <div class="step-content" *ngIf="selectedDeliveryOption && currentStep > 2">
+          <div class="selected-delivery">
+            <p><strong>{{selectedDeliveryOption.name}}</strong></p>
+            <p class="delivery-date">Delivery scheduled on 27 July</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Payment Method -->
+      <div class="step" [class.active]="currentStep === 3">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <h3>PAYMENT METHOD</h3>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 3">
+          <div class="payment-options">
+            <h4>Payment on delivery</h4>
+            <div class="payment-option">
+              <input type="radio" id="cod" name="payment" value="cod" [(ngModel)]="selectedPaymentMethod">
+              <label for="cod">
+                <span class="payment-icon">💳</span>
+                Cash on Delivery (Bank Card - E-wallet - Cash)
+              </label>
+            </div>
+
+            <h4>Pre-pay Now</h4>
+            <div class="payment-option">
+              <input type="radio" id="card" name="payment" value="card" [(ngModel)]="selectedPaymentMethod">
+              <label for="card">
+                <span class="payment-icon">💳</span>
+                Pay By Card
+              </label>
+            </div>
+
+            <div class="jumia-credit" *ngIf="selectedPaymentMethod === 'card'">
+              <div class="credit-info">
+                <span class="credit-icon">🏪</span>
+                <span>Jumia store credit balance: EGP 0.00</span>
+              </div>
+              <p class="credit-description">
+                You will be redirected to JumiaPay platform to complete your purchase.
+                Ensure your payment information is up to date and that you have the necessary funds...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to Shopping Link -->
+      <div class="back-to-shopping">
+        <button class="back-link">
+          ← Go back & continue shopping
+        </button>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary-container">
+      <app-order-summary
+        [cartItems]="cartItems"
+        [deliveryFee]="getDeliveryFee()"
+        [freeDeliveryDiscount]="getFreeDeliveryDiscount()"
+        [total]="getTotal()"
+        [couponCode]="couponCode"
+        [canConfirmOrder]="canConfirmOrder()"
+        (confirmOrder)="confirmOrder()"
+        (applyCoupon)="applyCoupon($event)">
+      </app-order-summary>
+    </div>
+  </div>
+</div>

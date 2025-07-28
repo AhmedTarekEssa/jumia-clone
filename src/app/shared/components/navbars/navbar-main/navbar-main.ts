@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { CenterSliderComponent } from "../../center-slider/center-slider.component";
 import { CategoryList } from "../../category-list/category-list";
 import { Router } from "@angular/router";
 import { OnInit } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { AuthService } from "../../../../core/services/auth";
+import { Ai } from '../../../../core/services/ai-service/ai';
+import { FormsModule } from '@angular/forms';
 
 
 
 @Component({
   standalone: true,
   selector: 'app-navbar-main',
-  imports: [CommonModule, CategoryList],
+//   standalone: true,
+  imports: [CommonModule, CategoryList,FormsModule],
+
   templateUrl: './navbar-main.html',
   styleUrl: './navbar-main.css'
 })
@@ -22,10 +26,12 @@ export class NavbarMain implements OnInit {
   userInfo: any = null;
   username: string = '';
 
+
   constructor(
     private router: Router,
     private cookieService: CookieService,
-    private authService: AuthService
+    private authService: AuthService  
+   
   ) { }
 
   ngOnInit() {
@@ -53,9 +59,17 @@ export class NavbarMain implements OnInit {
       }
     }
   }
+  sementicSearch(query:string){
+   console.log(query)
+    this.router.navigate(['/search-products'], {
+  queryParams: { query: query }
+});
 
-  getUserFirstName(): string {
+
     
+  }
+  getUserFirstName(): string {
+
     return this.username.split(' ')[0] || 'User';
   }
   navigateAndClose(route: string): void {
@@ -97,6 +111,7 @@ export class NavbarMain implements OnInit {
         this.cookieService.delete('UserInfo');
         this.router.navigate(['/login-register']);
       }else {
+        this.router.navigate(['/login-register']);
         console.error('Logout failed', err);
       }
 

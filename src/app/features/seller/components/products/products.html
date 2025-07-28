@@ -1,11 +1,11 @@
 <div class="products">
   <div class="page-header">
     <div class="header-content">
-      <h2>Products Management</h2>
+      <h2><i class="fas fa-boxes"></i> Products Management</h2>
       <p>Manage your product inventory and listings</p>
     </div>
     <button class="btn-primary" (click)="navigateToAddProduct()">
-      + Add New Product
+      <i class="fas fa-plus"></i> Add New Product
     </button>
   </div>
 
@@ -20,66 +20,91 @@
 
     <div class="filter-group">
       <select [(ngModel)]="selectedStatus" (change)="filterProducts()">
-        <option value="all">All Status</option>
-        <option value="pending">pending</option>
-        <option value="approved">approved</option>
-        <option value="rejected">rejected</option>
+        <option value="all"><i class="fas fa-list"></i> All Status</option>
+        <option value="pending"><i class="fas fa-clock"></i> Pending</option>
+        <option value="approved"><i class="fas fa-check"></i> Approved</option>
+        <option value="rejected"><i class="fas fa-times"></i> Rejected</option>
       </select>
     </div>
   </div>
 
   <div class="products-stats">
     <div class="stat-item">
-      <span class="stat-number">{{products.length}}</span>
-      <span class="stat-label">Total Products</span>
+      <div class="stat-icon">
+        <i class="fas fa-boxes"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{products?.length}}</span>
+        <span class="stat-label">Total Products</span>
+      </div>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{pending.length}}</span>
-      <span class="stat-label">pending</span>
+      <div class="stat-icon">
+        <i class="fas fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{pending?.length}}</span>
+        <span class="stat-label">Pending</span>
+      </div>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{approved.length}}</span>
-      <span class="stat-label">approved</span>
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{approved?.length}}</span>
+        <span class="stat-label">Approved</span>
+      </div>
     </div>
     <div class="stat-item">
-      <span class="stat-number">{{rejected.length}}</span>
-      <span class="stat-label">rejected</span>
+      <div class="stat-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{rejected?.length}}</span>
+        <span class="stat-label">Rejected</span>
+      </div>
     </div>
   </div>
 
-  <div class="products-grid row justify-content-center" *ngIf="filteredProducts.length > 0">
-    <div class="product-card col-lg-3 mx-3 my-2" *ngFor="let product of paginatedProducts">
+  <div class="products-grid" *ngIf="filteredProducts.length > 0">
+    <div class="product-card" *ngFor="let product of paginatedProducts">
       <div class="product-image">
         <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name">
         <div class="product-status">
           <span class="status-badge" [class]="getStatusClass(product.approvalStatus)">
-            {{product.approvalStatus | titlecase}}
+            <i class="fas fa-info-circle"></i> {{product.approvalStatus | titlecase}}
           </span>
         </div>
       </div>
 
       <div class="product-content">
-        <h3>{{product.name}}</h3>
+        <h3><i class="fas fa-tag"></i> {{product.name}}</h3>
 
         <div class="product-details">
-          <span class="product-price">EGP{{product.basePrice | number:'1.2-2'}}</span>
-          <span class="product-stock">Stock: {{product.stockQuantity > 0?product.stockQuantity: "out of stock" }}</span>
+          <span class="product-price">
+           EGP{{product.basePrice | number:'1.2-2'}}
+          </span>
+          <span class="product-stock">
+            <i class="fas fa-warehouse"></i> Stock: {{product.stockQuantity > 0 ? product.stockQuantity : "Out of Stock"}}
+          </span>
         </div>
 
         <div class="product-actions">
           <button class="btn-edit" (click)="editProduct(product.productId)">
-            ✏️ Edit
+            <i class="fas fa-edit"></i> Edit Product
           </button>
           <button
-            *ngIf="product.approvalStatus ==='Deleted' && product.stockQuantity>0"
+            *ngIf="product.isAvailable === false && product.stockQuantity > 0"
             class="btn-toggle active"
-            (click)="toggleProductStatus(product.productId)">
-           ▶️ Activate
+            (click)="activateproduct(product.productId)">
+            <i class="fas fa-play"></i> Activate
           </button>
           <button
-           *ngIf="product.approvalStatus !=='Deleted'"
-          class="btn-delete" (click)="deleteProduct(product.productId)">
-            🗑️ Delete
+            *ngIf="product.isAvailable === true"
+            class="btn-delete"
+            (click)="deleteProduct(product.productId)">
+            <i class="fas fa-trash-alt"></i> Delete Product
           </button>
         </div>
       </div>
@@ -88,22 +113,24 @@
 
   <div *ngIf="filteredProducts.length === 0" class="no-products">
     <div class="empty-state">
-      <div class="empty-icon">📦</div>
-      <h3>No products found</h3>
-      <p>Try adjusting your search criteria or add a new product.</p>
+      <div class="empty-icon">
+        <i class="fas fa-box-open"></i>
+      </div>
+      <h3><i class="fas fa-exclamation-triangle"></i> No Products Found</h3>
+      <p>Try adjusting your search criteria or add a new product to get started.</p>
       <button class="btn-primary" (click)="navigateToAddProduct()">
-        Add Your First Product
+        <i class="fas fa-plus-circle"></i> Add Your First Product
       </button>
     </div>
   </div>
 
-  <!-- Pagination Controls -->
+  <!-- Enhanced Pagination Controls -->
   <div class="pagination-controls" *ngIf="filteredProducts.length > itemsPerPage">
     <button
       (click)="prevPage()"
       [disabled]="currentPage === 1"
       class="pagination-button">
-      Previous
+      <i class="fas fa-chevron-left"></i> Previous
     </button>
 
     <ng-container *ngFor="let page of pageNumbers">
@@ -116,7 +143,7 @@
       <span
         *ngIf="page === 1 && pageNumbers[0] > 2"
         class="page-ellipsis">
-        ...
+        <i class="fas fa-ellipsis-h"></i>
       </span>
       <span
         (click)="goToPage(page)"
@@ -127,7 +154,7 @@
       <span
         *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages - 1"
         class="page-ellipsis">
-        ...
+        <i class="fas fa-ellipsis-h"></i>
       </span>
       <span
         *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages"
@@ -141,11 +168,11 @@
       (click)="nextPage()"
       [disabled]="currentPage === totalPages"
       class="pagination-button">
-      Next
+      Next <i class="fas fa-chevron-right"></i>
     </button>
 
     <span class="page-info">
-      Page {{ currentPage }} of {{ totalPages }} ({{ filteredProducts.length }} products)
+      <i class="fas fa-info-circle"></i> Page {{ currentPage }} of {{ totalPages }} ({{ filteredProducts.length }} products)
     </span>
   </div>
 </div>

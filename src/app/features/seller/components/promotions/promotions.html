@@ -1,163 +1,135 @@
 <div class="promotions">
   <div class="page-header">
     <div class="header-content">
-      <h2>Promotions & Discounts</h2>
-      <p>Create and manage promotional campaigns for your products</p>
-    </div>
-    <button class="btn-primary" (click)="toggleCreateForm()">
-      {{ showCreateForm ? 'Cancel' : '+ Create Promotion' }}
-    </button>
-  </div>
-
-  <div class="create-form" *ngIf="showCreateForm">
-    <div class="form-card">
-      <h3>Create New Promotion</h3>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Title</label>
-          <input
-            type="text"
-            [(ngModel)]="newPromotion.title"
-            placeholder="Enter promotion title">
-        </div>
-
-        <div class="form-group">
-          <label>Description</label>
-          <textarea
-            [(ngModel)]="newPromotion.description"
-            placeholder="Describe your promotion"
-            rows="3"></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Discount Type</label>
-            <select [(ngModel)]="newPromotion.discountType">
-              <option value="percentage">Percentage (%)</option>
-              <option value="fixed">Fixed Amount ($)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Discount Value</label>
-            <input
-              type="number"
-              [(ngModel)]="newPromotion.discountValue"
-              [placeholder]="newPromotion.discountType === 'percentage' ? 'Enter percentage' : 'Enter amount'">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Start Date</label>
-            <input
-              type="date"
-              [(ngModel)]="newPromotion.startDate">
-          </div>
-
-          <div class="form-group">
-            <label>End Date</label>
-            <input
-              type="date"
-              [(ngModel)]="newPromotion.endDate">
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button
-          class="btn-create"
-          (click)="createPromotion()"
-          [disabled]="!isValidPromotion()">
-          Create Promotion
-        </button>
-      </div>
+      <h2><i class="fas fa-percentage"></i> Discounted Products</h2>
+      <p>Products with active discounts and promotions</p>
     </div>
   </div>
 
   <div class="promotions-stats">
     <div class="stat-item">
-      <span class="stat-number">{{promotions.length}}</span>
-      <span class="stat-label">Total Promotions</span>
+      <div class="stat-icon">
+        <i class="fas fa-tags"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ discountedProducts.length }}</span>
+        <span class="stat-label">Total Discounted</span>
+      </div>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{promotions.filter(p => p.status === 'active').length}}</span> -->
-      <span class="stat-label">Active</span>
+      <div class="stat-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ availableProductsCount }}</span>
+        <span class="stat-label">Available</span>
+      </div>
     </div>
     <div class="stat-item">
-      <!-- <span class="stat-number">{{promotions.filter(p => p.status === 'expired').length}}</span> -->
-      <span class="stat-label">Expired</span>
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-number">{{ outOfStockProductsCount }}</span>
+        <span class="stat-label">Out of Stock</span>
+      </div>
     </div>
   </div>
 
   <div class="promotions-list">
-    <div class="promotion-card" *ngFor="let promotion of promotions">
-      <div class="promotion-header">
-        <div class="promotion-title">
-          <h3>{{promotion.title}}</h3>
-          <span class="discount-badge">
-            {{getDiscountDisplay(promotion)}} OFF
-          </span>
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of paginatedProducts">
+        <div class="product-image" *ngIf="product.imageUrl">
+          <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name" />
         </div>
-        <div class="promotion-status">
-          <span class="status-badge" [class]="getStatusClass(promotion.status)">
-            {{promotion.status | titlecase}}
-          </span>
-        </div>
-      </div>
-
-      <div class="promotion-content">
-        <p class="promotion-description">{{promotion.description}}</p>
-
-        <div class="promotion-details">
-          <div class="detail-item">
-            <span class="label">Start Date:</span>
-            <span class="value">{{promotion.startDate | date:'mediumDate'}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">End Date:</span>
-            <span class="value">{{promotion.endDate | date:'mediumDate'}}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Applicable Products:</span>
-            <span class="value">{{promotion.applicableProducts}}</span>
+        <div class="product-header">
+          <h3 class="product-title">
+            <i class="fas fa-tag"></i> {{ product.name }}
+          </h3>
+          <div class="product-discount">
+            <span class="discount-badge">
+              <i class="fas fa-percentage"></i> {{ product.discountPercentage || "No Discount" }}
+            </span>
           </div>
         </div>
-      </div>
 
-      <div class="promotion-actions">
-        <button
-          class="btn-action edit"
-          title="Edit Promotion">
-          ✏️ Edit
-        </button>
-        <button
-          *ngIf="promotion.status !== 'expired'"
-          class="btn-action toggle"
-          [class.active]="promotion.status === 'active'"
-          (click)="togglePromotionStatus(promotion.id)"
-          [title]="promotion.status === 'active' ? 'Deactivate' : 'Activate'">
-          {{promotion.status === 'active' ? '⏸️ Deactivate' : '▶️ Activate'}}
-        </button>
-        <button
-          class="btn-action delete"
-          (click)="deletePromotion(promotion.id)"
-          title="Delete Promotion">
-          🗑️ Delete
-        </button>
+        <div class="product-details">
+          <div class="detail-row">
+            <span class="detail-label">
+               Price:
+            </span>
+            <span class="detail-value price">EGP{{ product.basePrice }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">
+              <i class="fas fa-warehouse"></i> Stock:
+            </span>
+            <span class="detail-value">{{ product.stockQuantity }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">
+              <i class="fas fa-info-circle"></i> Status:
+            </span>
+            <span
+              class="detail-value status-badge"
+              [class.status-active]="product.isAvailable"
+              [class.status-inactive]="!product.isAvailable"
+            >
+              <i class="fas" [class.fa-check]="product.isAvailable" [class.fa-times]="!product.isAvailable"></i>
+              {{ product.isAvailable ? "Available" : "Out of Stock" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- <div class="product-actions">
+          <button class="btn-action edit" title="Edit Product">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn-action toggle"
+                  [class.active]="product.isAvailable"
+                  [title]="product.isAvailable ? 'Deactivate' : 'Activate'">
+            <i class="fas" [class.fa-pause]="product.isAvailable" [class.fa-play]="!product.isAvailable"></i>
+            {{product.isAvailable ? 'Deactivate' : 'Activate'}}
+          </button>
+        </div> -->
       </div>
     </div>
 
-    <div *ngIf="promotions.length === 0" class="no-promotions">
+    <div *ngIf="discountedProducts.length === 0" class="no-promotions">
       <div class="empty-state">
-        <div class="empty-icon">🎯</div>
-        <h3>No promotions yet</h3>
-        <p>Create your first promotional campaign to boost sales.</p>
-        <button class="btn-primary" (click)="toggleCreateForm()">
-          Create Your First Promotion
+        <div class="empty-icon">
+          <i class="fas fa-percentage"></i>
+        </div>
+        <h3><i class="fas fa-info-circle"></i> No Discounted Products</h3>
+        <p>Currently there are no products with active discounts or promotions.</p>
+      </div>
+    </div>
+
+    <div class="pagination" *ngIf="discountedProducts.length > itemsPerPage">
+      <button
+        class="pagination-btn"
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+      >
+        <i class="fas fa-chevron-left"></i> Previous
+      </button>
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="page-number"
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
         </button>
       </div>
+      <button
+        class="pagination-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        Next <i class="fas fa-chevron-right"></i>
+      </button>
     </div>
   </div>
 </div>

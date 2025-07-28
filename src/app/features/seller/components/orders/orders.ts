@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OrderService, SubOrder, OrderItem } from '../../../../core/services/orders-services/orders-user';
+import { OrderService, SubOrder } from '../../../../core/services/orders-services/orders-user';
+
 
 interface Order {
   id: string;
@@ -33,7 +34,6 @@ export class Orders implements OnInit {
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
-  sellerId: number = 1;
   showItemsModal: boolean = false;
   selectedOrderForItems: SubOrder | null = null;
 
@@ -45,7 +45,7 @@ export class Orders implements OnInit {
 
   // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 1;
+  itemsPerPage: number = 3;
 
   ngOnInit(): void {
     this.loadOrders();
@@ -55,7 +55,7 @@ export class Orders implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.orderService.getSubOrdersBySellerId(this.sellerId).subscribe({
+    this.orderService.getSubOrdersBySellerId().subscribe({
       next: (subOrders) => {
         this.subOrders = subOrders;
         console.log('SubOrders:', this.subOrders.length);
@@ -82,17 +82,17 @@ export class Orders implements OnInit {
     let filtered = [...this.subOrders];
 
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(order => order.status.toLocaleUpperCase() === this.selectedStatus.toLowerCase());
+      filtered = filtered.filter(order => order.status.toLowerCase() === this.selectedStatus.toLowerCase());
     }
 
     if (this.searchTerm) {
       filtered = filtered.filter(order =>
-        order.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
+        order.status.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
 
     this.filteredOrders = filtered;
-    this.currentPage = 1; // Reset to first page when filtering
+    this.currentPage = 1;
     this.cdr.detectChanges();
   }
 

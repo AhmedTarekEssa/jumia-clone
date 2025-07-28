@@ -1,0 +1,237 @@
+<!-- admin-chat.html -->
+<div class="admin-chat-container">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-left">
+        <i class="fas fa-comments header-icon"></i>
+        <h1 class="dashboard-title">Admin Chat Dashboard</h1>
+      </div>
+      <div class="header-stats">
+        <div class="stat-card">
+          <i class="fas fa-clock stat-icon"></i>
+          <div class="stat-info">
+            <span class="stat-number">{{ activeChatRequests.length }}</span>
+            <span class="stat-label">Pending</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-user-check stat-icon"></i>
+          <div class="stat-info">
+            <span class="stat-number">{{ assignedChats.length }}</span>
+            <span class="stat-label">Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <div class="row h-100">
+      <!-- Left Sidebar - Chat Lists -->
+      <div class="col-lg-4 col-md-5">
+        <div class="chat-sidebar">
+
+          <!-- Unassigned Chats Section -->
+          <div class="chat-section">
+            <div class="section-header">
+              <h3 class="section-title">
+                <i class="fas fa-inbox section-icon"></i>
+                New Requests
+                <span class="badge-count" *ngIf="activeChatRequests.length > 0">
+                  {{ activeChatRequests.length }}
+                </span>
+              </h3>
+            </div>
+
+            <div class="chat-list">
+              <div *ngIf="activeChatRequests.length === 0" class="empty-state">
+                <i class="fas fa-check-circle empty-icon"></i>
+                <p class="empty-text">All caught up!</p>
+                <small class="empty-subtext">No new chat requests</small>
+              </div>
+
+              <div *ngFor="let chat of activeChatRequests" class="chat-item new-request" (click)="assignChat(chat)">
+                <div class="chat-avatar new">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="chat-details">
+                  <div class="chat-header">
+                    <h4 class="chat-name">{{ chat.userName }}</h4>
+                    <span class="chat-time">{{ chat.createdAt | date:'shortTime' }}</span>
+                  </div>
+                  <p class="chat-email">{{ chat.userEmail }}</p>
+                  <p class="chat-preview" *ngIf="chat.lastMessage">
+                    {{ chat.lastMessage.message }}
+                  </p>
+                  <div class="chat-actions">
+                    <button class="btn btn-assign" (click)="assignChat(chat); $event.stopPropagation()">
+                      <i class="fas fa-user-plus"></i>
+                      Assign to Me
+                    </button>
+                  </div>
+                </div>
+                <div class="new-indicator"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assigned Chats Section -->
+          <div class="chat-section">
+            <div class="section-header">
+              <h3 class="section-title">
+                <i class="fas fa-comments section-icon"></i>
+                My Chats
+                <span class="badge-count active" *ngIf="assignedChats.length > 0">
+                  {{ assignedChats.length }}
+                </span>
+              </h3>
+            </div>
+
+            <div class="chat-list">
+              <div *ngIf="assignedChats.length === 0" class="empty-state">
+                <i class="fas fa-comment-slash empty-icon"></i>
+                <p class="empty-text">No active chats</p>
+                <small class="empty-subtext">Assigned chats will appear here</small>
+              </div>
+
+              <div *ngFor="let chat of assignedChats" class="chat-item assigned-chat"
+                [class.active]="selectedChat?.id === chat.id" (click)="openChatConversation(chat)">
+                <div class="chat-avatar active">
+                  <i class="fas fa-user"></i>
+                  <div class="online-indicator"></div>
+                </div>
+                <div class="chat-details">
+                  <div class="chat-header">
+                    <h4 class="chat-name">{{ chat.userName }}</h4>
+                    <span class="chat-time">{{ chat.createdAt | date:'shortTime' }}</span>
+                  </div>
+                  <p class="chat-email">{{ chat.userEmail }}</p>
+                  <p class="chat-preview" *ngIf="chat.lastMessage">
+                    <i class="fas fa-reply preview-icon" *ngIf="chat.lastMessage.isFromAdmin"></i>
+                    {{ chat.lastMessage.message }}
+                  </p>
+                </div>
+                <div class="unread-badge" *ngIf="chat.unreadCount && chat.unreadCount > 0">
+                  {{ chat.unreadCount }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel - Chat Conversation -->
+      <div class="col-lg-8 col-md-7">
+        <div class="chat-conversation">
+
+          <!-- Chat Selected -->
+          <div *ngIf="selectedChat; else noChatSelected" class="conversation-container">
+
+            <!-- Conversation Header -->
+            <div class="conversation-header">
+              <div class="header-left">
+                <button class="btn btn-back d-md-none" (click)="backToList()">
+                  <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="user-info">
+                  <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                    <div class="online-indicator"></div>
+                  </div>
+                  <div class="user-details">
+                    <h3 class="user-name">{{ selectedChat.userName }}</h3>
+                    <p class="user-email">{{ selectedChat.userEmail }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="header-actions">
+                <button class="btn btn-secondary btn-back d-none d-md-inline-flex" (click)="backToList()">
+                  <i class="fas fa-arrow-left"></i>
+                  Back to List
+                </button>
+              </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" #messagesContainer>
+              <div *ngIf="messages.length === 0" class="empty-messages">
+                <i class="fas fa-comment-dots empty-icon"></i>
+                <p class="empty-text">Start the conversation</p>
+                <small class="empty-subtext">Send the first message to begin</small>
+              </div>
+
+              <div class="messages-list">
+                <div *ngFor="let message of messages" class="message-wrapper"
+                  [class.admin-message]="message.isFromAdmin" [class.user-message]="!message.isFromAdmin">
+
+                  <div class="message-bubble">
+                    <div class="message-content">{{ message.message }}</div>
+                    <div class="message-meta">
+                      <span class="message-sender">
+                        {{ message.isFromAdmin ? 'You' : message.senderName }}
+                      </span>
+                      <span class="message-time">{{ message.sentAt | date:'shortTime' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Message Input Area -->
+            <div class="message-input-container">
+              <div class="input-wrapper">
+                <div class="text-input-container">
+                  <textarea 
+  [(ngModel)]="newMessage" 
+  class="message-input" 
+  placeholder="Type your message..."
+  (keydown)="handleKeyDown($event)"
+  #messageInput>
+</textarea>
+                   <button class="btn btn-send" (click)="sendMessage()" [disabled]="!newMessage?.trim()">
+                    <i class="fas fa-paper-plane"></i>
+                  </button>
+                </div>
+                <div class="input-actions">
+                  <button class="btn btn-danger btn-close" (click)="closeChat()">
+                    <i class="fas fa-times"></i>
+                    Close Chat
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Chat Selected -->
+          <ng-template #noChatSelected>
+            <div class="no-chat-selected">
+              <div class="welcome-content">
+                <i class="fas fa-comments welcome-icon"></i>
+                <h3 class="welcome-title">Welcome to Admin Chat</h3>
+                <p class="welcome-text">
+                  Select a chat request from the left panel to start helping customers,
+                  or choose an active conversation to continue.
+                </p>
+                <div class="welcome-stats">
+                  <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <span>{{ activeChatRequests.length }} requests waiting</span>
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-comment"></i>
+                    <span>{{ assignedChats.length }} active chats</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
