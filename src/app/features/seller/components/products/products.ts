@@ -40,7 +40,7 @@ export class Products implements OnInit {
       const userTypeId = userInfo.UserTypeId;
       console.log('UserTypeId:', userTypeId);
 
-      this.productService.getBySellerIdUi(userTypeId, "Seller").subscribe({
+      this.productService.getBySellerIdUi(1, "Seller").subscribe({
         next: (data) => {
           console.log(data);
           this.products = data;
