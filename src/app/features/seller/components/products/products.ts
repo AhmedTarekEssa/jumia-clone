@@ -119,12 +119,30 @@ export class Products implements OnInit {
     this.router.navigate(['/seller/product-edit', productId]);
   }
 
-  toggleProductStatus(productId: number): void {
+  activateproduct(productId: number): void {
+    this.productService.activateProduct(productId).subscribe({
+      next: () => {
     const product = this.products.find(p => p.productId === productId);
-    if (product) {
-      product.approvalStatus = product.approvalStatus === 'active' ? 'inactive' : 'active';
-      this.filterProducts();
-    }
+        if (product) {
+          product.isAvailable = true;
+          console.log('Product activated:', product);
+          this.cdr.detectChanges();
+          this.filterProducts();
+
+          Swal.fire(
+            'Activated!',
+            'The product has been activated.',
+            'success'
+          );
+        }
+      },
+      error: () => {
+        Swal.fire(
+          'Error!',
+          'Failed to activate the product.',
+          'error'
+        );
+      }});
   }
 
   deleteProduct(productId: number): void {
@@ -140,7 +158,8 @@ export class Products implements OnInit {
       this.productService.dactivateProduct(productId).subscribe({
         next: () => {
           const product = this.products.find(p => p.productId == productId);
-          product!.approvalStatus = "Deleted";
+          product!.isAvailable = false;
+          console.log('Product deleted:', product);
           this.cdr.detectChanges();
           this.filterProducts();
 
