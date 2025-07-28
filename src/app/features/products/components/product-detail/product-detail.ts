@@ -10,10 +10,11 @@ import { WishlistService } from '../../../../core/services/wishlist';
 import { environment } from '../../../../../environments/environment.development';
 import { CookieService } from 'ngx-cookie-service';
 import { Loading } from '../../../../shared/components/loading/loading';
+
 import { IsVariantPipe } from '../../../../shared/pipes/is-variant-pipe';
 import { ParseNumberPipe } from '../../../../shared/pipes/parse-number-pipe';
 import { Ai, AskQuestion, ChatMessage, GetAnswer } from '../../../../core/services/ai-service/ai';
-
+import { ProductReviews } from "../product-reviews/product-reviews";
 // --- Start of New/Modified Types ---
 // Define a type guard to check if an item is a Variant
 
@@ -30,9 +31,14 @@ export interface CartSelection {
 // --- End of New/Modified Types ---
 
 
+
+
+
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule, RouterLink , Loading,IsVariantPipe],
+
+  imports: [CommonModule, FormsModule, RouterLink , Loading,IsVariantPipe, ProductReviews],
+
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })

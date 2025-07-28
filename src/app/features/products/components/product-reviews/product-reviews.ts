@@ -1,10 +1,12 @@
+import { CookieService } from 'ngx-cookie-service';
+import { routes } from './../../../../app.routes';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { IReview,  } from '../../../../shared/models/ireview';
 import { IReviewService } from '../../../../core/services/ReviewService/ireview-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IReviewCreate } from '../../../../shared/models/ireview-create';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-reviews',
@@ -22,8 +24,8 @@ export class ProductReviews implements OnInit {
   showReviewForm = false;
   
 
-  customerId = 1; // Simulate for now
-  productId = 4; // Make dynamic later
+  customerId!: number; // Simulate for now
+  productId!: number; // Make dynamic later
 
   newReview: IReviewCreate = {
     customerID: this.customerId,
@@ -34,15 +36,40 @@ export class ProductReviews implements OnInit {
 
   constructor(
     private reviewService: IReviewService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private routes:ActivatedRoute,
+    private cookieService : CookieService,
+    private route: Router
   ) {}
 
   ngOnInit(): void {
+    this.routes.params.subscribe(params => {
+      this.productId = +params['id']; // Get product ID from route
+      // this.customerId = +params['customerId'] || 1; // Simulate customer ID for now
+      this.checkUserLogin(); 
+      this.newReview.customerID = this.customerId; // Ensure customerId is set
+      this.newReview.productID = this.productId;
+      // Ensure customerId is set
+    });
     this.loadReviews();
   }
 
   Print() {
-    console.log('Print');
+    this.route.navigate([`/Products/${this.productId}/reviews`]);
+  }
+    checkUserLogin() {
+    const userInfoCookie = this.cookieService.get('UserInfo');
+    if (userInfoCookie) {
+      try {
+        // Decode the URL encoded cookie
+        const decodedCookie = decodeURIComponent(userInfoCookie);
+        const userInfo = JSON.parse(decodedCookie);
+        this.customerId = userInfo.UserTypeId || 1; // Fallback to 1 if not set
+
+      } catch (e) {
+        console.error('Error parsing user info cookie', e);
+      }
+    }
   }
 
   loadReviews() {

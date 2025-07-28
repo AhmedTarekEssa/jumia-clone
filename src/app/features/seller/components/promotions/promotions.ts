@@ -29,6 +29,7 @@ export class Promotions implements OnInit {
     // this.loadDiscountedProducts();
   }
 
+
   // loadDiscountedProducts(): void {
   //   this.productService.getAllUi().subscribe({
   //     next: (products) => {
@@ -44,6 +45,7 @@ export class Promotions implements OnInit {
   //     }
   //   });
   // }
+
 
   updatePaginatedProducts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;

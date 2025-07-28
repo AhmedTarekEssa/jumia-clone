@@ -1,7 +1,7 @@
 <div class="search-filter">
-  <input 
-    type="text" 
-    placeholder="Search orders..." 
+  <input
+    type="text"
+    placeholder="Search orders..."
     [(ngModel)]="searchTerm"
     class="search-input">
   <select [(ngModel)]="statusFilter" class="filter-select">
@@ -49,20 +49,20 @@
 
         <td>{{order.orderDate}}</td>
         <td>
-          <button 
-            class="btn btn-sm btn-warning" 
-            (click)="cancelOrder(order)" 
+          <button
+            class="btn btn-sm btn-warning"
+            (click)="cancelOrder(order)"
             [disabled]="order.status.toLowerCase() === 'delivered' || order.status.toLowerCase() === 'cancelled'">
             Cancel
           </button>
-          <button 
-            class="btn btn-sm btn-success" 
+          <button
+            class="btn btn-sm btn-success"
             (click)="progressStatus(order)"
             [disabled]="order.status.toLowerCase() === 'delivered' || order.status.toLowerCase() === 'cancelled'">
             {{ getNextStatusLabel(order.status) }}
           </button>
-          <button 
-            class="btn btn-sm btn-info" 
+          <button  (click)="redirect(order.id)"
+            class="btn btn-sm btn-info"
             >
             View Details
           </button>

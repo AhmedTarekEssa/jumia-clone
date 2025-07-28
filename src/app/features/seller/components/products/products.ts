@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ProductService } from '../../../../core/services/Product-Service/product';
 import { ProductDetails, ProductUi } from '../../../products/product-models';
 import { environment } from '../../../../../environments/environment.development';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-products',
@@ -83,7 +84,7 @@ export class Products implements OnInit {
 
   get pageNumbers(): number[] {
     const pages = [];
-    const maxVisiblePages = 5; 
+    const maxVisiblePages = 5;
     let startPage = 1;
     let endPage = this.totalPages;
 
@@ -118,26 +119,67 @@ export class Products implements OnInit {
     this.router.navigate(['/seller/product-edit', productId]);
   }
 
-  toggleProductStatus(productId: number): void {
+  activateproduct(productId: number): void {
+    this.productService.activateProduct(productId).subscribe({
+      next: () => {
     const product = this.products.find(p => p.productId === productId);
-    if (product) {
-      product.approvalStatus = product.approvalStatus === 'active' ? 'inactive' : 'active';
-      this.filterProducts();
-    }
+        if (product) {
+          product.isAvailable = true;
+          console.log('Product activated:', product);
+          this.cdr.detectChanges();
+          this.filterProducts();
+
+          Swal.fire(
+            'Activated!',
+            'The product has been activated.',
+            'success'
+          );
+        }
+      },
+      error: () => {
+        Swal.fire(
+          'Error!',
+          'Failed to activate the product.',
+          'error'
+        );
+      }});
   }
 
   deleteProduct(productId: number): void {
-    if (confirm('Are you sure you want to delete this product?')) {
+  Swal.fire({
+    title: 'Are you sure?',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.productService.dactivateProduct(productId).subscribe({
         next: () => {
           const product = this.products.find(p => p.productId == productId);
-          product!.approvalStatus = "Deleted";
+          product!.isAvailable = false;
+          console.log('Product deleted:', product);
           this.cdr.detectChanges();
           this.filterProducts();
+
+          Swal.fire(
+            'Deleted!',
+            'The product has been deleted.',
+            'success'
+          );
+        },
+        error: () => {
+          Swal.fire(
+            'Error!',
+            'Failed to delete the product.',
+            'error'
+          );
         }
       });
     }
-  }
+  });
+}
 
   getStatusClass(status: string): string {
     const statusClasses: { [key: string]: string } = {

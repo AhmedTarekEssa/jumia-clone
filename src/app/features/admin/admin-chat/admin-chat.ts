@@ -38,6 +38,7 @@ export class AdminChat implements OnInit, OnDestroy {
         console.log('New chat request received:', chat);
       }
     }));
+    
 
     this.subscriptions.add(this.chatService.chatAssignedToAdmin$.subscribe(chat => {
       if (chat) {
@@ -82,6 +83,22 @@ export class AdminChat implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+    onEnterKey(event: KeyboardEvent) {
+    if (!event.shiftKey) {
+      this.sendMessage();
+      event.preventDefault();
+    }
+  }
+  // Add this method to your component class
+handleKeyDown(event: Event) {
+  const keyboardEvent = event as KeyboardEvent;
+  if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+    this.sendMessage();
+    keyboardEvent.preventDefault();
+  }
+}
+
+
 
   loadActiveChatRequests(): void {
     this.chatService.getActiveChats().subscribe({

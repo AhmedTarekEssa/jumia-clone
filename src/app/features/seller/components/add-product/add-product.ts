@@ -8,7 +8,11 @@ import { CategoryAttribute } from '../../../../shared/models/category-attribute'
 import { JsonParsePipe } from "../../../../shared/pipes/json-parse-pipe"; // We'll use this in the template
 import { CreateProduct, ProductDetails } from '../../../products/product-models';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Subscription } from 'rxjs';
+
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-add-product',
@@ -17,9 +21,10 @@ import { Subscription } from 'rxjs';
   templateUrl: './add-product.html',
   styleUrl: './add-product.css'
 })
+
 export class AddProduct implements OnInit, OnDestroy {
 
-  ///services////
+
   private cdr = inject(ChangeDetectorRef);
   private categoryService = inject(CategoryService);
   private productService = inject(ProductService);
@@ -48,7 +53,9 @@ export class AddProduct implements OnInit, OnDestroy {
     this.initProductForm();
     this.cdr.detectChanges()
     this.loadCategories();
+
     this.cdr.detectChanges()
+
     this.route.paramMap.subscribe(params => {
       this.productId = Number(params.get('id'));
       this.cdr.detectChanges()
@@ -60,6 +67,10 @@ export class AddProduct implements OnInit, OnDestroy {
         this.cdr.detectChanges()
       }
     });
+
+
+  }
+
 
     this.variantQuantitySubscription = this.variantsArray.valueChanges.subscribe(() => {
       this.updateProductQuantityBasedOnVariants();
@@ -315,6 +326,7 @@ this.cdr.detectChanges()
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
+
       if (controlName === 'mainImageUrl') {
         this.selectedMainImageFile = file;
         const reader = new FileReader();
@@ -385,6 +397,7 @@ this.cdr.detectChanges()
     this.clearProductAttributes(); // Clear existing attributes first
     this.categoryService.getAttributes(categoryId).subscribe({
       next: (attributes) => {
+
         // Store attributes as they are received (possibleValues is string | null)
         this.availableCategoryAttributes = attributes;
 
@@ -409,6 +422,8 @@ this.cdr.detectChanges()
         }
         this.manageProductAttributesState();
         this.cdr.detectChanges();
+
+
       },
       error: (err) => {
         console.error(`Error fetching attributes for category ${categoryId}:`, err);
@@ -740,8 +755,20 @@ this.cdr.detectChanges()
   }
 
   cancel(): void {
-    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'All changes will be lost!',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, cancel it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.router.navigate(['/seller/products']);
     }
-  }
+
+  });
 }
+
+  }
+
