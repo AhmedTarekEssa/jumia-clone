@@ -169,6 +169,7 @@ export class CategoryList implements OnInit {
     if (this.currentCategory && this.currentCategory.id) {
       filters.categoryIds = [this.currentCategory.id];
     }
+    console.log(this.categoryId);
 
     const attributeFilters: { [key: string]: string } = {};
 for (const attributeName in this.selectedValues) {
