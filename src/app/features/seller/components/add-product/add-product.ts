@@ -67,11 +67,6 @@ export class AddProduct implements OnInit, OnDestroy {
         this.cdr.detectChanges()
       }
     });
-
-
-  }
-
-
     this.variantQuantitySubscription = this.variantsArray.valueChanges.subscribe(() => {
       this.updateProductQuantityBasedOnVariants();
       this.cdr.detectChanges()
@@ -95,29 +90,8 @@ export class AddProduct implements OnInit, OnDestroy {
        productDiscount: (product.variants && product.variants.length > 0) ? 0 : (product.discountPercentage || 0),
     });
 
-    // if (product.categoryId) {
-    //   this.categoryService.getCategoryPath(product.categoryId).subscribe({
-    //     next: (path: number[]) => {
-    //       this.categoryIdsArray.clear();
-    //       let currentCategories = this.categories;
-    //       this.displayedCategoryLevels = [this.categories];
-
-    //       path.forEach((catId, index) => {
-    //         this.categoryIdsArray.push(this.fb.control(catId, Validators.required));
-    //         const selectedCategory = currentCategories.find(c => c.id === catId);
-    //         if (selectedCategory && selectedCategory.subCategories && selectedCategory.subCategories.length > 0) {
-    //           this.displayedCategoryLevels.push(selectedCategory.subCategories);
-    //           currentCategories = selectedCategory.subCategories;
-    //         }
-    //       });
-    //       // This will call fetchCategoryAttributes, which populates availableCategoryAttributes
-    //       this.fetchCategoryAttributes(product.categoryId);
-    //       this.cdr.detectChanges();
-    //     },
-    //     error: (err) => console.error('Error fetching category path:', err)
-    //   });
-    // }
-this.cdr.detectChanges()
+   
+      this.cdr.detectChanges()
     if (product.mainImageUrl) {
       this.productForm.get('mainImageUrl')?.setValue(product.mainImageUrl);
       this.cdr.detectChanges()
@@ -769,6 +743,6 @@ this.cdr.detectChanges()
 
   });
 }
+}
 
-  }
-
+  
