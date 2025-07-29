@@ -2,10 +2,12 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ProductService } from '../../../../../core/services/Product-Service/product';
 import { OrderService } from '../../../../../core/services/orders-services/orders-user';
 import { User } from '../../../../../core/services/User-Service/user';
+import { CustomerInsightsChart } from "../../customer-insights-chart/customer-insights-chart";
+import { ProductPerformance } from "../../product-performance/product-performance";
 
 @Component({
   selector: 'app-admin-stats',
-  imports: [],
+  imports: [CustomerInsightsChart, ProductPerformance],
   templateUrl: './admin-stats.html',
   styleUrl: './admin-stats.css'
 })
