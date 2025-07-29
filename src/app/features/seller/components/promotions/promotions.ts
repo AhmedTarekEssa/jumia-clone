@@ -24,17 +24,29 @@ export class Promotions implements OnInit {
   totalPages = 1;
   showCreateForm = false;
   baseImageUrl = environment.ImageUrlBase;
+  userInfoCookie!: string | null;
+  userTypeId!: number ;
 
   ngOnInit(): void {
+    this.userInfoCookie = this.getCookie('UserInfo');
+    if (this.userInfoCookie) {
+      const userInfo = JSON.parse(this.userInfoCookie);
+      const userTypeId = userInfo.UserTypeId;
+      console.log('UserTypeId:', userTypeId);
+    } else {
+      console.error('Unable to identify seller');
+    }
     this.loadDiscountedProducts();
   }
 
 
+
   loadDiscountedProducts(): void {
-    this.productService.getAllUi().subscribe({
+    this.userTypeId = this.userInfoCookie ? JSON.parse(this.userInfoCookie).UserTypeId : 1;
+    this.productService.getBySellerIdUi(this.userTypeId,'seller').subscribe({
       next: (products) => {
         this.discountedProducts = products.filter(product =>
-          product.discountPercentage 
+          product.discountPercentage
         );
         this.totalPages = Math.ceil(this.discountedProducts.length / this.itemsPerPage);
         this.updatePaginatedProducts();
@@ -97,5 +109,18 @@ export class Promotions implements OnInit {
       this.currentPage--;
       this.updatePaginatedProducts();
     }
+  }
+  getCookie(name: string): string | null {
+    const nameEQ = name + '=';
+    const cookies = document.cookie.split(';');
+
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(nameEQ)) {
+        return decodeURIComponent(cookie.substring(nameEQ.length));
+      }
+    }
+
+    return null;
   }
 }
