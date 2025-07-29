@@ -80,12 +80,14 @@ export class PlaceOrder implements OnInit {
     this.loadAddresses();
     this.selectedDeliveryOption = this.deliveryOptions.find(opt => opt.selected) || null;
     const userInfoCookie = this.cookiesService.get('UserInfo');
+    console.log('User Info Cookie:', userInfoCookie);
     if (userInfoCookie) {
       try {
         // Decode the URL encoded cookie
         const decodedCookie = decodeURIComponent(userInfoCookie);
         this.userInfo = JSON.parse(decodedCookie);
-        this.userId = this.userInfo.UserTypeId;
+        this.userId = +this.userInfo.UserTypeId;
+     this.cdr.detectChanges(); 
 
       } catch (e) {
         console.error('Error parsing user info cookie', e);
@@ -252,6 +254,7 @@ export class PlaceOrder implements OnInit {
         this.orderBody = payload;
         this.cdr.detectChanges();
         if (payload.paymentMethod === "cod") {
+          console.log(payload);
           this.orderService.createOrder(this.orderBody).subscribe(
             order => {
               this.cdr.detectChanges();
