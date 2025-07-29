@@ -30,7 +30,7 @@ export class RoleGuard implements CanActivate {
     const normalizedRoles = expectedRoles.map(role => role.toLowerCase());
 
     if (!normalizedRoles.includes(userRole)) {
-      this.router.navigate(['/login-register']);
+      this.router.navigate(['/unauthorized']);
       return false;
     }
 
