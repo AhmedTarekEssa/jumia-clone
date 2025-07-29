@@ -2,9 +2,9 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 .dashboard {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 1rem;
+  padding-top: 1rem;
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -24,7 +24,7 @@
   text-align: center;
   padding: 2rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 102, 0, 0.1);
@@ -55,7 +55,7 @@
 .stat-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -96,7 +96,7 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   color: white;
   box-shadow: 0 8px 25px rgba(255, 102, 0, 0.3);
   transition: all 0.3s ease;
@@ -124,7 +124,7 @@
 
 .recent-section {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   backdrop-filter: blur(10px);
@@ -152,7 +152,7 @@
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 2px;
   cursor: pointer;
   text-decoration: none;
   font-size: 0.95rem;
@@ -219,7 +219,7 @@
   color: #4a5568;
   background: rgba(255, 102, 0, 0.1);
   padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  border-radius: 2px;
   display: inline-block;
 }
 
@@ -231,7 +231,7 @@
 
 .status-badge {
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 2px;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -279,7 +279,7 @@
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   border: 2px solid rgba(255, 102, 0, 0.2);
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
@@ -324,7 +324,7 @@
 .modal-content {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   width: 90%;
   max-width: 800px;
@@ -395,7 +395,7 @@
   border-collapse: collapse;
   margin-top: 1rem;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -431,7 +431,7 @@
 .modal-footer .btn {
   padding: 0.75rem 2rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
@@ -458,12 +458,12 @@
 
 .modal-content::-webkit-scrollbar-track {
   background: rgba(241, 245, 249, 0.5);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .modal-content::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #ff6600, #ff8533);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .modal-content::-webkit-scrollbar-thumb:hover {
