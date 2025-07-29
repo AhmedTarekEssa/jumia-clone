@@ -34,25 +34,7 @@
           </div>
         </div>
         <div class="chart-placeholder">
-          <div class="sales-trend">
-            <p><i class="fas fa-chart-bar"></i> Monthly Revenue Trend</p>
-            <div class="trend-bars">
-              <div class="trend-bar">
-                <div
-                  class="bar-fill"
-                  [style.height.%]="lastMonthBarHeight"
-                ></div>
-                <span class="bar-label">Last Month</span>
-              </div>
-              <div class="trend-bar">
-                <div
-                  class="bar-fill current"
-                  [style.height.%]="thisMonthBarHeight"
-                ></div>
-                <span class="bar-label">This Month</span>
-              </div>
-            </div>
-          </div>
+          <canvas id="salesChart"></canvas>
         </div>
       </div>
 
