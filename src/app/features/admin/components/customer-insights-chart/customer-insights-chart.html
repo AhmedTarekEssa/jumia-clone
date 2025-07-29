@@ -1,0 +1,28 @@
+<!-- customer-insights-chart.component.html -->
+<div class="chart-card">
+    <div class="chart-header">
+        <h3 class="chart-title">Customer Analytics</h3>
+        <div class="chart-actions">
+            <select class="chart-filter" (change)="onGenderFilterChange($event)">
+                <option value="all">All Genders</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <select class="chart-filter" (change)="onStatusFilterChange($event)">
+                <option value="all">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>
+            </select>
+        </div>
+    </div>
+    <div class="chart-container">
+        <canvas id="customerChart"></canvas>
+    </div>
+    <div class="chart-footer">
+        <div class="metric-box" *ngFor="let metric of summaryMetrics">
+            <span class="metric-value">{{metric.value}}</span>
+            <span class="metric-label">{{metric.label}}</span>
+        </div>
+    </div>
+</div>

@@ -26,24 +26,26 @@ export class Promotions implements OnInit {
   baseImageUrl = environment.ImageUrlBase;
 
   ngOnInit(): void {
-    this.loadDiscountedProducts();
+    // this.loadDiscountedProducts();
   }
 
-  loadDiscountedProducts(): void {
-    this.productService.getAllUi().subscribe({
-      next: (products) => {
-        this.discountedProducts = products.filter(product =>
-          product.discountPercentage 
-        );
-        this.totalPages = Math.ceil(this.discountedProducts.length / this.itemsPerPage);
-        this.updatePaginatedProducts();
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error loading discounted products:', error);
-      }
-    });
-  }
+
+  // loadDiscountedProducts(): void {
+  //   this.productService.getAllUi().subscribe({
+  //     next: (products) => {
+  //       this.discountedProducts = products.filter(product => 
+  //         product.discountPercentage && product.discountPercentage === "% - %"
+  //       );
+  //       this.totalPages = Math.ceil(this.discountedProducts.length / this.itemsPerPage);
+  //       this.updatePaginatedProducts();
+  //       this.cdr.detectChanges();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error loading discounted products:', error);
+  //     }
+  //   });
+  // }
+
 
   updatePaginatedProducts(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;

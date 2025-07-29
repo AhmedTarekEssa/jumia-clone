@@ -16,6 +16,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { ProductService } from '../../../core/services/Product-Service/product';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-place-order',
@@ -64,7 +65,8 @@ export class PlaceOrder implements OnInit {
     private cartService: CartService,
     private cdr: ChangeDetectorRef,
     private cookiesService: CookieService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     //if cart is empty redirect to cart
 
@@ -261,6 +263,9 @@ export class PlaceOrder implements OnInit {
                 },
                 error => console.error('Error clearing cart:', error)
               );
+              this.router.navigate(['/success']);
+
+
             },
             error => {
               console.error('Error creating order:', error);

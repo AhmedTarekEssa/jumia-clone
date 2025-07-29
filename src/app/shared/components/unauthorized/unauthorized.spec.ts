@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminHeader } from './admin-header';
+import { Unauthorized } from './unauthorized';
 
-describe('AdminHeader', () => {
-  let component: AdminHeader;
-  let fixture: ComponentFixture<AdminHeader>;
+describe('Unauthorized', () => {
+  let component: Unauthorized;
+  let fixture: ComponentFixture<Unauthorized>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminHeader]
+      imports: [Unauthorized]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AdminHeader);
+    fixture = TestBed.createComponent(Unauthorized);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

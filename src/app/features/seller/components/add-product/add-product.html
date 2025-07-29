@@ -1,23 +1,18 @@
 <div class="product-management-container">
   <div class="header">
-    <h2>Product Category Selection</h2>
+    <h2>{{ isEditMode ? 'Edit Product' : 'Add New Product' }}</h2>
   </div>
 
   <div class="form-container">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
       <div class="form-section">
         <h4>Select Product Category</h4>
-        
+
         <div formArrayName="categoryIds" class="category-selects-container">
-          <div 
-            *ngFor="let categoryControl of categoryIdsArray.controls; let i = index" 
-            class="form-group">
+          <div *ngFor="let categoryControl of categoryIdsArray.controls; let i = index" class="form-group">
             <label *ngIf="i === 0">Main Category</label>
             <label *ngIf="i > 0">Sub-Category Level {{i}}</label>
-            <select 
-              [formControlName]="i" 
-              class="form-control"
-              (change)="onCategorySelect(i)">
+            <select [formControlName]="i" class="form-control" (change)="onCategorySelect(i)">
               <option value="">Select {{ i === 0 ? 'a Main Category' : 'a Sub-Category' }}</option>
               <option *ngFor="let category of displayedCategoryLevels[i]" [value]="category.id">
                 {{ category.name }}
@@ -29,311 +24,240 @@
           </div>
         </div>
       </div>
-  
-       <div class="form-row">
+
+      <hr>
+
+      <div class="form-section">
+        <h4>Product Details</h4>
+        <div class="form-row">
           <div class="form-group">
             <label for="name">Product Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              formControlName="name" 
-              class="form-control"
-              placeholder="Enter product name">
+            <input type="text" id="name" formControlName="name" class="form-control">
             <div class="error" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
-              Product name is required
+              Product Name is required.
             </div>
           </div>
 
           <div class="form-group">
             <label for="basePrice">Base Price</label>
-            <input 
-              type="number" 
-              id="basePrice" 
-              formControlName="basePrice" 
-              class="form-control"
-              placeholder="0.00"
-              step="0.01">
+            <input type="number" id="basePrice" formControlName="basePrice" class="form-control" min="0">
             <div class="error" *ngIf="productForm.get('basePrice')?.invalid && productForm.get('basePrice')?.touched">
-              Valid base price is required
+              Base Price is required and must be a non-negative number.
             </div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="variantsArray.length === 0">
+          <label for="productDiscount">Product Discount (%)</label>
+          <input type="number" id="productDiscount" formControlName="productDiscount" class="form-control" min="0"
+            max="100">
+          <div class="error"
+            *ngIf="productForm.get('productDiscount')?.invalid && productForm.get('productDiscount')?.touched">
+            Discount must be between 0 and 100.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" class="form-control" rows="4"></textarea>
+          <div class="error" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+            Description is required.
           </div>
         </div>
 
         <div class="form-group">
-          <label for="description">Description</label>
-          <textarea 
-            id="description" 
-            formControlName="description" 
-            class="form-control"
-            rows="4"
-            placeholder="Enter product description"></textarea>
-          <div class="error" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
-            Description is required
-          </div>
-        </div>
-     
-      <!-- Images Section -->
-      <div class="form-section">
-        <h4>Images</h4>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="mainImage">Main Image</label>
-            <input 
-              type="file" 
-              id="mainImage" 
-              (change)="onFileSelect($event, 'mainImageUrl')"
-              accept="image/*"
-              class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="additionalImages">Additional Images</label>
-            <input 
-              type="file" 
-              id="additionalImages" 
-              (change)="onMultipleFileSelect($event)"
-              accept="image/*"
-              multiple
-              class="form-control">
+          <label for="quantity">Product Quantity</label>
+          <input type="number" id="quantity" formControlName="quantity" class="form-control" min="0">
+          <div class="error" *ngIf="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
+            Product Quantity is required and must be a non-negative number.
           </div>
         </div>
       </div>
 
+      <hr>
 
- <div class="form-section" *ngIf="attributesArray.length > 0">
-        <div class="section-header">
-          <h4>Product Attributes</h4>
+      <div class="form-section">
+        <h4>Product Images</h4>
+        <div class="form-group">
+          <label for="mainImage">Main Image</label>
+          <input type="file" id="mainImage" (change)="onFileSelect($event, 'mainImageUrl')" class="form-control-file">
+          <div class="error"
+            *ngIf="productForm.get('mainImageUrl')?.invalid && productForm.get('mainImageUrl')?.touched">
+            Main Image is required.
           </div>
+          <div *ngIf="productForm.get('mainImageUrl')?.value" class="image-preview">
+            <img [src]="productForm.get('mainImageUrl')?.value" alt="Main Image Preview" class="preview-img">
+          </div>
+        </div>
 
-        <div formArrayName="attributes" class="attributes-container">
-          <div 
-            *ngFor="let attributeGroup of attributesArray.controls; let i = index" 
-            [formGroupName]="i" 
+        <div class="form-group">
+          <label for="additionalImages">Additional Images</label>
+          <input type="file" id="additionalImages" multiple (change)="onMultipleFileSelect($event)"
+            class="form-control-file">
+          <div class="image-preview-multiple">
+            <div *ngFor="let imgUrl of productForm.get('additionalImageUrls')?.value" class="preview-item">
+              <img [src]="imgUrl" alt="Additional Image Preview" class="preview-img">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="form-section" *ngIf="variantsArray.length === 0">
+        <h4>Product Attributes (No Variants)</h4>
+        <div *ngIf="availableCategoryAttributes.length === 0 && productForm.get('categoryIds')?.valid">
+          <p>No attributes found for the selected category or sub-category. Select a deeper category if available or add
+            variants.</p>
+        </div>
+        <div formArrayName="attributes" *ngIf="attributesArray.length > 0">
+          <div *ngFor="let attributeGroup of attributesArray.controls; let i = index" [formGroupName]="i"
             class="attribute-group">
-            <div class="attribute-header">
-              <h5>{{ (attributeGroup.get('attributeName')?.value || 'Attribute') }}</h5>
+            <label>{{ attributeGroup.get('attributeName')?.value }}</label>
+            <ng-container [ngSwitch]="attributeGroup.get('attributeType')?.value">
+              <input *ngSwitchCase="'text'" type="text" formControlName="value" class="form-control">
+              <input *ngSwitchCase="'number'" type="number" formControlName="value" class="form-control">
+              <input *ngSwitchCase="'boolean'" type="checkbox" formControlName="value" class="form-check-input">
+              <select *ngSwitchCase="'select'" formControlName="value" class="form-control">
+                <option value="">Select a value</option>
+                <option *ngFor="let possibleValue of attributeGroup.get('possibleValues')?.value | jsonParse"
+                  [value]="possibleValue">
+                  {{ possibleValue }}
+                </option>
+              </select>
+              <div class="error" *ngIf="attributeGroup.get('value')?.invalid && attributeGroup.get('value')?.touched">
+                Value is required.
               </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>{{ (attributeGroup.get('attributeName')?.value || 'Attribute Name') }}</label>
-                
-                <ng-container [ngSwitch]="attributeGroup.get('attributeType')?.value">
-                  <select 
-                    *ngSwitchCase="'select'"
-                    formControlName="value" 
-                    class="form-control"
-                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false"
-                    multiple> <option value="">Select value(s)</option> <option 
-                      *ngFor="let option of (attributeGroup.get('possibleValues')?.value | jsonParse)" 
-                      [value]="option">
-                      {{ option }}
-                    </option>
-                  </select>
-
-                  <input 
-                    *ngSwitchCase="'text'"
-                    type="text" 
-                    formControlName="value" 
-                    class="form-control"
-                    placeholder="Enter text value"
-                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
-
-                  <input 
-                    *ngSwitchCase="'number'"
-                    type="number" 
-                    formControlName="value" 
-                    class="form-control"
-                    placeholder="Enter number value"
-                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
-                  
-                  <input 
-                    *ngSwitchDefault
-                    type="text" 
-                    formControlName="value" 
-                    class="form-control"
-                    placeholder="Enter value"
-                    [required]="attributeGroup.get('value')?.hasValidator(this.validators.required) || false">
-                </ng-container>
-
-                <div class="error" *ngIf="attributeGroup.get('value')?.invalid && attributeGroup.get('value')?.touched">
-                  {{ attributeGroup.get('attributeName')?.value }} is required
-                </div>
-              </div>
-            </div>
-            </div>
+            </ng-container>
+          </div>
         </div>
       </div>
 
+      <hr *ngIf="variantsArray.length === 0">
 
       <div class="form-section">
-        <div class="section-header">
-          <h4>Product Variants</h4>
-          <button type="button" class="btn btn-sm btn-outline-primary" (click)="addVariant()">
-            Add Variant
-          </button>
+        <h4>Product Variants</h4>
+        <button type="button" class="btn btn-add" (click)="addVariant()">Add Variant</button>
+        <div *ngIf="variantsArray.length === 0" class="no-variants-message">
+          <p>Add variants if your product comes in different options (e.g., sizes, colors).</p>
         </div>
 
         <div formArrayName="variants" class="variants-container">
-          <div 
-            *ngFor="let variant of variantsArray.controls; let i = index" 
-            [formGroupName]="i" 
-            class="variant-group">
-            <div class="variant-header">
-              <h5>Variant {{ i + 1 }}</h5>
-              <button type="button" class="btn btn-sm btn-danger" (click)="removeVariant(i)">
-                Remove
-              </button>
-            </div>
-
+          <div *ngFor="let variantGroup of variantsArray.controls; let i = index" [formGroupName]="i"
+            class="variant-card">
+            <h5>Variant {{ i + 1 }}</h5>
             <div class="form-row">
               <div class="form-group">
-                <label>Variant Name</label>
-                <input 
-                  type="text" 
-                  formControlName="variantName" 
-                  class="form-control"
-                  placeholder="Enter variant name">
+                <label for="variantName{{i}}">Variant Name</label>
+                <input type="text" id="variantName{{i}}" formControlName="variantName" class="form-control">
+                <div class="error"
+                  *ngIf="variantGroup.get('variantName')?.invalid && variantGroup.get('variantName')?.touched">
+                  Variant Name is required.
+                </div>
               </div>
-
               <div class="form-group">
-                <label>SKU</label>
-                <input 
-                  type="text" 
-                  formControlName="sku" 
-                  class="form-control"
-                  placeholder="Enter SKU">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>Price</label>
-                <input 
-                  type="number" 
-                  formControlName="price" 
-                  class="form-control"
-                  placeholder="0.00"
-                  step="0.01">
-              </div>
-
-              <div class="form-group">
-                <label>Discount %</label>
-                <input 
-                  type="number" 
-                  formControlName="discountPercentage" 
-                  class="form-control"
-                  placeholder="0"
-                  min="0"
-                  max="100">
-              </div>
-
-              <div class="form-group">
-                <label>Stock Quantity</label>
-                <input 
-                  type="number" 
-                  formControlName="stockQuantity" 
-                  class="form-control"
-                  placeholder="0"
-                  min="0">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>Variant Image</label>
-                <input 
-                  type="file" 
-                  (change)="onFileSelect($event, 'variantImageUrl', i)"
-                  accept="image/*"
-                  class="form-control">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" formControlName="isDefault">
-                  Is Default Variant
-                </label>
-              </div>
-
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" formControlName="isAvailable">
-                  Is Available
-                </label>
-              </div>
-            </div>
-
-            <!-- Variant Attributes -->
-            <div class="variant-attributes-section">
-              <div class="section-header">
-                <label>Variant Attributes</label>
-                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addVariantAttribute(i)">
-                  Add Attribute
-                </button>
-              </div>
-
-              <div formArrayName="attributes" class="variant-attributes-container">
-                <div 
-                  *ngFor="let variantAttr of getVariantAttributesArray(i).controls; let j = index" 
-                  [formGroupName]="j"
-                  class="variant-attribute-group">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <select 
-                        formControlName="attributeId" 
-                        (change)="onVariantAttributeChange(i, j)"
-                        class="form-control">
-                        <option value="">Select Attribute</option>
-                        <option *ngFor="let attr of availableCategoryAttributes" [value]="attr.attributeId">
-                          {{ attr.name }}
-                        </option>
-                      </select>
-                    </div>
-
-                    <div class="form-group">
-                      <input 
-                        type="text" 
-                        formControlName="attributeName" 
-                        class="form-control"
-                        placeholder="Attribute Name"
-                        readonly>
-                    </div>
-
-                    <div class="form-group">
-                      <input 
-                        type="text" 
-                        formControlName="attributeValue" 
-                        class="form-control"
-                        placeholder="Attribute Value">
-                    </div>
-
-                    <button 
-                      type="button" 
-                      class="btn btn-sm btn-outline-danger" 
-                      (click)="removeVariantAttribute(i, j)">
-                      ×
-                    </button>
-                  </div>
+                <label for="sku{{i}}">SKU</label>
+                <input type="text" id="sku{{i}}" formControlName="sku" class="form-control">
+                <div class="error" *ngIf="variantGroup.get('sku')?.invalid && variantGroup.get('sku')?.touched">
+                  SKU is required.
                 </div>
               </div>
             </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="price{{i}}">Price</label>
+                <input type="number" id="price{{i}}" formControlName="price" class="form-control" min="0">
+                <div class="error" *ngIf="variantGroup.get('price')?.invalid && variantGroup.get('price')?.touched">
+                  Price is required and must be non-negative.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="discountPercentage{{i}}">Discount %</label>
+                <input type="number" id="discountPercentage{{i}}" formControlName="discountPercentage"
+                  class="form-control" min="0" max="100">
+                <div class="error"
+                  *ngIf="variantGroup.get('discountPercentage')?.invalid && variantGroup.get('discountPercentage')?.touched">
+                  Discount % must be between 0 and 100.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="stockQuantity{{i}}">Stock Quantity</label>
+                <input type="number" id="stockQuantity{{i}}" formControlName="stockQuantity" class="form-control"
+                  min="0">
+                <div class="error"
+                  *ngIf="variantGroup.get('stockQuantity')?.invalid && variantGroup.get('stockQuantity')?.touched">
+                  Stock Quantity is required and must be non-negative.
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="variantImage{{i}}">Variant Image</label>
+              <input type="file" id="variantImage{{i}}" (change)="onFileSelect($event, 'variantImageUrl', i)"
+                class="form-control-file">
+              <div *ngIf="variantGroup.get('variantImageUrl')?.value" class="image-preview">
+                <img [src]="variantGroup.get('variantImageUrl')?.value" alt="Variant Image Preview" class="preview-img">
+              </div>
+            </div>
+
+            <div class="form-row form-check-row">
+              <div class="form-check">
+                <input type="checkbox" id="isDefault{{i}}" formControlName="isDefault" class="form-check-input">
+                <label class="form-check-label" for="isDefault{{i}}">Is Default Variant</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" id="isAvailable{{i}}" formControlName="isAvailable" class="form-check-input">
+                <label class="form-check-label" for="isAvailable{{i}}">Is Available</label>
+              </div>
+            </div>
+
+            <hr>
+
+            <h6>Variant Attributes</h6>
+            <button type="button" class="btn btn-add-small" (click)="addVariantAttribute(i)">Add Attribute</button>
+            <div formArrayName="attributes" class="variant-attributes-container">
+              <div *ngFor="let vAttrGroup of getVariantAttributesArray(i).controls; let attrIndex = index"
+                [formGroupName]="attrIndex" class="attribute-row">
+                <div class="form-group flex-grow">
+                  <label>Attribute Type</label>
+                  <select formControlName="attributeId" class="form-control"
+                    (change)="onVariantAttributeChange(i, attrIndex)">
+                    <option value="">Select Attribute</option>
+                    <option *ngFor="let catAttr of availableCategoryAttributes" [value]="catAttr.attributeId">
+                      {{ catAttr.name }}
+                    </option>
+                  </select>
+                  <div class="error"
+                    *ngIf="vAttrGroup.get('attributeId')?.invalid && vAttrGroup.get('attributeId')?.touched">
+                    Attribute type is required.
+                  </div>
+                </div>
+                <div class="form-group flex-grow">
+                  <label>Attribute Name</label>
+                  <input type="text" formControlName="attributeName" class="form-control" readonly>
+                </div>
+                <div class="form-group flex-grow">
+                  <label>Attribute Value</label>
+                  <input type="text" formControlName="attributeValue" class="form-control">
+                  <div class="error"
+                    *ngIf="vAttrGroup.get('attributeValue')?.invalid && vAttrGroup.get('attributeValue')?.touched">
+                    Attribute value is required.
+                  </div>
+                </div>
+                <button type="button" class="btn btn-remove-small"
+                  (click)="removeVariantAttribute(i, attrIndex)">Remove</button>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-remove" (click)="removeVariant(i)">Remove Variant</button>
           </div>
         </div>
       </div>
 
+      <hr>
 
-<div class="form-actions d-flex justify-content-between">
-        <button 
-          type="submit"  
-          class="btn btn-primary" 
-          [disabled]="productForm.invalid">
-          Submit 
-        </button>
-        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update Product' : 'Add Product' }}</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
       </div>
     </form>
   </div>
