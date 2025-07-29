@@ -74,7 +74,7 @@ export class SellerRegister {
       this.errorMessage = 'Please fill all required fields and upload both images.';
       return;
     }
-
+    this.cdr.detectChanges();
     const formValue = this.registerForm.getRawValue();
 
     const formData = new FormData();
