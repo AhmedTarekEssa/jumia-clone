@@ -31,7 +31,7 @@
   padding: 0 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   z-index: 100;
-  border-top-left-radius: 20px;
+  border-top-left-radius: 2px;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e2e8f0;
 }
@@ -42,7 +42,7 @@
   cursor: pointer;
   padding: 12px;
   margin-right: 1.5rem;
-  border-radius: 12px;
+  border-radius: 2px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
 }
