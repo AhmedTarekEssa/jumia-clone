@@ -5,6 +5,7 @@ import { IReviewService } from '../../../../core/services/ReviewService/ireview-
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-product-review-show-all',
@@ -20,8 +21,8 @@ export class ProductReviewShowAll {
   showReviewForm = false;
   
 
-  customerId = 2; // Simulate for now
-  productId = 4; // Make dynamic later
+  customerId!: number; // Simulate for now
+  productId!: number; // Make dynamic later
 
   newReview: IReviewCreate = {
     customerID: this.customerId,
@@ -33,19 +34,36 @@ export class ProductReviewShowAll {
   constructor(
     private reviewService: IReviewService,
     private cdr: ChangeDetectorRef,
-      private route: ActivatedRoute
+    private routes:ActivatedRoute,
+    private cookieService : CookieService
   ) {}
-
   ngOnInit(): void {
-  this.route.paramMap.subscribe(params => {
+  this.routes.paramMap.subscribe(params => {
     const id = params.get('id');
     if (id) {
       this.productId = +id;
-      this.newReview.productID = this.productId; // also update the form model
+      this.newReview.productID = this.productId;
+      this.checkUserLogin();
+      this.newReview.customerID = this.customerId;
       this.loadReviews();
     }
     this.cdr.detectChanges();
   });
+  }
+
+      checkUserLogin() {
+    const userInfoCookie = this.cookieService.get('UserInfo');
+    if (userInfoCookie) {
+      try {
+        // Decode the URL encoded cookie
+        const decodedCookie = decodeURIComponent(userInfoCookie);
+        const userInfo = JSON.parse(decodedCookie);
+        this.customerId = userInfo.UserTypeId || 1; // Fallback to 1 if not set
+
+      } catch (e) {
+        console.error('Error parsing user info cookie', e);
+      }
+    }
   }
 
   loadReviews() {

@@ -1,9 +1,7 @@
  <div class="customers-container">
       <div class="header">
         <h2>Customers Management</h2>
-        <!-- <button class="btn btn-primary" (click)="showAddForm = !showAddForm">
-          Add New Customer
-        </button> -->
+       
       </div>
 
       <div class="search-filter">
@@ -19,60 +17,41 @@
         </select> -->
       </div>
 
-      <div *ngIf="showAddForm" class="add-form">
-        <h3>Add New Customer</h3>
-        <form (ngSubmit)="addCustomer()">
-          <div class="form-row">
-            <input type="text" placeholder="Customer Name" [(ngModel)]="newCustomer.firstName" name="name" required>
-            <input type="email" placeholder="Email" [(ngModel)]="newCustomer.email" name="email" required>
-          </div>
-          <div class="form-row">
-            <input type="tel" placeholder="Phone" [(ngModel)]="newCustomer.phoneNumber" name="phone" required>
-            <!-- <select [(ngModel)]="newCustomer.status" name="status" required>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select> -->
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-success">Add Customer</button>
-            <button type="button" class="btn btn-secondary" (click)="showAddForm = false">Cancel</button>
-          </div>
-        </form>
-      </div>
+      
 
       <div class="customers-table">
         <table>
           <thead>
             <tr>
-              <!-- <th>ID</th> -->
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <!-- <th>Status</th> -->
-              <th>Join Date</th>
-              <!-- <th>Orders</th>
-              <th>Total Spent</th> -->
+              <!-- <th>Join Date</th> -->
+              <th>Gender</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let customer of filteredCustomers">
-              <!-- <td>{{customer.id}}</td> -->
               <td>{{customer.firstName}}</td>
               <td>{{customer.email}}</td>
-              <td>{{customer.phoneNumber}}</td>
-              <!-- <td>
-                <span class="status" [class]="customer.status.toLowerCase()">
-                  {{customer.status}}
-                </span>
-              </td> -->
-              <td>{{customer.dateOfBirth}}</td>
-              <!-- <td>{{customer.totalOrders}}</td>
-              <td>\${{customer.totalSpent}}</td> -->
-              <td>
-                <!-- <button class="btn btn-sm btn-primary" style="background-color: darkorange">Edit</button> -->
-                <button class="btn btn-sm btn-danger" >Delete</button>              
-              </td>
+              <td>{{customer.phone}}</td>
+            
+              <!-- <td>{{customer.dateOfBirth}}</td> -->
+              <td>{{customer.gender}}</td>
+             <td>
+      <span [ngClass]="{'text-danger': customer.isBlocked, 'text-success': !customer.isBlocked}">
+        {{ customer.isBlocked ? 'Blocked' : 'Active' }}
+      </span>
+    </td>
+    <td>
+      <button class="btn btn-sm"
+              [ngClass]="{'btn-danger': customer.isBlocked, 'btn-success': !customer.isBlocked}"
+              (click)="toggleBlockStatus(customer)">
+        {{ customer.isBlocked ? 'Unblock' : 'Block' }}
+      </button>
+    </td>
             </tr>
           </tbody>
         </table>

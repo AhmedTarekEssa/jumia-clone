@@ -11,8 +11,12 @@
       </button>
       <h1>Seller Dashboard</h1>
       <div class="user-info">
-        <span>Welcome, Seller</span>
-        <div class="avatar" (click)="navigateToSellerDetails()">S</div>
+        <span>Welcome, {{ seller?.sellerName }}</span>
+        <div class="avatar" (click)="navigateToSellerDetails()">
+          <span class="avatar-initial">
+            {{ seller?.sellerName?.charAt(0)?.toUpperCase() }}
+          </span>
+        </div>
       </div>
     </header>
 

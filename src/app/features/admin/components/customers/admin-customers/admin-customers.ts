@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../../../../core/services/User-Service/user';
+import { AppUser, User, UserProfile } from '../../../../../core/services/User-Service/user';
 import { finalize } from 'rxjs';
 
 
 export interface Customer {
+  customerId: number,
+  userId: string,
+  isBlocked: boolean,
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
-  dateOfBirth: Date;
+  phone: string;
   gender: string;
 
 }
@@ -77,9 +79,16 @@ export class AdminCustomers {
         this.customers = customers.map(c => ({
           ...c,
           name: `${c.firstName} ${c.lastName}`, // For display purposes
-          phone: c.phoneNumber, // Map to match your template
-          joinDate: this.formatDate(c.dateOfBirth) // Format date for display
+          phone: c.phone, // Map to match your template
+          // joinDate: this.formatDate(c.user.dateOfBirth), // Format date for display
+          email: c.email,
+          gender: c.gender,
+          isBlocked: c.isBlocked ?? false,
+          customerId: c.customerId,
+          userId: c.userId
         }));
+        this.cdr.detectChanges();
+                console.log('Mapped customers:', this.customers); // Log the mapped customers
       }else{
                 this.error = 'No customers found.';
       }
@@ -93,7 +102,14 @@ export class AdminCustomers {
 
   
   private formatDate(date: Date): string {
-    return new Date(date).toISOString().split('T')[0];
+    if (date) {
+        const parsedDate = new Date(date);
+        // Check if the date is valid
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        }
+      }
+      return ''; 
   }
 
    get filteredCustomers(): Customer[] {
@@ -112,8 +128,7 @@ export class AdminCustomers {
     const matches = (
       (customer.firstName?.toLowerCase().includes(searchLower)) ||
       (customer.lastName?.toLowerCase().includes(searchLower)) 
-      // (customer.email?.toLowerCase().includes(searchLower)) ||
-      // (customer.phoneNumber?.toLowerCase().includes(searchLower))
+     
     );
     
     console.log(`Customer ${customer.email} matches:`, matches);
@@ -124,39 +139,37 @@ export class AdminCustomers {
   return filtered;
   }
 
-  // Add new customer
-  addCustomer(): void {
-    const newCustomer: Customer = {
-      // id: Math.random().toString(36).substring(2), // Temp ID
-      ...this.newCustomer,
-      firstName: this.newCustomer.firstName,
-      lastName: this.newCustomer.lastName,
-      // name: `${this.newCustomer.firstName} ${this.newCustomer.lastName}`,
-      phoneNumber: this.newCustomer.phoneNumber,
-      dateOfBirth: new Date(),
-      gender: 'Unknown',
-      
-      
-      // totalOrders: 0,
-      // totalSpent: 0
-    };
-    
-    this.customers = [...this.customers, newCustomer];
-    this.resetCustomerForm();
+   toggleBlockStatus(customer: Customer): void {
+    // Prevent toggling if userId is missing
+  if (!customer.userId) {
+    console.error('User ID is missing!');
+    this.error = 'User ID is missing. Please try again later.';
+    return;
   }
 
-  private resetCustomerForm(): void {
-    this.newCustomer = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      dateOfBirth: '',
-    gender: ''
-      // status: 'Active'
-    };
-    this.showAddForm = false;
+  // Optimistically update the UI first
+  const originalStatus = customer.isBlocked;
+  customer.isBlocked = !customer.isBlocked;
+  
+
+  // Call the API to toggle the block status
+  this.userService.toggleBlockStatus(customer.customerId)
+  .subscribe({
+    next: (message) => {
+      // Toggle the block status in the UI
+      console.log('Block status updated successfully:', message);
+    },
+    error: (err) => {      
+      customer.isBlocked = originalStatus;
+
+      this.error = 'Failed to update block status. Please try again later.';
+      console.error('Error updating block status:', err);
+    }
+  });
   }
+  
+    
+  
 }
 
   
