@@ -10,6 +10,7 @@ import { CartService } from '../../../../core/services/cart-service/cart-service
 import { environment } from '../../../../../environments/environment.development';
 import { IsVariantPipe } from '../../../pipes/is-variant-pipe';
 import { ParseNumberPipe } from '../../../pipes/parse-number-pipe';
+import Swal from 'sweetalert2';
 
 // Assuming ProductUi is similar to ProductDetails for non-variant products
 // You should define or import ProductUi properly. For now, I'll assume it has:
@@ -99,7 +100,17 @@ export class ProductGrid implements OnInit, OnChanges {
         console.log(data)
         this.products = data.items
         this.cdr.detectChanges();
-      }
+      },
+      error:()=>{
+        this.products = [];
+          Swal.fire(
+                    
+                    'No Products Found',
+                    'warning'
+                  );
+                }
+              
+     
     })
   }
 
