@@ -13,9 +13,9 @@
       <div class="user-info">
         <span>Welcome, {{ seller?.sellerName }}</span>
         <div class="avatar" (click)="navigateToSellerDetails()">
-          <span class="avatar-initial">
-            {{ seller?.sellerName?.charAt(0)?.toUpperCase() }}
-          </span>
+          <img class="avatar-initial" [src]="'http://localhost:5087' +seller?.imageUrl"  />
+
+
         </div>
       </div>
     </header>
