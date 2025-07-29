@@ -34,7 +34,6 @@ export class Orders implements OnInit {
   selectedStatus: string = 'all';
   searchTerm: string = '';
 
-  // sellerId: number = 1;
   showItemsModal: boolean = false;
   selectedOrderForItems: SubOrder | null = null;
 
@@ -46,7 +45,7 @@ export class Orders implements OnInit {
 
   // Pagination properties
   currentPage: number = 1;
-  itemsPerPage: number = 1;
+  itemsPerPage: number = 3;
 
   ngOnInit(): void {
     this.loadOrders();
@@ -93,7 +92,7 @@ export class Orders implements OnInit {
     }
 
     this.filteredOrders = filtered;
-    this.currentPage = 1; // Reset to first page when filtering
+    this.currentPage = 1;
     this.cdr.detectChanges();
   }
 

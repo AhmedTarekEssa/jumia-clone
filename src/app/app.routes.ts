@@ -65,6 +65,13 @@ export const routes: Routes = [
         loadComponent:()=>import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
       },
       {
+        path: 'Products/:id/reviews',
+        loadComponent: () => import('./features/products/components/product-review-show-all/product-review-show-all').then(m => m.ProductReviewShowAll),
+        canActivate: [RoleGuard],
+        data: { role: ['none', 'customer'] }
+
+      },
+      {
         path: 'place-order',
         loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
         canActivate: [RoleGuard],

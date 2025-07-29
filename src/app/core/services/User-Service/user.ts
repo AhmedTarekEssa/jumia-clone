@@ -2,6 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { Customer } from '../../../features/admin/components/customers/admin-customers/admin-customers';
+
+export interface AppUser{
+  FirstName : string
+  LastName : string
+  DateOfBirth: Date
+  Address: String 
+  Gender: string 
+  CreatedAt: Date
+}
 
 export interface UserProfile {
   firstName: string;
@@ -32,8 +42,11 @@ constructor(){}
 getUserInfo():Observable<UserInformation>{
     return this.httpClient.get<UserInformation>(this.apiBaseUrl + environment.User.getUserInfo,{withCredentials:true})
   }
-getAllCustomers(): Observable<UserProfile[]>{
-  return this.httpClient.get<UserProfile[]>(`${this.apiBaseUrl}/User/customers`,{withCredentials:true})
+
+
+  
+getAllCustomers(): Observable<Customer[]>{
+  return this.httpClient.get<Customer[]>(`${this.apiBaseUrl}/User/customers`,{withCredentials:true})
   .pipe(
     tap(
       {
@@ -46,6 +59,8 @@ getAllCustomers(): Observable<UserProfile[]>{
     )
   );
 }
+
+
 
 getAllSellers(): Observable<UserProfile[]>{
   return this.httpClient.get<UserProfile[]>(`${this.apiBaseUrl}/User/sellers`,{withCredentials:true})
@@ -60,6 +75,25 @@ getAllSellers(): Observable<UserProfile[]>{
     }
     )
   );
+}
+
+getAdmin(): Observable<UserProfile[]>{
+  return this.httpClient.get<UserProfile[]>(`${this.apiBaseUrl}/User/admin`,{withCredentials:true})
+  .pipe(
+    tap(
+      {
+      next: (admin) => console.log('admin loaded successfully:', admin), // Log the response
+      error: (error) => {
+        console.error('Error while getting admin:', error); // More detailed logging
+        alert('Failed to load admin. Please check the console for errors.'); // Show user-friendly message
+      }
+    }
+    )
+  );
+}
+
+toggleBlockStatus(customerId: number): Observable<any>{
+  return this.httpClient.post(`${this.apiBaseUrl}/User/toggle-block-status/${customerId}`,{}, {withCredentials:true});
 }
 
 }

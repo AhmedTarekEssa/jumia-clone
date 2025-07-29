@@ -11,7 +11,7 @@ interface Product {
   productId: number;
   name: string;
   basePrice: number;
-  discountPercentage: string;
+  discountPercentage: number;
   imageUrl: any;
   discount?: number;
   approvalStatus: string;

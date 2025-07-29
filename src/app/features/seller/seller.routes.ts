@@ -14,7 +14,7 @@ export const routes: Routes = [
       { path: 'promotions', loadComponent: () => import('./components/promotions/promotions').then(m => m.Promotions) },
       { path: 'analytics', loadComponent: () => import('./components/analytics/analytics').then(m => m.Analytics) },
       {path:'add-product', loadComponent:()=>import('./components/add-product/add-product').then(m=>m.AddProduct)},
-      {path: 'details', loadComponent: () => import('./components/seller-details/seller-details').then(m => m.SellerDetails) },
+      {path: 'details', loadComponent: () => import('./components/seller-details/seller-details').then(m => m.SellerDetailsComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

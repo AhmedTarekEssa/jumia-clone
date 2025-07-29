@@ -1,4 +1,142 @@
-<p>admin-order-details works!</p>
-<button (click)="redirect()" class="btn btn-sm btn-info">
-  back
-</button>
+<div class="main-container" *ngIf="order">
+  <!-- Header Section -->
+  <div class="order-header">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="mb-3"><i class="fas fa-receipt me-3"></i>Order Details</h1>
+        <h2 class="mb-0">Order #{{ order.orderId }}</h2>
+      </div>
+      <div class="text-end">
+        <div class="mb-2">
+          <span class="status-badge status-{{ order.status }}">
+            <i class="fas fa-check-circle me-1"></i>{{ order.status | titlecase }}
+          </span>
+        </div>
+        <div>
+          <span class="status-badge payment-{{ order.paymentStatus }}">
+            <i class="fas fa-clock me-1"></i>Payment {{ order.paymentStatus | titlecase }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="redirect()" class="btn btn-back mb-4">
+    <i class="fas fa-arrow-left me-2"></i>Back to Orders
+  </button>
+
+  <div class="row">
+    <!-- Order Summary -->
+    <div class="col-lg-8">
+      <div class="info-card">
+        <h3 class="card-title">
+          <i class="fas fa-info-circle text-primary"></i> Order Information
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-row"><span class="info-label">Order ID:</span><span class="info-value">#{{ order.orderId }}</span></div>
+            <div class="info-row"><span class="info-label">Customer ID:</span><span class="info-value">#{{ order.customerId }}</span></div>
+            <div class="info-row"><span class="info-label">Address ID:</span><span class="info-value">#{{ order.addressId }}</span></div>
+            <div class="info-row"><span class="info-label">Payment Method:</span><span class="info-value"><i class="fas fa-credit-card me-1"></i>{{ order.paymentMethod }}</span></div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-row"><span class="info-label">Created:</span><span class="info-value">{{ order.createdAt | date:'medium' }}</span></div>
+            <div class="info-row"><span class="info-label">Updated:</span><span class="info-value">{{ order.updatedAt | date:'medium' }}</span></div>
+            <div class="info-row"><span class="info-label">Affiliate Code:</span><span class="info-value">{{ order.affiliateCode || 'N/A' }}</span></div>
+            <div class="info-row"><span class="info-label">Coupon:</span><span class="info-value">{{ order.couponId ? ('#' + order.couponId) : 'Not Applied' }}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub Orders -->
+      <div class="info-card">
+        <h3 class="card-title">
+          <i class="fas fa-boxes text-success"></i> Sub Orders
+        </h3>
+
+        <div *ngFor="let sub of order.subOrders" class="sub-order-card">
+          <div class="sub-order-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Sub Order #{{ sub.id }}</h5>
+              <div>
+                <span class="badge bg-info">Seller ID: #{{ sub.sellerId }}</span>
+                <span class="badge bg-secondary ms-2">Status: {{ sub.status | titlecase }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="info-row"><span class="info-label">Subtotal:</span><span class="info-value amount-highlight">${{ sub.subtotal.toFixed(2) }}</span></div>
+              <div class="info-row"><span class="info-label">Status Updated:</span><span class="info-value">{{ sub.statusUpdatedAt | date:'medium' }}</span></div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-row"><span class="info-label">Tracking Number:</span><span class="info-value text-muted">{{ sub.trackingNumber || 'Not Available' }}</span></div>
+              <div class="info-row"><span class="info-label">Shipping Provider:</span><span class="info-value text-muted">{{ sub.shippingProvider || 'Not Assigned' }}</span></div>
+            </div>
+          </div>
+
+          <h6 class="mb-3"><i class="fas fa-shopping-cart me-2"></i>Order Items</h6>
+          <div *ngFor="let item of sub.orderItems" class="product-item">
+            <div class="product-name">{{ item.productName }}</div>
+            <div class="row">
+              <div class="col-md-3">
+                <small class="info-label">Product ID:</small>
+                <div class="info-value">#{{ item.productId }}</div>
+              </div>
+              <div class="col-md-3">
+                <small class="info-label">Variation ID:</small>
+                <div class="info-value">#{{ item.variationId }}</div>
+              </div>
+              <div class="col-md-2">
+                <small class="info-label">Quantity:</small>
+                <div class="info-value">{{ item.quantity }}</div>
+              </div>
+              <div class="col-md-2">
+                <small class="info-label">Unit Price:</small>
+                <div class="info-value">${{ item.priceAtPurchase.toFixed(2) }}</div>
+              </div>
+              <div class="col-md-2">
+                <small class="info-label">Total:</small>
+                <div class="info-value amount-highlight">${{ item.totalPrice.toFixed(2) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Summary -->
+    <div class="col-lg-4">
+      <div class="info-card">
+        <h3 class="card-title"><i class="fas fa-calculator text-warning"></i> Payment Summary</h3>
+        <div class="info-row"><span class="info-label">Total Amount:</span><span class="info-value">${{ order.totalAmount.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Discount:</span><span class="info-value text-success">-${{ order.discountAmount.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Shipping Fee:</span><span class="info-value">${{ order.shippingFee.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Tax Amount:</span><span class="info-value">${{ order.taxAmount.toFixed(2) }}</span></div>
+        <hr class="my-3">
+        <div class="info-row">
+          <span class="info-label h5">Final Amount:</span>
+          <span class="info-value amount-highlight h4">${{ order.finalAmount.toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <!-- Order Timeline -->
+      <div class="info-card">
+        <h3 class="card-title"><i class="fas fa-history text-info"></i> Order Timeline</h3>
+        <div class="timeline-item">
+          <strong>Order Created</strong>
+          <div class="text-muted small">{{ order.createdAt | date:'medium' }}</div>
+        </div>
+        <div class="timeline-item">
+          <strong>Order Updated</strong>
+          <div class="text-muted small">{{ order.updatedAt | date:'medium' }}</div>
+        </div>
+        <div class="timeline-item">
+          <strong>Status: {{ order.status | titlecase }}</strong>
+          <div class="text-muted small">Current Status</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

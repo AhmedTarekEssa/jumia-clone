@@ -24,5 +24,9 @@ export class SellerService {
     );
   }
 
+  getSellerById(sellerId:number):Observable<ISeller>{
+    return this.http.get<ISeller>(`http://localhost:5087/api/Seller/GetSellerById/${sellerId}`)
+  }
+
 
 }

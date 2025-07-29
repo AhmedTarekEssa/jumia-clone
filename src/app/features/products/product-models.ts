@@ -4,7 +4,7 @@ export interface ProductDetails {
   categoryId:number
   description: string
   basePrice: number
-  discountPercentage: string
+  discountPercentage: number
   stockQuantity: number,
   isAvailable: boolean
   mainImageUrl: string
@@ -26,7 +26,7 @@ export interface Variant {
   discountPercentage: number
   stockQuantity: number
   sku: string
-  variantImageUrl: File|null
+  variantImageUrl: File|string|null
   isDefault: boolean
   isAvailable: boolean
   attributes: Attribute2[]
@@ -42,7 +42,7 @@ export interface ProductUi {
   productId: number
   name: string
   basePrice: number
-  discountPercentage: string
+  discountPercentage: number
   imageUrl: any
   discount?: number
   isAvailable:boolean

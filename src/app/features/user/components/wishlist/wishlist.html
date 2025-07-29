@@ -2,14 +2,15 @@
   <h2 class="wishlist-title">Wishlist ({{ wishlist?.totalQuantity || 0 }})</h2>
 
   @if (isLoading) {
-    <div class="loading">Loading wishlist...</div>
+  <div class="loading">Loading wishlist...</div>
   } @else if (errorMessage) {
-      <div class="empty-state">
+  <div class="empty-state">
     <div class="heart-icon-container">
       <div class="heart-icon">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                fill="#F97316" stroke="#F97316" stroke-width="1"/>
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            fill="#F97316" stroke="#F97316" stroke-width="1" />
         </svg>
       </div>
     </div>
@@ -28,58 +29,119 @@
   </div>
 
   } @else {
-    <div class="wishlist-items">
-      @for (item of wishlist?.wishlistItems; track item.wishlistItemId) {
-        <div class="wishlist-item">
-          <div class="item-image">
-            <img [src]="item.mainImageUrl" [alt]="item.productName" />
-          </div>
+  <div class="wishlist-items">
+    @for (item of wishlist?.wishlistItems; track item.wishlistItemId) {
+    <div class="wishlist-item">
+      <div class="item-image">
+        <img [src]="item.mainImageUrl" [alt]="item.productName" />
+      </div>
 
-          <div class="item-details">
-            <h3 class="item-name">{{ item.productName }}</h3>
+      <div class="item-details">
+        <h3 class="item-name">{{ item.productName }}</h3>
 
-            @if (item.size) {
-              <div class="item-size">
-                Size: <span class="size-value">{{ item.size }}</span>
+        @if (item.size) {
+        <div class="item-size">
+          Size: <span class="size-value">{{ item.size }}</span>
+        </div>
+        }
+
+        <div class="price-section">
+          <span class="current-price">EGP {{ item.unitPrice | number:'1.2-2' }}</span>
+          @if (item.originalPrice && item.originalPrice > item.unitPrice) {
+          <span class="original-price">EGP {{ item.originalPrice | number:'1.2-2' }}</span>
+          <span class="discount">
+            -{{ ((item.originalPrice - item.unitPrice) / item.originalPrice * 100) | number:'1.0-0' }}%
+          </span>
+          }
+        </div>
+
+        @if (item.brandName) {
+        <div class="brand">
+          <span class="brand-logo">{{ item.brandName }}</span>
+          @if (item.isExpress) {
+          <span class="express-label">EXPRESS</span>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="item-actions">
+        <button class="remove-btn" (click)="removeFromWishlist(item.wishlistItemId)">
+          Remove
+        </button>
+        <button class="add-to-cart-btn" (click)="addToCart(item)">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+    } @empty {
+    <div class="empty-wishlist">Your wishlist is empty</div>
+    }
+  </div>
+  }
+</div>
+
+<div class="modal-overlay" *ngIf="showCartPopup" (click)="closeCartPopup()">
+  <div class="cart-popup" (click)="$event.stopPropagation()">
+    <div class="popup-header">
+      <h3>Select Quantities for Items</h3>
+      <button class="close-btn" (click)="closeCartPopup()">×</button>
+    </div>
+    <div class="popup-content">
+      @if (cartSelections.length > 0) {
+        <div *ngFor="let selection of cartSelections" class="variant-selection">
+          <div class="variant-card">
+            <img [src]="baseImageUrl + getItemImageUrl(selection.item)" class="variant-image">
+            <div class="variant-info">
+              <div class="variant-container">
+                <div>
+                  <h4>{{ getItemName(selection.item) }}</h4>
+                  <p class="variant-price">
+                    EGP {{ (getItemPrice(selection.item) * (1 - getItemDiscountPercentage(selection.item) / 100)) | number:'1.2-2' }}
+                    <span *ngIf="getItemDiscountPercentage(selection.item) > 0" class="discount">
+                      -{{ getItemDiscountPercentage(selection.item) }}%
+                    </span>
+                  </p>
+                  <p class="variant-stock">
+                    <ng-container *ngIf="getAvailableStockQuantity(selection.item) > 0">
+                      {{ getAvailableStockQuantity(selection.item) }} available
+                    </ng-container>
+                    <ng-container *ngIf="getAvailableStockQuantity(selection.item) === 0" [ngClass]="{'low-stock': true}">
+                      Out of stock
+                    </ng-container>
+                  </p>
+                </div>
+
+                <div class="quantity-controls">
+                  <button (click)="updateVariantQuantity(getItemIdentifier(selection.item), -1)"
+                          [disabled]="selection.quantity <= 0 || getAvailableStockQuantity(selection.item) === 0">-</button>
+                  <input type="number"
+                         [(ngModel)]="selection.quantity"
+                         (blur)="setVariantQuantity(getItemIdentifier(selection.item), selection.quantity)"
+                         [min]="0"
+                         [max]="getAvailableStockQuantity(selection.item)"
+                         [disabled]="getAvailableStockQuantity(selection.item) === 0">
+                  <button (click)="updateVariantQuantity(getItemIdentifier(selection.item), 1)"
+                          [disabled]="selection.quantity >= getAvailableStockQuantity(selection.item) || getAvailableStockQuantity(selection.item) === 0">+</button>
+                </div>
               </div>
-            }
-
-            <div class="price-section">
-              <span class="current-price">EGP {{ item.unitPrice | number:'1.2-2' }}</span>
-              @if (item.originalPrice && item.originalPrice > item.unitPrice) {
-                <span class="original-price">EGP {{ item.originalPrice | number:'1.2-2' }}</span>
-                <span class="discount">
-                  -{{ ((item.originalPrice - item.unitPrice) / item.originalPrice * 100) | number:'1.0-0' }}%
-                </span>
-              }
             </div>
-
-            @if (item.brandName) {
-              <div class="brand">
-                <span class="brand-logo">{{ item.brandName }}</span>
-                @if (item.isExpress) {
-                  <span class="express-label">EXPRESS</span>
-                }
-              </div>
-            }
-          </div>
-
-          <div class="item-actions">
-            <button
-              class="remove-btn"
-              (click)="removeFromWishlist(item.wishlistItemId)">
-              Remove
-            </button>
-            <button
-              class="add-to-cart-btn"
-              (click)="addToCart(item)">
-              Add to Cart
-            </button>
           </div>
         </div>
-      } @empty {
-        <div class="empty-wishlist">Your wishlist is empty</div>
+        <div class="total-summary">
+          Total Items: {{ getTotalItems() }} | Total Price: EGP {{ getTotalPrice() | number:'1.2-2' }}
+        </div>
+      } @else {
+        <div class="no-items-to-add">
+          No items are currently available to add to cart from this wishlist product.
+          <br>
+          This could be because it's out of stock or all units are already in your cart.
+        </div>
       }
     </div>
-  }
+    <div class="popup-actions">
+      <button class="continue-shopping-btn" (click)="closeCartPopup()">Continue Shopping</button>
+      <button class="add-to-cart-final-btn" (click)="addToCartApi()" [disabled]="getTotalItems() === 0">Add to Cart</button>
+    </div>
+  </div>
 </div>
