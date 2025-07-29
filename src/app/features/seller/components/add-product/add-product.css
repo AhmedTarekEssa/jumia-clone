@@ -156,7 +156,7 @@ textarea.form-control {
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: #d31d2c;
   color: white;
 }
 
@@ -177,7 +177,7 @@ textarea.form-control {
 
 .btn-outline-secondary {
   background-color: transparent;
-  color: #6c757d;
+  color: #b45b38;
   border: 1px solid #6c757d;
 }
 

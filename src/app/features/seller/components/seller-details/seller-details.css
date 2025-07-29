@@ -180,7 +180,7 @@
 .seller-image {
   width: 200px;
   height: 200px;
-  border-radius: 50%;
+  border-radius: 10%;
   object-fit: cover;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
