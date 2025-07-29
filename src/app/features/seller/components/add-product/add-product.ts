@@ -44,7 +44,9 @@ export class AddProduct implements OnInit, OnDestroy {
   productId: number | null = null;
   isEditMode: boolean = false;
   originalProductData: ProductDetails | null = null;
-
+  userInfoCookie!: string | null;
+  userInfo!:any;
+  userTypeId!:string;
   private variantQuantitySubscription: Subscription | null = null;
 
   constructor(private fb: FormBuilder) { }
@@ -55,7 +57,13 @@ export class AddProduct implements OnInit, OnDestroy {
     this.loadCategories();
 
     this.cdr.detectChanges()
+    this.userInfoCookie = this.getCookie('UserInfo');
 
+    if (this.userInfoCookie) {
+      this.userInfo = JSON.parse(this.userInfoCookie);
+      this.userTypeId = this.userInfo.UserTypeId;
+      this.cdr.detectChanges();
+    }
     this.route.paramMap.subscribe(params => {
       this.productId = Number(params.get('id'));
       this.cdr.detectChanges()
@@ -175,6 +183,20 @@ export class AddProduct implements OnInit, OnDestroy {
     this.manageProductAttributesState();
     this.cdr.detectChanges();
   }
+  getCookie(name: string): string | null {
+    const nameEQ = name + '=';
+    const cookies = document.cookie.split(';');
+
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(nameEQ)) {
+        return decodeURIComponent(cookie.substring(nameEQ.length));
+      }
+    }
+
+    return null;
+  }
+
 
   loadProductForEdit(productId: number): void {
     this.productService.getProductDetails(productId).subscribe({
@@ -571,7 +593,7 @@ export class AddProduct implements OnInit, OnDestroy {
 
       const formData = new FormData();
 
-      formData.append('SellerId', '1');
+      formData.append('SellerId',this.userTypeId );
       formData.append('CategoryId', finalCategoryId.toString());
       formData.append('Name', this.productForm.value.name);
       formData.append('Description', this.productForm.value.description);
