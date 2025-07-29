@@ -14,8 +14,8 @@ import { FormsModule } from '@angular/forms';
 @Component({
   standalone: true,
   selector: 'app-navbar-main',
-//   standalone: true,
-  imports: [CommonModule, CategoryList,FormsModule],
+  //   standalone: true,
+  imports: [CommonModule, CategoryList, FormsModule],
 
   templateUrl: './navbar-main.html',
   styleUrl: './navbar-main.css'
@@ -30,8 +30,8 @@ export class NavbarMain implements OnInit {
   constructor(
     private router: Router,
     private cookieService: CookieService,
-    private authService: AuthService  
-   
+    private authService: AuthService
+
   ) { }
 
   ngOnInit() {
@@ -59,14 +59,14 @@ export class NavbarMain implements OnInit {
       }
     }
   }
-  sementicSearch(query:string){
-   console.log(query)
+  sementicSearch(query: string) {
+    console.log(query)
     this.router.navigate(['/search-products'], {
-  queryParams: { query: query }
-});
+      queryParams: { query: query }
+    });
 
 
-    
+
   }
   getUserFirstName(): string {
 
@@ -97,29 +97,37 @@ export class NavbarMain implements OnInit {
   }
 
   logout() {
-  this.authService.logout().subscribe({
-    next: () => {
-      this.userInfo = null;
-      this.username = '';
-      this.cookieService.delete('UserInfo');
-      this.router.navigate(['/login-register']);
-    },
-    error: (err) => {
-
-
-      if(this.cookieService.get('UserInfo')) {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.userInfo = null;
+        this.username = '';
         this.cookieService.delete('UserInfo');
+        this.cookieService.delete('JumiaAuthCookie');
         this.router.navigate(['/login-register']);
-      }else {
+      },
+      error: (err) => {
+        if (this.cookieService.get('UserInfo')) {
+          this.cookieService.delete('UserInfo');
+        }
+        if (this.cookieService.get('JumiaAuthCookie')) {
+          this.cookieService.delete('JumiaAuthCookie');
+        }
         this.router.navigate(['/login-register']);
-        console.error('Logout failed', err);
+
+        // if (this.cookieService.get('UserInfo')) {
+        //   this.cookieService.delete('UserInfo');
+        //   this.cookieService.delete('JumiaAuthCookie');
+        //   this.router.navigate(['/login-register']);
+        // } else {
+        //   this.router.navigate(['/login-register']);
+        //   console.error('Logout failed', err);
+        // }
+
+
+
       }
-
-
-
-    }
-  });
-}
+    });
+  }
 
 
   //     sidebarCategories = [

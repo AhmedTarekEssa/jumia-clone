@@ -186,14 +186,14 @@
             <div class="message-input-container">
               <div class="input-wrapper">
                 <div class="text-input-container">
-                  <textarea 
-  [(ngModel)]="newMessage" 
-  class="message-input" 
+                  <textarea
+  [(ngModel)]="newMessage"
+  class="message-input"
   placeholder="Type your message..."
   (keydown)="handleKeyDown($event)"
   #messageInput>
 </textarea>
-                   <button class="btn btn-send" (click)="sendMessage()" [disabled]="!newMessage?.trim()">
+                   <button class="btn btn-send" (click)="sendMessage()" [disabled]="!newMessage.trim()">
                     <i class="fas fa-paper-plane"></i>
                   </button>
                 </div>

@@ -14,10 +14,24 @@ export class Unauthorized {
   constructor(private router: Router , private cookieService: CookieService , private cdr: ChangeDetectorRef) {}
 
   goToLogin() {
+    if(this.cookieService.get('UserInfo')){
+      this.cookieService.delete('UserInfo');
+    }
+    if(this.cookieService.get('JumiaAuthCookie')){
+      this.cookieService.delete('JumiaAuthCookie');
+    }
+
+
     this.router.navigate(['/login-register']);
   }
 
   goToRegister() {
+    if(this.cookieService.get('UserInfo')){
+      this.cookieService.delete('UserInfo');
+    }
+    if(this.cookieService.get('JumiaAuthCookie')){
+      this.cookieService.delete('JumiaAuthCookie');
+    }
     this.router.navigate(['/login-register']);
   }
 
