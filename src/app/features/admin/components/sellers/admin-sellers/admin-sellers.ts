@@ -17,21 +17,36 @@ export class AdminSellers implements OnInit {
 
   constructor(private sellerService: SellerService,private cdr : ChangeDetectorRef) {}
 
-   showAddForm = false;
+  showAddForm = false;
   searchTerm = '';
   statusFilter = '';
   categoryFilter = '';
   sellers:ISeller[]=[]
 
-get filteredSellers(): ISeller[] {
-  return this.sellers.filter(seller => {
-    const term = this.searchTerm.toLowerCase();
-    return (
-      seller.businessName.toLowerCase().includes(term) ||
-      seller.businessDescription.toLowerCase().includes(term)
+
+ get filteredSellers(): ISeller[] {
+      console.log('Current search term:', this.searchTerm);
+  console.log('All sellers:', this.sellers);
+  
+  if (!this.searchTerm?.trim()) {
+    console.log('No search term - returning all customers');
+    return this.sellers;
+  }
+
+  const searchLower = this.searchTerm.trim().toLowerCase();
+  console.log('Searching for:', searchLower);
+
+  const filtered = this.sellers.filter(seller => {
+    const matches = (
+      (seller.businessName.toLowerCase().includes(searchLower)) 
+     
     );
+        return matches;
   });
-}
+
+  console.log('Filtered results:', filtered);
+  return filtered;
+  }
 
 
   ngOnInit(): void {
