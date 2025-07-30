@@ -39,16 +39,7 @@ export class AdminCustomers {
   customers: Customer[] = [];
   selectedCustomer: Customer | null = null;
   totalCustomers: number = 0;
-  // filteredCustomers: Customer[] = [];
   
-  newCustomer = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateOfBirth: '',
-    gender: ''
-  };
 
   private cdr = inject(ChangeDetectorRef); 
   private userService = inject(User);
@@ -62,13 +53,10 @@ export class AdminCustomers {
   loadCustomers(): void {
     this.isLoading = true;
     this.error = '';
-
-    console.log("ccccccccccccccccccc");
     
     this.userService.getAllCustomers().pipe(
       finalize(() => {
         this.isLoading = false;
-              console.log('Loading finished');
               this.cdr.detectChanges();
       }
       )
@@ -112,31 +100,35 @@ export class AdminCustomers {
       return ''; 
   }
 
-   get filteredCustomers(): Customer[] {
-      console.log('Current search term:', this.searchTerm);
-  console.log('All customers:', this.customers);
   
-  if (!this.searchTerm?.trim()) {
-    console.log('No search term - returning all customers');
-    return this.customers;
-  }
+  // if (!this.searchTerm?.trim()) {
+  //   console.log('No search term - returning all customers');
+  //   return this.customers;
+  // }
 
-  const searchLower = this.searchTerm.trim().toLowerCase();
-  console.log('Searching for:', searchLower);
+  // Filtered customers getter
+  get filteredCustomers(): Customer[] {
+    console.log('Current search term:', this.searchTerm);
+    console.log('All customers:', this.customers);
 
-  const filtered = this.customers.filter(customer => {
-    const matches = (
-      (customer.firstName?.toLowerCase().includes(searchLower)) ||
-      (customer.lastName?.toLowerCase().includes(searchLower)) 
-     
-    );
-    
-    console.log(`Customer ${customer.email} matches:`, matches);
-    return matches;
-  });
+    // Filter customers by search term and status filter (Blocked/Active)
+    const filteredBySearch = this.customers.filter(customer => {
+      const searchLower = this.searchTerm.trim().toLowerCase();
+      return (
+        customer.firstName?.toLowerCase().includes(searchLower) ||
+        customer.lastName?.toLowerCase().includes(searchLower) ||
+        customer.email?.toLowerCase().includes(searchLower)
+      );
+    });
 
-  console.log('Filtered results:', filtered);
-  return filtered;
+    // Apply status filter (Blocked or Active)
+    if (this.statusFilter) {
+      return filteredBySearch.filter(customer =>
+        this.statusFilter === 'blocked' ? customer.isBlocked : !customer.isBlocked
+      );
+    }
+
+    return filteredBySearch;
   }
 
    toggleBlockStatus(customer: Customer): void {
@@ -173,30 +165,5 @@ export class AdminCustomers {
 }
 
   
-
-  // get filteredCustomers(): Customer[] {
-  //   return this.customers.filter(customer => {
-  //     const matchesSearch = customer.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-  //                          customer.email.toLowerCase().includes(this.searchTerm.toLowerCase());
-  //     const matchesStatus = !this.statusFilter || customer.status === this.statusFilter;
-  //     return matchesSearch && matchesStatus;
-  //   });
-  // }
-
-  // addCustomer(): void {
-  //   if (this.newCustomer.name && this.newCustomer.email && this.newCustomer.phone) {
-  //     const customer: Customer = {
-  //       id: this.customers.length + 1,
-  //       ...this.newCustomer,
-  //       joinDate: new Date().toISOString().split('T')[0],
-  //       totalOrders: 0,
-  //       totalSpent: 0
-  //     };
-  //     this.customers.push(customer);
-  //     this.newCustomer = { name: '', email: '', phone: '', status: 'Active' };
-  //     this.showAddForm = false;
-  //   }
-  // }
-
   
 

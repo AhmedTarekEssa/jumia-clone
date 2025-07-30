@@ -39,6 +39,25 @@ export class ProductPerformance implements OnInit, AfterViewInit, OnDestroy {
   products: any[] = [];
   orders: any[] = [];
 
+  // Jumia Color Palette
+  private jumiaColors = {
+    primary: '#ff6600',
+    primaryLight: 'rgba(255, 102, 0, 0.7)',
+    primaryDark: '#e55a00',
+    secondary: '#00a651',
+    secondaryLight: 'rgba(0, 166, 81, 0.7)',
+    warning: '#ffa726',
+    warningLight: 'rgba(255, 167, 38, 0.7)',
+    info: '#5e72e4',
+    infoLight: 'rgba(94, 114, 228, 0.7)',
+    success: '#00c851',
+    successLight: 'rgba(0, 200, 81, 0.7)',
+    error: '#ff4444',
+    errorLight: 'rgba(255, 68, 68, 0.7)',
+    text: '#333333',
+    lightGray: '#f7f7f7'
+  };
+
   constructor(
     private productService: ProductService,
     private orderService: OrderService,
@@ -157,15 +176,49 @@ export class ProductPerformance implements OnInit, AfterViewInit, OnDestroy {
         datasets: [{
           label: 'Revenue',
           data: sortedProducts.map(item => item[1].revenue),
-          backgroundColor: 'rgba(54, 162, 235, 0.7)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
+          backgroundColor: this.jumiaColors.primaryLight,
+          borderColor: this.jumiaColors.primary,
+          borderWidth: 2,
+          hoverBackgroundColor: this.jumiaColors.primary,
+          hoverBorderColor: this.jumiaColors.primaryDark
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          title: { display: true, text: 'Top Selling Products' }
+          title: { 
+            display: true, 
+            text: 'Top Selling Products',
+            color: this.jumiaColors.text,
+            font: {
+              size: 16,
+              weight: 'bold'
+            }
+          },
+          legend: {
+            labels: {
+              color: this.jumiaColors.text
+            }
+          }
+        },
+        scales: {
+          y: {
+            ticks: {
+              color: this.jumiaColors.text
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.1)'
+            }
+          },
+          x: {
+            ticks: {
+              color: this.jumiaColors.text
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.1)'
+            }
+          }
         }
       }
     });
@@ -183,15 +236,54 @@ export class ProductPerformance implements OnInit, AfterViewInit, OnDestroy {
         datasets: [{
           label: 'Monthly Sales',
           data: Object.values(monthlySales),
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
+          fill: true,
+          backgroundColor: 'rgba(255, 102, 0, 0.1)',
+          borderColor: this.jumiaColors.primary,
+          borderWidth: 3,
+          tension: 0.4,
+          pointBackgroundColor: this.jumiaColors.primary,
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          title: { display: true, text: 'Sales Trend' }
+          title: { 
+            display: true, 
+            text: 'Sales Trend',
+            color: this.jumiaColors.text,
+            font: {
+              size: 16,
+              weight: 'bold'
+            }
+          },
+          legend: {
+            labels: {
+              color: this.jumiaColors.text
+            }
+          }
+        },
+        scales: {
+          y: {
+            ticks: {
+              color: this.jumiaColors.text
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.1)'
+            }
+          },
+          x: {
+            ticks: {
+              color: this.jumiaColors.text
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.1)'
+            }
+          }
         }
       }
     });
@@ -211,16 +303,41 @@ export class ProductPerformance implements OnInit, AfterViewInit, OnDestroy {
         datasets: [{
           data: [lowStock, healthyStock],
           backgroundColor: [
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(75, 192, 192, 0.7)'
+            this.jumiaColors.errorLight,
+            this.jumiaColors.secondaryLight
           ],
-          borderWidth: 1
+          borderColor: [
+            this.jumiaColors.error,
+            this.jumiaColors.secondary
+          ],
+          borderWidth: 2,
+          hoverBackgroundColor: [
+            this.jumiaColors.error,
+            this.jumiaColors.secondary
+          ]
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          title: { display: true, text: 'Inventory Status' }
+          title: { 
+            display: true, 
+            text: 'Inventory Status',
+            color: this.jumiaColors.text,
+            font: {
+              size: 16,
+              weight: 'bold'
+            }
+          },
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: this.jumiaColors.text,
+              padding: 20,
+              usePointStyle: true
+            }
+          }
         }
       }
     });
@@ -242,19 +359,53 @@ export class ProductPerformance implements OnInit, AfterViewInit, OnDestroy {
         datasets: [{
           data: sortedCategories.map(item => item[1].revenue),
           backgroundColor: [
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(54, 162, 235, 0.7)',
-            'rgba(255, 206, 86, 0.7)',
-            'rgba(75, 192, 192, 0.7)',
-            'rgba(153, 102, 255, 0.7)'
+            this.jumiaColors.primaryLight,
+            this.jumiaColors.secondaryLight,
+            this.jumiaColors.warningLight,
+            this.jumiaColors.infoLight,
+            this.jumiaColors.successLight,
+            this.jumiaColors.errorLight
           ],
-          borderWidth: 1
+          borderColor: [
+            this.jumiaColors.primary,
+            this.jumiaColors.secondary,
+            this.jumiaColors.warning,
+            this.jumiaColors.info,
+            this.jumiaColors.success,
+            this.jumiaColors.error
+          ],
+          borderWidth: 2,
+          hoverBackgroundColor: [
+            this.jumiaColors.primary,
+            this.jumiaColors.secondary,
+            this.jumiaColors.warning,
+            this.jumiaColors.info,
+            this.jumiaColors.success,
+            this.jumiaColors.error
+          ]
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          title: { display: true, text: 'Revenue by Category' }
+          title: { 
+            display: true, 
+            text: 'Revenue by Category',
+            color: this.jumiaColors.text,
+            font: {
+              size: 16,
+              weight: 'bold'
+            }
+          },
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: this.jumiaColors.text,
+              padding: 15,
+              usePointStyle: true
+            }
+          }
         }
       }
     });

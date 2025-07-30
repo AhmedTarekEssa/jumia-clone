@@ -1,25 +1,277 @@
-.customers-container { padding: 20px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .search-filter { display: flex; gap: 15px; margin-bottom: 20px; }
-    .search-input, .filter-select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
-    .add-form { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
-    .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
-    .form-row input, .form-row select { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
-    .form-actions { display: flex; gap: 10px; }
-    .customers-table { background: white; border-radius: 8px; overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-    th { background-color: #f8f9fa; font-weight: 600; }
-    .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-    .status.active { background-color: #d4edda; color: #155724; }
-    .status.inactive { background-color: #f8d7da; color: #721c24; }
-    .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
-    .btn-primary { background-color: #007bff; color: white; }
-    .btn-success { background-color: #28a745; color: white; }
-    .btn-secondary { background-color: #6c757d; color: white; }
-    .btn-danger { background-color: #dc3545; color: white; }
-    .btn-sm { padding: 4px 8px; font-size: 12px; margin-right: 5px; }
+.customers-container {
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
 
-    
+.header {
+  margin-bottom: 32px;
+}
 
-     
+.header h2 {
+  color: #f68b1e;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.search-filter {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #ff6900;
+  box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.1);
+}
+
+.search-input::placeholder {
+  color: #6c757d;
+}
+
+.filter-select {
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  min-width: 140px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: #ff6900;
+  box-shadow: 0 0 0 3px rgba(255, 105, 0, 0.1);
+}
+
+.customers-table {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.customers-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.customers-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.customers-table thead th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.customers-table tbody tr {
+  border-bottom: 1px solid #f1f3f4;
+  transition: background-color 0.2s ease;
+}
+
+.customers-table tbody tr:hover {
+  background-color: #fef9f5;
+}
+
+.customers-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.customers-table tbody td {
+  padding: 16px 20px;
+  font-size: 18px;
+  color: #495057;
+  vertical-align: middle;
+  border: none;
+}
+
+.customers-table tbody td:first-child {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+/* Status styling */
+.text-success {
+  color: #28a745 !important;
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Button styling */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 16px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: 2px solid #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: 2px solid #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .customers-container {
+    padding: 16px;
+  }
+  
+  .header h2 {
+    font-size: 24px;
+  }
+  
+  .search-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input {
+    max-width: none;
+  }
+  
+  .customers-table {
+    overflow-x: auto;
+  }
+  
+  .customers-table table {
+    min-width: 600px;
+  }
+  
+  .customers-table thead th,
+  .customers-table tbody td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customers-container {
+    padding: 12px;
+  }
+  
+  .header h2 {
+    font-size: 20px;
+  }
+  
+  .customers-table thead th,
+  .customers-table tbody td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+/* Loading and empty states */
+.customers-table tbody tr.empty-state td {
+  text-align: center;
+  padding: 48px 20px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Additional Jumia-inspired enhancements */
+.customers-table tbody tr:nth-child(even) {
+  background-color: #fefefe;
+}
+
+.customers-table tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.customers-table tbody tr:hover {
+  background-color: #fff5e6 !important;
+  box-shadow: inset 4px 0 0 #ff6900;
+}
+
+/* Custom scrollbar for table */
+.customers-table::-webkit-scrollbar {
+  height: 8px;
+}
+
+.customers-table::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.customers-table::-webkit-scrollbar-thumb {
+  background: #ff6900;
+  border-radius: 4px;
+}
+
+.customers-table::-webkit-scrollbar-thumb:hover {
+  background: #e55a00;
+}

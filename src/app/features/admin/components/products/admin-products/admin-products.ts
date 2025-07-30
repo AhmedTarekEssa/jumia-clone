@@ -37,34 +37,16 @@ interface ProductVariant {
   status: 'Active' | 'Inactive';
 }
 
-interface NewProduct {
-  sellerId: number;
-  categoryId: number;
-  name: string;
-  description: string;
-  basePrice: number;
-  mainImage: File | null;
-  additionalImages: File[];
-  attributes: { attributeId: number; values: string[] }[];
-  variants: {
-    variantName: string;
-    price: number;
-    stockQuantity: number;
-    sku: string;
-    image: File | null;
-  }[];
-}
-
 interface Category {
   id: number;
   name: string;
 }
 
-interface ProductAttribute {
-  id: number;
-  name: string;
-  values: string[];
-}
+// interface ProductAttribute {
+//   id: number;
+//   name: string;
+//   values: string[];
+// }
 
 
 @Component({
@@ -76,49 +58,22 @@ interface ProductAttribute {
 })
 export class AdminProducts implements OnInit , OnDestroy {
   private destroyed = new Subject<void>();
+  private categoryService = inject( CategoryService);
+  private cdr = inject(ChangeDetectorRef);
 
-  showAddForm = false;
   searchTerm = '';
   categoryFilter = '';
   statusFilter = '';
+  isAvailableFilter : boolean | null = null;
 
   products: Product[] = [];
   isLoading = true;
   error = '';
 
-  editingProduct: Product | null = null ;
-
-  newProduct: NewProduct = {
-    sellerId: 2, // Set default or get from auth
-    categoryId: 0,
-    name: '',
-    description: '',
-    basePrice: 0,
-    mainImage: null,
-    additionalImages: [],
-    attributes: [],
-    variants: [{
-      variantName: '',
-      price: 0,
-      stockQuantity: 0,
-      sku: '',
-      image: null
-    }]
-  };
-
   categories: Category[] = [];
-  attributesForCategory: ProductAttribute[] = [];
-  isSubmitting = false;
+   
 
-    private categoryService = inject( CategoryService);
-    // private attributeService = inject(AttributeService);
-    private cdr = inject(ChangeDetectorRef);
-
-  constructor(private productService : ProductService){
-  //   console.log(productService);
-  //   console.log('getAllWithDetails exists:', 
-  // typeof this.productService.getAllWithDetails === 'function');
-  }
+  constructor(private productService : ProductService){}
 
   ngOnInit(): void {
       console.log('Component initialized'); // Debug log
@@ -210,30 +165,6 @@ declineProduct(product: Product): void {
   }
 }
 
-// Only show delete for non-pending products
-// deleteProduct(product: Product): void {
-//   if (confirm('Are you sure you want to permanently delete this product?')) {
-//     this.isLoading = true;
-    
-//     this.productService.deleteProduct(product.productId).pipe(
-//       takeUntil(this.destroyed))
-//     .subscribe({
-//       next: (response) => {
-//         // Remove from local array
-//         this.products = this.products.filter(p => p.productId !== product.productId);
-//         this.isLoading = false;
-//         this.cdr.detectChanges();
-//       },
-//       error: (err) => {
-//         this.error = 'Failed to delete product';
-//         this.isLoading = false;
-//         this.cdr.detectChanges();
-//         console.error('Delete error:', err);
-//       }
-//     });
-//   }
-// }
-
 
   loadCategories():void {
     this.categoryService.getAllCategories().pipe(
@@ -248,177 +179,7 @@ declineProduct(product: Product): void {
     });
   }
 
-  onCategoryChange(): void {
-    if (this.newProduct.categoryId) {
-      this.categoryService.getAttributes(this.newProduct.categoryId).pipe(
-        takeUntil(this.destroyed)
-      ).subscribe({
-        next: (attributes) => {
-          this.attributesForCategory = attributes.map(
-            attr => ({
-              id: attr.categoryId,
-              name: attr.name,
-              values: this.getPossibleValues(attr.name)
-            })
-          );
-          // Initialize attributes array
-          this.newProduct.attributes = attributes.map(attr => ({
-            attributeId: attr.categoryId,
-            values: []
-          }));
-        },
-        error: (err) => {
-          console.error('Error loading attributes:', err);
-        }
-      });
-    }
-  }
-
-  getPossibleValues(attributeName: string): string[] {
-  const valueMappings: {[key: string]: string[]} = {
-    'Color': ['Red', 'Blue', 'Green', 'Black', 'White'],
-    'Size': ['S', 'M', 'L', 'XL', 'XXL'],
-    'Material': ['Cotton', 'Polyester', 'Wool', 'Silk']
-  };
-  return valueMappings[attributeName] || [];
-}
-
-onMainImageChange(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.newProduct.mainImage = file;
-    }
-  }
-
-  onAdditionalImagesChange(event: any): void {
-    this.newProduct.additionalImages = Array.from(event.target.files);
-  }
-
-  onVariantImageChange(event: any, index: number): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.newProduct.variants[index].image = file;
-    }
-  }
-
- onAttributeChange(event: Event, attributeId: number, value: string): void {
-  const target = event.target as HTMLInputElement;
-  const isChecked = target.checked;
-  
-  const attribute = this.newProduct.attributes.find(a => a.attributeId === attributeId);
-  if (attribute) {
-    if (isChecked) {
-      attribute.values.push(value);
-    } else {
-      attribute.values = attribute.values.filter(v => v !== value);
-    }
-  }
-}
-
-   addVariant(): void {
-    this.newProduct.variants.push({
-      variantName: '',
-      price: 0,
-      stockQuantity: 0,
-      sku: '',
-      image: null
-    });
-  }
-
-  removeVariant(index: number): void {
-    if (this.newProduct.variants.length > 1) {
-      this.newProduct.variants.splice(index, 1);
-    }
-  }
-
-
-  onSubmit(): void {
-    if (this.isSubmitting) return;
-    
-    this.isSubmitting = true;
-    
-    const formData = new FormData();
-    
-    // Append basic product info
-    formData.append('SellerId', this.newProduct.sellerId.toString());
-    formData.append('CategoryId', this.newProduct.categoryId.toString());
-    formData.append('Name', this.newProduct.name);
-    formData.append('Description', this.newProduct.description);
-    formData.append('BasePrice', this.newProduct.basePrice.toString());
-    
-    // Append main image
-    if (this.newProduct.mainImage) {
-      formData.append('MainImageUrl', this.newProduct.mainImage);
-    }
-    
-    // Append additional images
-    this.newProduct.additionalImages.forEach((image, index) => {
-      formData.append(`AdditionalImageUrls`, image);
-    });
-    
-    // Append attributes
-    this.newProduct.attributes.forEach((attr, index) => {
-      formData.append(`Attributes[${index}].AttributeName`, 
-        this.attributesForCategory.find(a => a.id === attr.attributeId)?.name || '');
-      attr.values.forEach((value, valueIndex) => {
-        formData.append(`Attributes[${index}].Values[${valueIndex}]`, value);
-      });
-    });
-
-     // Append variants
-    this.newProduct.variants.forEach((variant, index) => {
-      formData.append(`Variants[${index}].VariantName`, variant.variantName);
-      formData.append(`Variants[${index}].Price`, variant.price.toString());
-      formData.append(`Variants[${index}].StockQuantity`, variant.stockQuantity.toString());
-      formData.append(`Variants[${index}].Sku`, variant.sku);
-      if (variant.image) {
-        formData.append(`Variants[${index}].VariantImageUrl`, variant.image);
-      }
-    });
-    
-    this.productService.AddProduct(formData).pipe(
-      takeUntil(this.destroyed)
-    ).subscribe({
-      next: (response) => {
-        this.isSubmitting = false;
-        this.showAddForm = false;
-        this.resetForm();
-        this.loadProducts(); // Refresh the product list
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        this.error = 'Failed to add product. Please try again.';
-        console.error('Error adding product:', error);
-      }
-    });
-  }
-
-   resetForm(): void {
-    this.newProduct = {
-      sellerId: 1,
-      categoryId: 0,
-      name: '',
-      description: '',
-      basePrice: 0,
-      mainImage: null,
-      additionalImages: [],
-      attributes: [],
-      variants: [{
-        variantName: '',
-        price: 0,
-        stockQuantity: 0,
-        sku: '',
-        image: null
-      }]
-    };
-    this.attributesForCategory = [];
-  
-  // ... rest of the existing methods
-   }
-
-
-
-
+ 
   private mapApiProductsToUiModel(apiProducts: ProductUi[]): Product[] {
     if (!apiProducts) return [];
 
@@ -445,8 +206,16 @@ onMainImageChange(event: any): void {
 
 
   get filteredProducts(): Product[] {
+  // console.log('Current statusFilter:', this.statusFilter);
+  // console.log('Sample product statuses:', this.products.slice(0, 3).map(p => p.approvalStatus));
     return this.products.filter(product => {
-      return product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesStatus = !this.statusFilter || product.approvalStatus.toLowerCase() === this.statusFilter.toLowerCase();
+      const matchesAvailability = this.isAvailableFilter === null ||Boolean( product.isAvailable ) === this.isAvailableFilter;
+      console.log(`Product: ${product.name}, Status: ${product.approvalStatus}, Available: ${product.isAvailable} ,matchesStatus: ${matchesStatus}, matchesAvailability: ${matchesAvailability}`);
+      console.log("isAvailableFilter: " , this.isAvailableFilter);
+      return matchesSearch && matchesStatus && matchesAvailability;
     });
   }
 
@@ -457,28 +226,6 @@ onMainImageChange(event: any): void {
   img.parentElement!.classList.add('no-image'); // Add CSS class to parent
 }
 
-editProduct(product: Product){
-  this.editingProduct = {...product};
-  this.showAddForm = true;
-
-}
-
-updateProduct(): void{
-  if(!this.editingProduct) return;
-
-  this.products = this.products.map(p => 
-    p.productId === this.editingProduct!.productId ? this.editingProduct! : p
-  );
-
-  this.cancelEdit();
-  this.loadProducts();
-
-}
-
-cancelEdit(): void {
-    this.editingProduct = null;
-    this.showAddForm = false;
-  }
 
 // DELETE PRODUCT
   deleteProduct(product: Product): void {
