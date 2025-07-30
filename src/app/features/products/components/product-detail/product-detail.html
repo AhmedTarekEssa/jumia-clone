@@ -145,13 +145,20 @@
       <div *ngFor="let message of messages" class="ai-bot-message-wrapper">
         <div class="ai-bot-message-bubble"
           [ngClass]="{'ai-bot-user-message': message.type === 'user', 'ai-bot-bot-message': message.type === 'bot'}">
-          <span>{{ message.text }}</span>
+          <div>
+            <span>{{ message.text }}</span>
+          </div>
 
-          <span *ngIf="message.type === 'bot' && message.thought"
-                class="ai-bot-thought-arrow"
-                [class.rotated]="message.showThought"
-                (click)="toggleThought(message)">
-            &#9660; </span>
+          <div *ngIf="message.type === 'bot' && message.thought" class="thought-toggle-container">
+            <span class="ai-bot-thought-label">Thinking</span>
+            <span class="ai-bot-thought-arrow"
+                  [class.rotated]="message.showThought"
+                  (click)="toggleThought(message)">
+              &#9660;
+            </span>
+            
+          </div>
+          
         </div>
 
         <div *ngIf="message.type === 'bot' && message.thought && message.showThought"

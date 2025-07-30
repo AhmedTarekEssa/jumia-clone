@@ -5,7 +5,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">J</div>
-            <div class="logo-text">Jumia Admin</div>
+            <div class="logo-text" (click)="toggleSidebar()">Jumia Admin</div>
         </div>
 
         <nav class="nav-section">
@@ -20,7 +20,7 @@
                 <a class="nav-link" [routerLink]="['/admin/customers']" [routerLinkActive]="'active'" >
                     <i class="fas fa-users"></i>
                     <span>Customers</span>
-                    <i class="fas fa-chevron-down" ></i>
+                    <!-- <i class="fas fa-chevron-down" ></i> -->
                 </a>
 
             </div>
@@ -29,7 +29,7 @@
                 <a class="nav-link" [routerLink]="['/admin/products']" [routerLinkActive]="'active'" >
                     <i class="fas fa-shopping-bag"></i>
                     <span>Products</span>
-                    <i class="fas fa-chevron-down" ></i>
+                    <!-- <i class="fas fa-chevron-down" ></i> -->
                 </a>
 
             </div>
@@ -57,7 +57,7 @@
 
             <div class="nav-item">
                 <a  class="nav-link" [routerLink]="['/admin/chats']" [routerLinkActive]="'active'">
-                    <i class="fas fa-star"></i>
+                    <i class="fa-solid fa-comment"></i>
                     <span>Chats</span>
                 </a>
             </div>
@@ -74,5 +74,13 @@
                     <span>Settings</span>
                 </a>
             </div>
+
+            <div class="nav-item">
+                <a class="nav-link" (click)="logout()" >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+
         </nav>
     </aside>

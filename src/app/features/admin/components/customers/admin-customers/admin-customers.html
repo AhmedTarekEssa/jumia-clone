@@ -10,11 +10,13 @@
           placeholder="Search customers..." 
           [(ngModel)]="searchTerm"
           class="search-input">
-        <!-- <select [(ngModel)]="statusFilter" class="filter-select">
-          <option value="">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select> -->
+
+        <!-- Add filter for blocked or active customers -->
+        <select [(ngModel)]="statusFilter" class="filter-select">
+          <option value="">All Customers</option>
+          <option value="blocked">Blocked</option>
+          <option value="active">Active</option>
+        </select>
       </div>
 
       
