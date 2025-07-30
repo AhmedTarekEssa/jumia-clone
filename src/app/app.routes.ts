@@ -61,7 +61,7 @@ export const routes: Routes = [
 
       },
       {
-        path: 'seccess',
+        path: 'success',
         loadComponent:()=>import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
       },
       {
