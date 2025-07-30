@@ -34,7 +34,8 @@ export class SellerSidebar {
     { icon: 'fas fa-chart-bar', label: 'Analytics', route: '/seller/analytics' },
     { icon: 'fas fa-box', label: 'Orders', route: '/seller/orders'},
     { icon: 'fas fa-shopping-bag', label: 'Products', route: '/seller/products' },
-    { icon: 'fas fa-bullhorn', label: 'Promotions', route: '/seller/promotions' }
+    { icon: 'fas fa-bullhorn', label: 'Promotions', route: '/seller/promotions' },
+    { icon: 'fas fa-shopping-bag', label: 'chat', route: '/seller/chat' }
   ];
 
   navigateTo(route: string) {
