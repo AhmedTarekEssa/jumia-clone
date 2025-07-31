@@ -1,0 +1,91 @@
+<!-- recommendation-showcase.component.html -->
+<div class="flash-sales-container">
+  <!-- Top banner with category name -->
+  <div class="flash-sales-header">
+    <div class="flash-sales-title">
+      <i class="flash-icon"></i>
+      <span><b>Recommended for you</b></span>
+    </div>
+    <div class="see-all">
+
+    
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <app-loading></app-loading>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!isLoading && loadingError" class="error-container">
+    <i class="fas fa-exclamation-triangle text-warning"></i>
+    <p>Failed to load recommendations</p>
+    <button class="btn btn-sm btn-outline-primary" (click)="retryLoading()">
+      <i class="fas fa-redo me-1"></i> Try Again
+    </button>
+  </div>
+
+  <!-- Products carousel -->
+  <div *ngIf="!isLoading && !loadingError && products && products.length > 0"
+       class="products-carousel-container">
+    <!-- Left scroll arrow -->
+    <button class="scroll-arrow left-arrow" (click)="scrollLeft(productsContainer)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <!-- Products container -->
+    <div #productsContainer class="products-container">
+      <div *ngFor="let product of products"
+           (click)="goToProductDetails(product.productId)"
+           class="product-card">
+        <a class="text-decoration-none">
+          <!-- Category badge -->
+          <div class="category-badge" *ngIf="categories[product.categoryId]">
+            {{getCategoryName(product.categoryId)}}
+          </div>
+
+          <!-- Discount badge -->
+          <div *ngIf="product.discountPercentage > 0" class="discount-badge">
+            {{product.discountPercentage}}%
+          </div>
+
+          <!-- Product image -->
+          <div class="product-image">
+            <img [src]="base + product.mainImageUrl" [alt]="product.name">
+          </div>
+
+          <!-- Product info -->
+          <div class="product-info">
+            <h3 class="product-name">{{product.name}}</h3>
+            <div class="product-price">
+              <div *ngIf="product.discountPercentage > 0">
+                <span class="final-price">EGP {{ product.basePrice | discountPrice:product.discountPercentage | number:'1.2-2' }}</span>
+                <br>
+                <span class="base-price">EGP {{product.basePrice}}</span>
+              </div>
+              <div *ngIf="product.discountPercentage === 0">
+                <span class="undiscounted-price">EGP {{product.basePrice}}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right scroll arrow -->
+    <button class="scroll-arrow right-arrow" (click)="scrollRight(productsContainer)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && !loadingError && (!products || products.length === 0)"
+       class="empty-container">
+    <i class="fas fa-box-open"></i>
+    <p>No recommendations available at the moment</p>
+  </div>
+</div>
