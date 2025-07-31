@@ -44,12 +44,12 @@ export class ProductReviews implements OnInit {
 
   ngOnInit(): void {
     this.routes.params.subscribe(params => {
-      this.productId = +params['id']; // Get product ID from route
-      // this.customerId = +params['customerId'] || 1; // Simulate customer ID for now
+      this.productId = +params['id']; 
+      
       this.checkUserLogin(); 
-      this.newReview.customerID = this.customerId; // Ensure customerId is set
+      this.newReview.customerID = this.customerId; 
       this.newReview.productID = this.productId;
-      // Ensure customerId is set
+     
     });
     this.loadReviews();
   }
@@ -61,10 +61,10 @@ export class ProductReviews implements OnInit {
     const userInfoCookie = this.cookieService.get('UserInfo');
     if (userInfoCookie) {
       try {
-        // Decode the URL encoded cookie
+        
         const decodedCookie = decodeURIComponent(userInfoCookie);
         const userInfo = JSON.parse(decodedCookie);
-        this.customerId = userInfo.UserTypeId || 1; // Fallback to 1 if not set
+        this.customerId = userInfo.UserTypeId || 1; 
 
       } catch (e) {
         console.error('Error parsing user info cookie', e);
@@ -100,7 +100,7 @@ checkCustomerEligibility() {
   this.reviewService.hasCustomerPurchasedProduct(this.customerId, this.productId).subscribe({
     next: (hasPurchased) => {
       this.canAddReview = hasPurchased;
-      this.cdr.detectChanges(); // in case async update affects view
+      this.cdr.detectChanges(); 
     },
     error: (err) => {
       console.error('Error checking purchase status:', err);
@@ -129,7 +129,7 @@ get visibleReviews(): IReview[] {
       next: () => {
         this.showReviewForm = false;
         this.newReview = { customerID: this.customerId, productID: this.productId, stars: 5, comment: '' };
-        this.loadReviews(); // refresh
+        this.loadReviews(); 
       },
       error: (err) => {
         alert(err?.error?.message || 'Failed to submit review.');
