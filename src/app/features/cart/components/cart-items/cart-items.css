@@ -400,3 +400,9 @@
     justify-content: flex-start;
   }
 }
+
+.recommended-products-container {
+  max-width: 1200px; /* or whatever max width you prefer */
+  margin: 0 auto; /* this centers the container */
+  padding: 20px;
+}
