@@ -43,12 +43,39 @@ export class AdminReviews implements OnInit {
       return matchesSearch && matchesRating;
     });
   }
+  acceptReview(ratingId: number) {
+  this.reviewservice.AcceptReview(ratingId).subscribe({
+    next: () => {
+      const review = this.RatingList.find(r => r.ratingId === ratingId);
+      if (review) review.isAccepted = 'Approved';
+      this.cdr.detectChanges(); // Ensure the view updates after the change
+    },
+    error: (err) => {
+      console.error('Failed to accept review:', err);
+    }
+  });
+}
+
+rejectReview(ratingId: number) {
+  this.reviewservice.RejectReview(ratingId).subscribe({
+    next: () => {
+      const review = this.RatingList.find(r => r.ratingId === ratingId);
+      if (review) review.isAccepted = 'Rejected';
+      this.cdr.detectChanges(); // Ensure the view updates after the change
+    },
+    error: (err) => {
+      console.error('Failed to reject review:', err);
+    }
+  });
+}
+
   ngOnInit(): void {
     this.getAllReview();
   }
   getAllReview() {
-    this.reviewservice.getallRatings().subscribe({
+    this.reviewservice.getAllForAdmin().subscribe({
       next: (res) => {
+        console.log('Reviews fetched successfully:', res);
         this.RatingList = res;
         this.cdr.detectChanges();
       },
