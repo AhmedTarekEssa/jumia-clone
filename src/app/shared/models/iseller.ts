@@ -7,7 +7,7 @@ export  interface ISeller {
   imageUrl: string;
   businessDescription: string;
   businessLogo: string;
-  isVerified: boolean;
+  isVerified: "Authorized" | "Blocked"| "Pending";
   verifiedAt: string | null;
   rating: number;
   totalProductsSold: number;

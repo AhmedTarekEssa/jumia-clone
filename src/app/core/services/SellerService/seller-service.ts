@@ -19,13 +19,17 @@ export class SellerService {
 
   IsVerify(sellerId: number): Observable<{ message: string }> {
     return this.http.patch<{ message: string }>(
-      `http://localhost:5087/api/Seller/ToggleVerification/${sellerId}`,
+      `http://localhost:5087/api/Seller/Verification/${sellerId}`,
       {} // PATCH requires a body, so send an empty object
     );
   }
 
   getSellerById(sellerId:number):Observable<ISeller>{
     return this.http.get<ISeller>(`http://localhost:5087/api/Seller/GetSellerById/${sellerId}`)
+  }
+  ToggleBlock(sellerId:number):Observable<boolean>{
+
+    return this.http.patch<boolean>(`http://localhost:5087/api/Seller/ToggleBlock/${sellerId}`, {});
   }
 
 
