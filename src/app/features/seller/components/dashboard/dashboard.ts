@@ -66,7 +66,10 @@ export class Dashboard implements OnInit {
     });
   }
   }
-
+  requestreport(): void {
+  }
+  requestcampain(): void {
+  }
   navigatetoorders(): void {
     this.router.navigate(['/seller/orders']);
   }

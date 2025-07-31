@@ -8,8 +8,8 @@ import {
 import { forkJoin } from 'rxjs';
 import { ProductUi } from '../../../products/product-models';
 import { Chart, registerables } from 'chart.js';
+import { FormsModule } from '@angular/forms';
 
-// Register Chart.js components
 Chart.register(...registerables);
 
 interface AnalyticsData {
@@ -33,9 +33,22 @@ interface MetricsData {
   activeProducts: number;
 }
 
+interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+    borderWidth: number;
+    tension: number;
+    fill: boolean;
+  }[];
+}
+
 @Component({
   selector: 'app-analytics',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',
 })
@@ -63,6 +76,20 @@ export class Analytics implements OnInit {
   isLoading = true;
   error: string | null = null;
   userInfoCookie!: string | null;
+  selectedPeriod: 'weekly' | 'monthly' | 'quarterly' | 'yearly' = 'monthly';
+  chartType: 'line' | 'bar' | 'pie' = 'line';
+  chartData: ChartData = {
+    labels: [],
+    datasets: [{
+      label: 'Sales Revenue',
+      data: [],
+      borderColor: 'rgba(255, 102, 0, 1)',
+      backgroundColor: 'rgba(255, 102, 0, 0.1)',
+      borderWidth: 3,
+      tension: 0.4,
+      fill: true
+    }]
+  };
 
   ngOnInit(): void {
     this.userInfoCookie = this.getCookie('UserInfo');
@@ -78,7 +105,7 @@ export class Analytics implements OnInit {
     this.loadAnalyticsData();
   }
 
-  private loadAnalyticsData(): void {
+  public loadAnalyticsData(): void {
     this.isLoading = true;
     this.error = null;
 
@@ -96,6 +123,7 @@ export class Analytics implements OnInit {
     }).subscribe({
       next: ({ products, subOrders }) => {
         this.processAnalyticsData(products, subOrders);
+        this.processChartData(subOrders);
         this.isLoading = false;
         this.cdr.detectChanges();
         this.createSalesChart();
@@ -122,80 +150,210 @@ export class Analytics implements OnInit {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
-
     const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-    let thisMonthRevenue = 0;
-    let lastMonthRevenue = 0;
-
-    subOrders.forEach(subOrder => {
-      const orderDate = new Date(subOrder.statusUpdatedAt);
-      const orderMonth = orderDate.getMonth();
-      const orderYear = orderDate.getFullYear();
-
-      if (orderMonth === currentMonth && orderYear === currentYear) {
-        thisMonthRevenue += subOrders
-          .filter(o => o.status.toLowerCase() == 'shipped' ||
-                      o.status.toLowerCase() == 'delivered' ||
-                      o.status.toLowerCase() == 'confirmed')
-          .reduce((sum, order) => sum + order.subtotal, 0);
-      } else if (orderMonth === lastMonth && orderYear === lastMonthYear) {
-        lastMonthRevenue += subOrders
-          .filter(o => o.status.toLowerCase() == 'shipped' ||
-                      o.status.toLowerCase() == 'delivered' ||
-                      o.status.toLowerCase() == 'confirmed')
-          .reduce((sum, order) => sum + order.subtotal, 0);
-      }
-    });
+    const validOrders = subOrders.filter(o =>
+      ['shipped', 'delivered', 'confirmed'].includes(o.status.toLowerCase())
+    );
 
     this.salesData = {
-      thisMonth: thisMonthRevenue,
-      lastMonth: lastMonthRevenue,
-      growth: lastMonthRevenue > 0 ?
-             ((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100 :
-             100, 
+      thisMonth: validOrders
+        .filter(o => {
+          const d = new Date(o.statusUpdatedAt);
+          return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+        })
+        .reduce((sum, o) => sum + o.subtotal, 0),
+
+      lastMonth: validOrders
+        .filter(o => {
+          const d = new Date(o.statusUpdatedAt);
+          return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear;
+        })
+        .reduce((sum, o) => sum + o.subtotal, 0),
+
+      growth: 0
     };
+
+    if (this.salesData.lastMonth > 0) {
+      this.salesData.growth =
+        ((this.salesData.thisMonth - this.salesData.lastMonth) / this.salesData.lastMonth) * 100;
+    } else {
+      this.salesData.growth = this.salesData.thisMonth > 0 ? 100 : 0;
+    }
   }
 
-  private createSalesChart(): void {
-  const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
+  private processChartData(subOrders: SubOrder[]): void {
+    const validOrders = subOrders.filter(o =>
+      ['shipped', 'delivered', 'confirmed'].includes(o.status.toLowerCase())
+    );
 
-  // Destroy previous chart if it exists
-  if (this.salesChart) {
-    this.salesChart.destroy();
+    switch (this.selectedPeriod) {
+      case 'weekly':
+        this.processWeeklyData(validOrders);
+        break;
+      case 'monthly':
+        this.processMonthlyData(validOrders);
+        break;
+      case 'quarterly':
+        this.processQuarterlyData(validOrders);
+        break;
+      case 'yearly':
+        this.processYearlyData(validOrders);
+        break;
+    }
   }
 
-  this.salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Last Month', 'This Month'],
-      datasets: [{
-        label: 'Sales Revenue',
-        data: [this.salesData.lastMonth, this.salesData.thisMonth],
+  private processWeeklyData(orders: SubOrder[]): void {
+    const now = new Date();
+    const weeks: {label: string, revenue: number}[] = [];
+
+    // Get data for last 8 weeks
+    for (let i = 7; i >= 0; i--) {
+      const startDate = new Date(now);
+      startDate.setDate(now.getDate() - (i * 7));
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
+
+      const weekOrders = orders.filter(o => {
+        const orderDate = new Date(o.statusUpdatedAt);
+        return orderDate >= startDate && orderDate <= endDate;
+      });
+
+      const weekRevenue = weekOrders.reduce((sum, o) => sum + o.subtotal, 0);
+      const weekLabel = `Week ${i+1}`;
+
+      weeks.push({label: weekLabel, revenue: weekRevenue});
+    }
+
+    this.chartData.labels = weeks.map(w => w.label);
+    this.chartData.datasets[0].data = weeks.map(w => w.revenue);
+  }
+
+  private processMonthlyData(orders: SubOrder[]): void {
+    const now = new Date();
+    const months: {label: string, revenue: number, prevRevenue: number}[] = [];
+
+    // Get data for last 6 months with previous year comparison
+    for (let i = 5; i >= 0; i--) {
+      const month = now.getMonth() - i;
+      const year = now.getFullYear() - (month < 0 ? 1 : 0);
+      const adjustedMonth = (month + 12) % 12;
+
+      // Current period
+      const monthOrders = orders.filter(o => {
+        const orderDate = new Date(o.statusUpdatedAt);
+        return orderDate.getMonth() === adjustedMonth &&
+               orderDate.getFullYear() === year;
+      });
+
+      // Previous year
+      const prevYearOrders = orders.filter(o => {
+        const orderDate = new Date(o.statusUpdatedAt);
+        return orderDate.getMonth() === adjustedMonth &&
+               orderDate.getFullYear() === year - 1;
+      });
+
+      const monthRevenue = monthOrders.reduce((sum, o) => sum + o.subtotal, 0);
+      const prevRevenue = prevYearOrders.reduce((sum, o) => sum + o.subtotal, 0);
+      const monthLabel = new Date(year, adjustedMonth, 1).toLocaleString('default', { month: 'short' });
+
+      months.push({label: monthLabel, revenue: monthRevenue, prevRevenue});
+    }
+
+    this.chartData.labels = months.map(m => m.label);
+    this.chartData.datasets = [
+      {
+        label: 'Current Period',
+        data: months.map(m => m.revenue),
         borderColor: 'rgba(255, 102, 0, 1)',
         backgroundColor: 'rgba(255, 102, 0, 0.1)',
         borderWidth: 3,
         tension: 0.4,
-        fill: true,
-        pointBackgroundColor: 'rgba(255, 102, 0, 1)',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 8
-      }]
-    },
-    options: {
+        fill: true
+      },
+      {
+        label: 'Previous Period',
+        data: months.map(m => m.prevRevenue),
+        borderColor: 'rgba(100, 100, 100, 1)',
+        backgroundColor: 'rgba(100, 100, 100, 0.1)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: false
+      }
+    ];
+  }
+
+  private processQuarterlyData(orders: SubOrder[]): void {
+    const now = new Date();
+    const quarters: {label: string, revenue: number}[] = [];
+
+    for (let i = 3; i >= 0; i--) {
+      const quarterMonth = now.getMonth() - (i * 3);
+      const year = now.getFullYear() - (quarterMonth < 0 ? 1 : 0);
+      const adjustedQuarterMonth = (quarterMonth + 12) % 12;
+      const quarter = Math.floor(adjustedQuarterMonth / 3) + 1;
+
+      const quarterOrders = orders.filter(o => {
+        const orderDate = new Date(o.statusUpdatedAt);
+        const orderQuarter = Math.floor(orderDate.getMonth() / 3) + 1;
+        return orderQuarter === quarter &&
+               orderDate.getFullYear() === year;
+      });
+
+      const quarterRevenue = quarterOrders.reduce((sum, o) => sum + o.subtotal, 0);
+      const quarterLabel = `Q${quarter} ${year}`;
+
+      quarters.push({label: quarterLabel, revenue: quarterRevenue});
+    }
+
+    this.chartData.labels = quarters.map(q => q.label);
+    this.chartData.datasets[0].data = quarters.map(q => q.revenue);
+  }
+
+  private processYearlyData(orders: SubOrder[]): void {
+    const now = new Date();
+    const years: {label: string, revenue: number}[] = [];
+
+    // Get data for last 3 years
+    for (let i = 2; i >= 0; i--) {
+      const year = now.getFullYear() - i;
+
+      const yearOrders = orders.filter(o => {
+        const orderDate = new Date(o.statusUpdatedAt);
+        return orderDate.getFullYear() === year;
+      });
+
+      const yearRevenue = yearOrders.reduce((sum, o) => sum + o.subtotal, 0);
+      const yearLabel = year.toString();
+
+      years.push({label: yearLabel, revenue: yearRevenue});
+    }
+
+    this.chartData.labels = years.map(y => y.label);
+    this.chartData.datasets[0].data = years.map(y => y.revenue);
+  }
+
+  private createSalesChart(): void {
+    const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
+
+    if (this.salesChart) {
+      this.salesChart.destroy();
+    }
+
+    const commonOptions = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false
+          display: this.chartType === 'pie',
+          position: 'right' as const
         },
         tooltip: {
           callbacks: {
-            label: (context) => {
-              return ` ${this.formatCurrency(context.raw as number)}`;
+            label: (tooltipItem: import('chart.js').TooltipItem<'line' | 'bar' | 'pie'>) => {
+              const value = tooltipItem.raw as number;
+              return ` ${this.formatCurrency(value)}`;
             }
           }
         }
@@ -207,20 +365,64 @@ export class Analytics implements OnInit {
             color: 'rgba(0, 0, 0, 0.05)'
           },
           ticks: {
-            callback: (value) => {
-              return this.formatCurrency(value as number);
+            callback: function(this: any, tickValue: string | number, index: number, ticks: any[]) {
+              return typeof tickValue === 'number'
+                ? (new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EGP' }).format(tickValue))
+                : tickValue;
             }
-          }
+          },
+          display: this.chartType !== 'pie'
         },
         x: {
           grid: {
             display: false
-          }
+          },
+          display: this.chartType !== 'pie'
         }
       }
+    };
+
+    this.salesChart = new Chart(ctx, {
+      type: this.chartType,
+      data: this.chartData,
+      options: commonOptions
+    });
+  }
+
+  updateChartData(): void {
+    if (!this.userInfoCookie) return;
+
+    const sellerId = JSON.parse(this.userInfoCookie).UserTypeId;
+    this.orderService.getSubOrdersBySellerId().subscribe({
+      next: (subOrders) => {
+        this.processChartData(subOrders);
+        this.createSalesChart();
+      },
+      error: (error) => {
+        console.error('Error updating chart data:', error);
+      }
+    });
+  }
+
+  setChartType(type: 'line' | 'bar' ): void {
+    this.chartType = type;
+    if (this.salesChart) {
+      this.salesChart.destroy();
     }
-  });
-}
+    this.createSalesChart();
+  }
+
+  exportChart(): void {
+    if (!this.salesChart) return;
+
+    const canvas = this.salesChart.canvas;
+    const dataURL = canvas.toDataURL('image/png');
+
+    const link = document.createElement('a');
+    link.download = 'sales-chart.png';
+    link.href = dataURL;
+    link.click();
+  }
 
   private calculateTopProducts(subOrders: SubOrder[]): void {
     const productStats = new Map<
