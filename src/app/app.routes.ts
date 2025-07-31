@@ -5,6 +5,7 @@ import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welc
 import { RoleGuard } from './core/guards/roles-guard-guard';
 import { AdminChat } from './features/admin/admin-chat/admin-chat';
 import { SearchProducts } from './features/search-products/search-products';
+import { ProductByBrand } from './features/products/components/product-by-brand/product-by-brand';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,10 @@ export const routes: Routes = [
         data: { preload: true, role: ['Customer'] },
         canActivate: [RoleGuard]
       },
+        {
+    path: 'products-brand/:id',
+    component:ProductByBrand
+  },
       {
         path: 'search-products',
         component: SearchProducts,
@@ -76,7 +81,8 @@ export const routes: Routes = [
         loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
         canActivate: [RoleGuard],
         data: { role: ['customer'] }
-      }
+      },
+
     ]
 
 
@@ -160,10 +166,7 @@ export const routes: Routes = [
   //   // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
   //   // data: { roles: ['Admin'] } // Pass role data for the guard
   // },
-  {
-    path: 'search-products',
-    component: SearchProducts,
-  },
+
 
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

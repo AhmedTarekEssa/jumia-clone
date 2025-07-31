@@ -84,7 +84,7 @@
             Main Image is required.
           </div>
           <div *ngIf="productForm.get('mainImageUrl')?.value" class="image-preview">
-            <img [src]="productForm.get('mainImageUrl')?.value" alt="Main Image Preview" class="preview-img">
+            <img [src]=" baseImageUrl+ productForm.get('mainImageUrl')?.value" alt="Main Image Preview" class="preview-img">
           </div>
         </div>
 
@@ -94,7 +94,7 @@
             class="form-control-file">
           <div class="image-preview-multiple">
             <div *ngFor="let imgUrl of productForm.get('additionalImageUrls')?.value" class="preview-item">
-              <img [src]="imgUrl" alt="Additional Image Preview" class="preview-img">
+              <img [src]="baseImageUrl+ imgUrl" alt="Additional Image Preview" class="preview-img">
             </div>
           </div>
         </div>
@@ -195,7 +195,7 @@
               <input type="file" id="variantImage{{i}}" (change)="onFileSelect($event, 'variantImageUrl', i)"
                 class="form-control-file">
               <div *ngIf="variantGroup.get('variantImageUrl')?.value" class="image-preview">
-                <img [src]="variantGroup.get('variantImageUrl')?.value" alt="Variant Image Preview" class="preview-img">
+                <img [src]="baseImageUrl+ variantGroup.get('variantImageUrl')?.value" alt="Variant Image Preview" class="preview-img">
               </div>
             </div>
 
