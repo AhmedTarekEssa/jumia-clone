@@ -2,9 +2,9 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 .analytics {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 1rem;
+  padding-top: 1rem;
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -24,19 +24,17 @@
   text-align: center;
   padding: 2rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 102, 0, 0.1);
 }
 
 .page-header h2 {
   margin: 0 0 0.75rem 0;
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #2d3748, #4a5568);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #2c3e50;
   letter-spacing: -0.025em;
 }
 
@@ -52,10 +50,10 @@
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 102, 0, 0.1);
 }
 
 .loading-state {
@@ -73,19 +71,20 @@
 .retry-btn {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 2px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
 }
 
 .retry-btn:hover {
+  background: linear-gradient(135deg, #e55a00 0%, #ff7f2e 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
 }
 
 .analytics-grid {
@@ -99,10 +98,10 @@
 .top-products-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 102, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -116,7 +115,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.1), transparent);
   transition: left 0.5s ease;
 }
 
@@ -128,7 +127,8 @@
 .chart-card:hover,
 .top-products-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 40px rgba(255, 102, 0, 0.15);
+  border-color: rgba(255, 102, 0, 0.2);
 }
 
 .chart-card h3,
@@ -136,7 +136,7 @@
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #2c3e50;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -154,10 +154,10 @@
   gap: 0.5rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
+  border-radius: 2px;
   flex: 1;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 102, 0, 0.1);
 }
 
 .metric .label {
@@ -171,84 +171,24 @@
 .metric .value {
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #2d3748, #4a5568);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #2c3e50;
 }
 
 .metric.growth .value.positive {
-  background: linear-gradient(135deg, #38a169, #68d391);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #28a745;
 }
 
 .metric.growth .value.negative {
-  background: linear-gradient(135deg, #ef4444, #f87171);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #dc3545;
 }
 
 .chart-placeholder {
-  height: 200px;
+  height: 300px;
   background: rgba(248, 250, 252, 0.5);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #64748b;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.sales-trend {
-  text-align: center;
-  width: 100%;
-}
-
-.sales-trend p {
-  margin: 0 0 1rem 0;
-  font-weight: 600;
-  color: #4a5568;
-  font-size: 1.1rem;
-}
-
-.trend-bars {
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  gap: 2rem;
-  height: 120px;
-}
-
-.trend-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-}
-
-.bar-fill {
-  width: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px 8px 0 0;
-  min-height: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.bar-fill.current {
-  background: linear-gradient(135deg, #38a169 0%, #68d391 100%);
-  box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
-}
-
-.bar-label {
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  color: #64748b;
-  font-weight: 500;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 102, 0, 0.1);
+  position: relative;
+  padding: 10px;
 }
 
 .products-list {
@@ -263,20 +203,21 @@
   align-items: center;
   padding: 1.5rem;
   background: rgba(248, 250, 252, 0.5);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  border: 1px solid rgba(255, 102, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .product-item:hover {
   background: rgba(255, 255, 255, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.15);
+  border-color: rgba(255, 102, 0, 0.2);
 }
 
 .product-info h4 {
   margin: 0 0 0.25rem 0;
-  color: #2d3748;
+  color: #2c3e50;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -291,10 +232,7 @@
 .product-revenue {
   font-weight: 700;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, #38a169, #68d391);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #28a745;
 }
 
 .no-data {
@@ -314,12 +252,12 @@
 .metric-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 102, 0, 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -331,7 +269,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.1), transparent);
   transition: left 0.5s ease;
 }
 
@@ -341,7 +279,8 @@
 
 .metric-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px rgba(255, 102, 0, 0.15);
+  border-color: rgba(255, 102, 0, 0.2);
 }
 
 .metric-card h4 {
@@ -360,10 +299,7 @@
 .metric-value {
   font-size: 2.2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #2d3748, #4a5568);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #2c3e50;
 }
 
 .metric-icon {
@@ -373,42 +309,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
+  border-radius: 2px;
   color: white;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 102, 0, 0.3);
   margin: 0 auto 1rem auto;
   transition: all 0.3s ease;
 }
 
 .metric-card:hover .metric-icon {
   transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
 }
 
-/* Different gradient colors for different metrics */
+/* Different shades of orange and complementary colors for different metrics */
 .metric-card:nth-child(1) .metric-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
 }
 
 .metric-card:nth-child(2) .metric-icon {
-  background: linear-gradient(135deg, #38a169 0%, #68d391 100%);
+  background: linear-gradient(135deg, #28a745 0%, #34ce57 100%);
 }
 
 .metric-card:nth-child(3) .metric-icon {
-  background: linear-gradient(135deg, #ff6b35 0%, #f093fb 100%);
+  background: linear-gradient(135deg, #ff8533 0%, #ffad66 100%);
 }
 
 .metric-card:nth-child(4) .metric-icon {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #0066cc 0%, #3399ff 100%);
 }
 
 .metric-card:nth-child(5) .metric-icon {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #dc3545 0%, #ff6b7a 100%);
 }
 
 .metric-card:nth-child(6) .metric-icon {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  background: linear-gradient(135deg, #6f42c1 0%, #9c6fd6 100%);
 }
 
 @media (max-width: 768px) {
@@ -431,10 +367,6 @@
 
   .sales-summary {
     flex-direction: column;
-    gap: 1rem;
-  }
-
-  .trend-bars {
     gap: 1rem;
   }
 

@@ -4,7 +4,7 @@
   <div class="center-slider-track" [style.transform]="'translateX(' + translateValue + 'px)'">
     <div *ngFor="let image of images" class="center-slider-slide">
       <a [routerLink]="image.link">
-        <img [src]="image.image" alt="Promo banner">
+        <img [src]="image.image"  alt="Promo banner">
       </a>
     </div>
   </div>

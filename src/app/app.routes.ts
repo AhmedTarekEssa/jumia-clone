@@ -35,7 +35,7 @@ export const routes: Routes = [
       {
         path: 'user',
         loadChildren: () => import('./features/user/user.routes').then(m => m.routes),
-        data: { role: 'Customer' },
+        data: { role: [ 'customer']},
         canActivate: [RoleGuard]
       },
       {
@@ -59,6 +59,10 @@ export const routes: Routes = [
         // canActivate: [RoleGuard],
         data: { role: ['none', 'customer'] }
 
+      },
+      {
+        path: 'success',
+        loadComponent:()=>import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
       },
       {
         path: 'Products/:id/reviews',
@@ -118,6 +122,10 @@ export const routes: Routes = [
     data: { role: ['seller'] }
 
 
+  },
+  {
+    path: 'unauthorized',
+    loadComponent:()=>import('./shared/components/unauthorized/unauthorized').then(m => m.Unauthorized)
   },
 
   {

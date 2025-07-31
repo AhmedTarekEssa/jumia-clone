@@ -1,0 +1,64 @@
+<section class="seller-live-chat">
+  <!-- Header -->
+  <header class="chat-header">
+    <h2>Seller  Chat</h2>
+  </header>
+
+  <div class="chat-body">
+    <!-- Chat List View -->
+    <div *ngIf="currentView === 'list'" class="chat-list">
+      <button class="new-conversation-btn" (click)="startNewConversation()">
+        + New Conversation
+      </button>
+
+      <h3>Your Conversations</h3>
+      <div
+        class="conversation-item"
+        *ngFor="let conv of conversations"
+        (click)="openConversation(conv)"
+      >
+        <div class="conv-info">
+          <strong>{{ conv.id }}</strong>
+          <p>{{ conv.lastMessage.message }}</p>
+        </div>
+        <span class="status">{{ conv.status }}</span>
+      </div>
+    </div>
+
+    <!-- Conversation View -->
+    <div *ngIf="currentView === 'conversation'" class="conversation-view">
+      <button class="back-btn" (click)="backToList()">← Back to list</button>
+
+      <div class="messages">
+        <div *ngFor="let msg of messages" class="message">
+          <div
+            [ngClass]="{
+              'sent': !msg.isFromAdmin,
+              'received': msg.isFromAdmin
+            }"
+          >
+            <p>{{ msg.message }}</p>
+            <small>{{ msg.sentAt }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedConversation?.status !== 'Active'" class="closed-note">
+        <p>This conversation has been closed.</p>
+        <button (click)="startNewConversationFromChat()">
+          Start New
+        </button>
+      </div>
+
+      <div *ngIf="selectedConversation?.status === 'Active'" class="input-group">
+        <input
+          type="text"
+          [(ngModel)]="newMessage"
+          placeholder="Type message..."
+          (keyup.enter)="sendMessage()"
+        />
+        <button (click)="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
