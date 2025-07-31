@@ -1,9 +1,19 @@
+<div class="orders-container">
+      <div class="header">
+        <h2>Orders Management</h2>
+      </div>
 <div class="search-filter">
+   <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
   <input
     type="text"
     placeholder="Search orders..."
     [(ngModel)]="searchTerm"
     class="search-input">
+    </div>
+
+    <div class="filter-container">
+    <i class="fas fa-filter filter-icon"></i>
   <select [(ngModel)]="statusFilter" class="filter-select">
     <option value="">All Status</option>
     <option value="Pending">Pending</option>
@@ -12,8 +22,10 @@
     <option value="Delivered">Delivered</option>
     <option value="Cancelled">Cancelled</option>
   </select>
+  </div>
 </div>
 
+<div class="orders-table-container">
 <div class="orders-table">
   <table>
     <thead>
@@ -21,54 +33,75 @@
         <th>Order ID</th>
         <th>Customer</th>
         <th>Products</th>
-        <th>Total</th>
+        <th>Total  <i class="fas fa-sort"></i></th>
         <th>Payment Status</th>
         <th>Status</th>
-        <th>Order Date</th>
+        <th>Order Date <i class="fas fa-sort"></i></th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let order of filteredOrders">
         <td>#{{order.id}}</td>
-        <td>{{order.customer}}</td>
+        <td>
+          <div class="customer-cell">
+            <i class="fas fa-user-circle customer-icon"></i>
+            {{order.customer}}
+          </div>
+        </td>
         <td>
           <div class="products-list">
             <span *ngFor="let product of order.products; let last = last">
+                            <i class="fas fa-box-open product-icon"></i>
               {{product}}<span *ngIf="!last">, </span>
             </span>
           </div>
         </td>
-        <td>\${{order.total}}</td>
-        <td>{{order.paymentStatus}}</td>
+        <td class="total-cell">${{order.total}}</td>
+        <td>
+           <span class="status-label" [class]="order.status.toLowerCase()">
+            <i class="fas" [ngClass]="{
+              'fa-hourglass-start': order.status.toLowerCase() === 'pending',
+              'fa-cog': order.status.toLowerCase() === 'processing',
+              'fa-truck': order.status.toLowerCase() === 'shipped',
+              'fa-check-circle': order.status.toLowerCase() === 'delivered',
+              'fa-ban': order.status.toLowerCase() === 'cancelled'
+            }"></i>
+          {{order.paymentStatus}}
+           </span>
+        </td>
 
         <!-- CHANGED: show status as plain text -->
         <td>
           <span class="status-label" [class]="order.status.toLowerCase()">{{ order.status }}</span>
         </td>
 
-        <td>{{order.orderDate}}</td>
         <td>
+                    <i class="far fa-calendar-alt date-icon"></i>
+          {{order.orderDate}}
+        </td>
+        <td class="actions-cell">
           <button
-            class="btn btn-sm btn-warning"
+            class="btn btn-cancel"
             (click)="cancelOrder(order)"
             [disabled]="order.status.toLowerCase() === 'delivered' || order.status.toLowerCase() === 'cancelled'">
-            Cancel
+            <i class="fas fa-times"></i> Cancel
           </button>
           <button
-            class="btn btn-sm btn-success"
+            class="btn btn-progress"
             (click)="progressStatus(order)"
             [disabled]="order.status.toLowerCase() === 'delivered' || order.status.toLowerCase() === 'cancelled'">
-            {{ getNextStatusLabel(order.status) }}
+            <i class="fas fa-arrow-right"></i> {{ getNextStatusLabel(order.status) }}
           </button>
           <button  (click)="redirect(order.id)"
-            class="btn btn-sm btn-info"
+            class="btn btn-view"
             >
-            View Details
+            <i class="fas fa-eye"></i> View
           </button>
           <!-- (click)="viewOrderDetails(order)" -->
         </td>
       </tr>
     </tbody>
   </table>
+</div>
 </div>

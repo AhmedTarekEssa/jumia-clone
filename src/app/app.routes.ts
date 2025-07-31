@@ -16,7 +16,7 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () => import('./features/home/home-container/home-container').then(m => m.HomeContainer),
         pathMatch: 'full',
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
         data: { role: ['none', 'customer'] }
 
       },
@@ -28,7 +28,7 @@ export const routes: Routes = [
       {
         path: 'categories/:id',
         loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
 
         data: { preload: true, role: ['none', 'customer'] },
 
@@ -61,25 +61,25 @@ export const routes: Routes = [
       {
         path: 'Products/:id',
         loadComponent: () => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
         data: { role: ['none', 'customer'] }
 
       },
       {
-        path: 'seccess',
+        path: 'success',
         loadComponent:()=>import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
       },
       {
         path: 'Products/:id/reviews',
         loadComponent: () => import('./features/products/components/product-review-show-all/product-review-show-all').then(m => m.ProductReviewShowAll),
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
         data: { role: ['none', 'customer'] }
 
       },
       {
         path: 'place-order',
         loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
-        canActivate: [RoleGuard],
+        // canActivate: [RoleGuard],
         data: { role: ['customer'] }
       },
 
@@ -115,7 +115,7 @@ export const routes: Routes = [
 
     component: SimpleLayout,
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes),
-    canActivate: [RoleGuard],
+    // canActivate: [RoleGuard],
     data: { role: ['admin'] }
 
 
@@ -124,7 +124,7 @@ export const routes: Routes = [
     path: 'seller',
     component: SimpleLayout, // or create a separate SellerLayoutComponent
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes),
-    canActivate: [RoleGuard],
+    // canActivate: [RoleGuard],
     data: { role: ['seller'] }
 
 

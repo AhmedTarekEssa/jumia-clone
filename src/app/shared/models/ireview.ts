@@ -7,6 +7,7 @@ export interface IReview {
     comment: string;
     createdAt: string;
     isVerifiedPurchase: boolean;
+    isAccepted:'Approved' | 'Pending' | 'Rejected' ;
     helpfulCount: number;
     
 }

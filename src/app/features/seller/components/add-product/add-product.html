@@ -134,11 +134,8 @@
       <hr *ngIf="variantsArray.length === 0">
 
       <div class="form-section">
+
         <h4>Product Variants</h4>
-        <button type="button" class="btn btn-add" (click)="addVariant()">Add Variant</button>
-        <div *ngIf="variantsArray.length === 0" class="no-variants-message">
-          <p>Add variants if your product comes in different options (e.g., sizes, colors).</p>
-        </div>
 
         <div formArrayName="variants" class="variants-container">
           <div *ngFor="let variantGroup of variantsArray.controls; let i = index" [formGroupName]="i"
@@ -160,6 +157,7 @@
                   SKU is required.
                 </div>
               </div>
+              
             </div>
 
             <div class="form-row">
@@ -250,6 +248,11 @@
 
             <button type="button" class="btn btn-remove" (click)="removeVariant(i)">Remove Variant</button>
           </div>
+        </div>
+        
+        <button type="button" class="btn btn-add" (click)="addVariant()">Add Variant</button>
+        <div *ngIf="variantsArray.length === 0" class="no-variants-message">
+          <p>Add variants if your product comes in different options (e.g., sizes, colors).</p>
         </div>
       </div>
 

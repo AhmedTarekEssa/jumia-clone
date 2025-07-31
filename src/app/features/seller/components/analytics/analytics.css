@@ -2,9 +2,9 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 .analytics {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 1rem;
+  padding-top: 1rem;
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -24,7 +24,7 @@
   text-align: center;
   padding: 2rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 102, 0, 0.1);
@@ -50,7 +50,7 @@
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 102, 0, 0.1);
@@ -74,7 +74,7 @@
   background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 2px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -98,7 +98,7 @@
 .top-products-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 102, 0, 0.1);
@@ -154,7 +154,7 @@
   gap: 0.5rem;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
+  border-radius: 2px;
   flex: 1;
   text-align: center;
   border: 1px solid rgba(255, 102, 0, 0.1);
@@ -185,7 +185,7 @@
 .chart-placeholder {
   height: 300px;
   background: rgba(248, 250, 252, 0.5);
-  border-radius: 12px;
+  border-radius: 2px;
   border: 1px solid rgba(255, 102, 0, 0.1);
   position: relative;
   padding: 10px;
@@ -203,7 +203,7 @@
   align-items: center;
   padding: 1.5rem;
   background: rgba(248, 250, 252, 0.5);
-  border-radius: 12px;
+  border-radius: 2px;
   border: 1px solid rgba(255, 102, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -252,7 +252,7 @@
 .metric-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -310,7 +310,7 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
-  border-radius: 16px;
+  border-radius: 2px;
   color: white;
   box-shadow: 0 6px 20px rgba(255, 102, 0, 0.3);
   margin: 0 auto 1rem auto;

@@ -890,213 +890,359 @@ scrollbar-color:#e55a2b white;
 /* ... existing styles ... */
 
 /* Product AI Bot Toggle Button - RENAMED */
+/* Jumia-inspired AI Bot Chat Styles */
+
 .ai-bot-toggle-btn {
-  background-color: #007bff;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #ff6900, #ff8533);
   color: white;
-  padding: 10px 15px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 50px;
+  padding: 15px 20px;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s ease;
-
-  /* --- NEW POSITIONING --- */
-  position: fixed; /* Makes it float relative to the viewport */
-  bottom: 20px;    /* Aligns it vertically with the chat pop-up */
-  left: 20px;      /* Places it 20px from the left edge of the viewport */
-  z-index: 999;    /* Ensure it's above most content, but below the chat popup if desired */
-  /* --- END NEW POSITIONING --- */
-}
-
-.ai-bot-toggle-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Product AI Chat Container - Remains on the right */
-.ai-bot-chat-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px; /* Stays on the right side */
-  width: 350px;
-  height: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out;
-  opacity: 0;
-  z-index: 1000; /* Higher z-index to ensure it's on top when open */
-}
-
-.ai-bot-chat-container.show-chat {
-  height: 400px;
-  opacity: 1;
-}
-/* Product AI Chat Container - RENAMED */
-.ai-bot-chat-container {
-  position: fixed;
-  bottom: 20px;
-  left: 20px; /* Keep on the right, as requested */
-  width: 350px;
-  height: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease-out;
-  opacity: 0;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 105, 0, 0.3);
+  transition: all 0.3s ease;
   z-index: 1000;
 }
 
+.ai-bot-toggle-btn:hover {
+  background: linear-gradient(135deg, #e55a00, #ff6900);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 105, 0, 0.4);
+}
+
+.ai-bot-toggle-btn i {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.ai-bot-chat-container {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 350px;
+  height: 500px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+}
+
 .ai-bot-chat-container.show-chat {
-  height: 400px;
-  opacity: 1;
+  display: flex;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .ai-bot-chat-header {
+  background: linear-gradient(135deg, #ff6900, #ff8533);
+  color: white;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #eee;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-radius: 15px 15px 0 0;
 }
 
 .ai-bot-chat-header h4 {
   margin: 0;
   font-size: 18px;
-  color: #333;
+  font-weight: 600;
 }
 
 .ai-bot-close-btn {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
   border: none;
-  font-size: 24px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
   cursor: pointer;
-  color: #888;
-  padding: 0 5px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
 .ai-bot-close-btn:hover {
-  color: #333;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .ai-bot-chat-messages {
-  flex-grow: 1;
-  padding: 15px;
+  flex: 1;
+  padding: 20px;
   overflow-y: auto;
+  background: #fafafa;
+}
+
+.ai-bot-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-bot-chat-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.ai-bot-chat-messages::-webkit-scrollbar-thumb {
+  background: #ff6900;
+  border-radius: 3px;
+}
+
+/* AI Bot Message Styles - Updated */
+.ai-bot-message-wrapper {
+  position: relative;
+  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+
+/* Bot message bubble */
+.ai-bot-message-bubble.ai-bot-bot-message {
+  position: relative;
+  order: 2; /* Ensure message appears after thought content */
+  margin-top: 0;
+  padding: 12px 16px;
+    padding-top: 30px;
+
 }
 
 .ai-bot-message-bubble {
-  max-width: 80%;
-  padding: 10px 12px;
-  border-radius: 18px;
+  position: relative;
+  padding: 12px 16px;
+  /* border-radius: 18px;
+  max-width: 85%;
+  font-size: 14px;
+  line-height: 1.4;
   word-wrap: break-word;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  margin-top: 8px; Space for thought content */
 }
 
 .ai-bot-user-message {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #ff6900, #ff8533);
   color: white;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
+  margin-left: auto;
+  border-bottom-right-radius: 6px;
+    order: 2; /* User messages don't have thought content */
+
 }
 
 .ai-bot-bot-message {
-  background-color: #e0e0e0;
+  background: white;
   color: #333;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
+  margin-right: auto;
+  border: 1px solid #e8e8e8;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-top-left-radius: 0; /* Connect with thought content */
 }
 
-.ai-bot-typing-indicator {
-  align-self: flex-start;
-  font-style: italic;
-  color: #666;
-  padding: 5px 10px;
-  background-color: #f0f0f0;
-  border-radius: 15px;
-  max-width: fit-content;
+/* Thought toggle container */
+.thought-toggle-container {
+  position: absolute;
+  top: 8px;
+  right: 12px;
   display: flex;
   align-items: center;
-  gap: 2px;
+  justify-content: flex-end;
+  width: auto;
 }
 
-/* Typing animation for dots - RENAMED */
-.ai-bot-typing-indicator span.ai-bot-dot-1,
-.ai-bot-typing-indicator span.ai-bot-dot-2,
-.ai-bot-typing-indicator span.ai-bot-dot-3 {
-  animation: typing-blink 1s infinite;
-  opacity: 0;
+.ai-bot-thought-arrow {
+  position: relative;
+  z-index: 1; /* Bring arrow to front */
+  cursor: pointer;
+  color: #adb5bd;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
-.ai-bot-typing-indicator span.ai-bot-dot-1 {
-  animation-delay: 0.2s;
-}
-.ai-bot-typing-indicator span.ai-bot-dot-2 {
-  animation-delay: 0.4s;
-}
-.ai-bot-typing-indicator span.ai-bot-dot-3 {
-  animation-delay: 0.6s;
+.ai-bot-thought-arrow:hover {
+  color: #ff6900;
+  background: rgba(240, 240, 240, 0.9);
 }
 
-/* Keep the keyframes animation name as it's local to the CSS */
-@keyframes typing-blink {
-  0%, 80%, 100% { opacity: 0; }
-  40% { opacity: 1; }
+.ai-bot-thought-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Thought toggle container */
+.ai-bot-thought-toggle {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Thinking label */
+.ai-bot-thought-label {
+  position: absolute;
+  right: 20px; /* Position behind arrow */
+  font-size: 11px;
+  color: #ff6900; /* Muted color */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  pointer-events: none; /* Allows clicks to pass through to arrow */
+}
+
+.ai-bot-thought-content {
+  background: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+  padding: 12px;
+  margin-bottom: -4px; /* Connect with message bubble */
+  font-size: 12px;
+  color: #6c757d;
+  border: 1px solid #e9ecef;
+  border-bottom: none;
+  max-width: 85%;
+}
+
+.ai-bot-thought-content p {
+  margin: 5px 0;
+}
+
+.ai-bot-thought-content strong {
+  color: #555;
+  font-weight: 500;
+}
+
+/* Animation for smooth appearance */
+.ai-bot-thought-content {
+  transition: all 0.3s ease;
+  transform-origin: top;
+}
+
+
+/* ???????????????????????????????? */
+
+.ai-bot-thinking-indicator {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #e8e8e8;
+  max-width: 85%;
+  margin-right: auto;
+  color: #666;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ai-bot-thinking-indicator span:first-child {
+  margin-right: 5px;
+}
+
+.ai-bot-dot-1, .ai-bot-dot-2, .ai-bot-dot-3 {
+  animation: thinking 1.4s infinite ease-in-out;
+  color: #ff6900;
+  font-weight: bold;
+}
+
+.ai-bot-dot-1 {
+  animation-delay: -0.32s;
+}
+
+.ai-bot-dot-2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes thinking {
+  0%, 80%, 100% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 1;
+  }
 }
 
 .ai-bot-chat-input {
+  padding: 20px;
+  background: white;
+  border-top: 1px solid #e8e8e8;
   display: flex;
-  padding: 10px 15px;
-  border-top: 1px solid #eee;
   gap: 10px;
+  align-items: center;
 }
 
-.ai-bot-chat-input input[type="text"] {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
+.ai-bot-chat-input input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 25px;
   font-size: 14px;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
-.ai-bot-chat-input input[type="text"]:focus {
-  border-color: #007bff;
+.ai-bot-chat-input input:focus {
+  border-color: #ff6900;
+}
+
+.ai-bot-chat-input input::placeholder {
+  color: #999;
 }
 
 .ai-bot-chat-input button {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #ff6900, #ff8533);
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 10px 15px;
-  cursor: pointer;
+  border-radius: 25px;
+  padding: 12px 20px;
   font-size: 14px;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
 }
 
 .ai-bot-chat-input button:hover:not(:disabled) {
-  background-color: #218838;
+  background: linear-gradient(135deg, #e55a00, #ff6900);
+  transform: translateY(-1px);
 }
 
 .ai-bot-chat-input button:disabled {
-  background-color: #cccccc;
+  background: #ccc;
   cursor: not-allowed;
+  transform: none;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .ai-bot-chat-container {
+    width: calc(100vw - 20px);
+    left: 10px;
+    bottom: 80px;
+  }
+  
+  .ai-bot-toggle-btn {
+    left: 10px;
+  }
+}
+
+

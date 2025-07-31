@@ -1,7 +1,21 @@
+ <div class="sellers-container">
+      <div class="header">
+        <h2>Sellers Management</h2>
+       
+      </div>
+
+      <div class="search-filter">
+        <input 
+          type="text" 
+          placeholder="Search sellers..." 
+          [(ngModel)]="searchTerm"
+          class="search-input">
+      </div>
+
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th style="min-width: 80px;">ID</th>
+      <!-- <th style="min-width: 80px;">ID</th> -->
       <th style="min-width: 150px;">Business Name</th>
       <th style="min-width: 200px;">Description</th>
       <th style="min-width: 80px;">Rating</th>
@@ -14,7 +28,7 @@
   </thead>
   <tbody >
     <tr *ngFor="let seller of filteredSellers">
-      <td>{{ seller.sellerId }}</td>
+      <!-- <td>{{ seller.sellerId }}</td> -->
       <td>{{ seller.businessName }}</td>
       <td>{{ seller.businessDescription }}</td>
       <td>{{ seller.rating }}</td>
@@ -46,3 +60,4 @@
     </tr>
   </tbody>
 </table>
+</div>
