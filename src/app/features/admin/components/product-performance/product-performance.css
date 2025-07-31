@@ -33,9 +33,16 @@
 .filter-group select {
   padding: 8px 12px;
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #e5e5e5;
   background-color: white;
   min-width: 180px;
+  color: #333;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #ff6600;
+  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.1);
 }
 
 .charts-grid {
@@ -47,8 +54,16 @@
 .chart-card {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 20px;
+  border-left: 4px solid #ff6600;
+}
+
+.chart-card h3 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 16px;
 }
 
 .chart-container {
@@ -66,13 +81,18 @@
 }
 
 .spinner {
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
+  border: 5px solid #fff5f0;
+  border-top: 5px solid #ff6600;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
+}
+
+.loading-spinner p {
+  color: #666;
+  font-weight: 500;
 }
 
 @keyframes spin {
@@ -91,21 +111,27 @@
   }
 }
 
-
 .error-message {
   padding: 20px;
-  background-color: #ffebee;
-  border-left: 4px solid #f44336;
-  color: #d32f2f;
+  background-color: #fff5f0;
+  border-left: 4px solid #ff6600;
+  color: #cc5500;
   margin-bottom: 20px;
+  border-radius: 4px;
 }
 
 .error-message button {
   margin-left: 10px;
-  padding: 5px 10px;
-  background-color: #f44336;
+  padding: 8px 16px;
+  background-color: #ff6600;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.error-message button:hover {
+  background-color: #e55a00;
 }

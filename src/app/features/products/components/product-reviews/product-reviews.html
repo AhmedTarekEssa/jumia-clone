@@ -110,4 +110,23 @@
       <button class="btn btn-primary" (click)="showReviewForm = true">Add Review</button>
     </div>
   </div>
+  <div *ngIf="showReviewForm && reviews.length === 0" class="card p-4 shadow-sm mb-4" style="max-width: 600px; margin: 0 auto;">
+  <h5 class="mb-3">Add Your Review</h5>
+
+  <div class="mb-3">
+    <label class="form-label">Rating (1-5):</label>
+    <input type="number" [(ngModel)]="newReview.stars" min="1" max="5" class="form-control" />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Comment:</label>
+    <textarea [(ngModel)]="newReview.comment" class="form-control" rows="4"></textarea>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-secondary me-2" (click)="showReviewForm = false">Cancel</button>
+    <button class="btn btn-success" (click)="submitReview()">Submit</button>
+  </div>
+</div>
+
 </div>
