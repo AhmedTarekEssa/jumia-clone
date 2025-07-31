@@ -28,7 +28,7 @@
             <i class="heart-icon" [class.active]="isWishlisted" (click)="toggleWishlist()"></i>
           </div>
           <h1 class="product-title">{{ product?.name }}</h1>
-          <p>Brand: </p>
+          <p class="fw-bold">Brand: <a [routerLink]="['/products-brand',product.sellerId]" routerLinkActive="router-link-active" >{{product.businessName}}</a></p>
         </div>
 
         <div class="pricing">
@@ -52,7 +52,7 @@
         <div class="variant-omages-thumbnail" *ngIf="product.variants && product.variants.length > 0">
           <div class="omages-thumbnail" *ngFor="let img of variantImages; let i = index"
             [class.active]="i === currentVariantImageIndex" (click)="currentVariantImageIndex = i">
-            <img [src]="img" />
+            <img [src]="baseImageUrl + img" />
           </div>
         </div>
         <button class="add-to-cart-btn" (click)="openCartPopup()">Add to Cart</button>

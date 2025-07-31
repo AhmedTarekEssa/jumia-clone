@@ -27,5 +27,17 @@ export class IReviewService {
   getallRatings():Observable<IReview[]>{
     return this.http.get<IReview[]>('http://localhost:5087/api/Rating/GetAllRatings')
   }
+  
+  getAllForAdmin():Observable<IReview[]>{
+    return this.http.get<IReview[]>(`http://localhost:5087/api/Rating/GetAllRatingsForAdmin`);
+  }
+
+  AcceptReview(ratingId:number):Observable<boolean>{
+    return this.http.put<boolean>(`http://localhost:5087/api/Rating/Accept/${ratingId}`,null);
+  }
+
+  RejectReview(ratingId:number):Observable<boolean>{
+    return this.http.put<boolean>(`http://localhost:5087/api/Rating/Reject/${ratingId}`,null);
+  }
 
 }

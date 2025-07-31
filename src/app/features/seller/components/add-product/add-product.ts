@@ -12,6 +12,7 @@
   import { Subscription } from 'rxjs';
 
   import Swal from 'sweetalert2';
+import { environment } from '../../../../../environments/environment.development';
 
 
   @Component({
@@ -47,6 +48,7 @@
     userInfoCookie!: string | null;
     userInfo!:any;
     userTypeId!:string;
+    baseImageUrl = environment.ImageUrlBase
     private variantQuantitySubscription: Subscription | null = null;
 
     constructor(private fb: FormBuilder) { }
@@ -592,8 +594,8 @@
         const finalCategoryId = selectedCategoryIds[selectedCategoryIds.length - 1];
 
         const formData = new FormData();
-
-        formData.append('SellerId',this.userTypeId );
+        console.log(this.userTypeId)
+        formData.append('SellerId',this.userTypeId.toString());
         formData.append('CategoryId', finalCategoryId.toString());
         formData.append('Name', this.productForm.value.name);
         formData.append('Description', this.productForm.value.description);

@@ -4,7 +4,10 @@ export interface ProductDetails {
   categoryId:number
   description: string
   basePrice: number
+  sellerId:number
+  businessLogo:string
   discountPercentage: number
+  businessName:string,
   stockQuantity: number,
   isAvailable: boolean
   mainImageUrl: string
@@ -41,6 +44,7 @@ export interface Attribute2 {
 export interface ProductUi {
   productId: number
   name: string
+  businessLogo:string
   basePrice: number
   discountPercentage: number
   imageUrl: any

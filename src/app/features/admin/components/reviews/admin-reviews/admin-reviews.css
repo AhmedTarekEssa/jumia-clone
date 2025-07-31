@@ -356,3 +356,45 @@
 .review-card:hover .product-info h4 {
   color: #ff6600;
 }
+.status {
+  font-weight: bold;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.status.pending {
+  color: #ff9800; /* orange */
+}
+
+.status.rejected {
+  color: #f44336; /* red */
+}
+
+.status.verified,
+.status.approved {
+  color: #4caf50; /* green */
+}
+
+/* .status.approved { color: green; }
+.status.rejected { color: red; }
+.status.pending { color: orange; } */
+
+.actions {
+  margin-top: 10px;
+}
+.actions .btn {
+  margin-right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.accept {
+  background-color: #4caf50;
+  color: white;
+}
+.reject {
+  background-color: #f44336;
+  color: white;
+}
+

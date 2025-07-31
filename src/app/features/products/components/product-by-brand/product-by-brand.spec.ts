@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LiveChat } from './live-chat';
+import { ProductByBrand } from './product-by-brand';
 
-describe('LiveChat', () => {
-  let component: LiveChat;
-  let fixture: ComponentFixture<LiveChat>;
+describe('ProductByBrand', () => {
+  let component: ProductByBrand;
+  let fixture: ComponentFixture<ProductByBrand>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LiveChat]
+      imports: [ProductByBrand]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LiveChat);
+    fixture = TestBed.createComponent(ProductByBrand);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

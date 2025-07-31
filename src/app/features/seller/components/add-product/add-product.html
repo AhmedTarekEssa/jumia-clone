@@ -84,7 +84,7 @@
             Main Image is required.
           </div>
           <div *ngIf="productForm.get('mainImageUrl')?.value" class="image-preview">
-            <img [src]="productForm.get('mainImageUrl')?.value" alt="Main Image Preview" class="preview-img">
+            <img [src]=" baseImageUrl+ productForm.get('mainImageUrl')?.value" alt="Main Image Preview" class="preview-img">
           </div>
         </div>
 
@@ -94,7 +94,7 @@
             class="form-control-file">
           <div class="image-preview-multiple">
             <div *ngFor="let imgUrl of productForm.get('additionalImageUrls')?.value" class="preview-item">
-              <img [src]="imgUrl" alt="Additional Image Preview" class="preview-img">
+              <img [src]="baseImageUrl+ imgUrl" alt="Additional Image Preview" class="preview-img">
             </div>
           </div>
         </div>
@@ -134,11 +134,8 @@
       <hr *ngIf="variantsArray.length === 0">
 
       <div class="form-section">
+
         <h4>Product Variants</h4>
-        <button type="button" class="btn btn-add" (click)="addVariant()">Add Variant</button>
-        <div *ngIf="variantsArray.length === 0" class="no-variants-message">
-          <p>Add variants if your product comes in different options (e.g., sizes, colors).</p>
-        </div>
 
         <div formArrayName="variants" class="variants-container">
           <div *ngFor="let variantGroup of variantsArray.controls; let i = index" [formGroupName]="i"
@@ -160,6 +157,7 @@
                   SKU is required.
                 </div>
               </div>
+              
             </div>
 
             <div class="form-row">
@@ -195,7 +193,7 @@
               <input type="file" id="variantImage{{i}}" (change)="onFileSelect($event, 'variantImageUrl', i)"
                 class="form-control-file">
               <div *ngIf="variantGroup.get('variantImageUrl')?.value" class="image-preview">
-                <img [src]="variantGroup.get('variantImageUrl')?.value" alt="Variant Image Preview" class="preview-img">
+                <img [src]="baseImageUrl+ variantGroup.get('variantImageUrl')?.value" alt="Variant Image Preview" class="preview-img">
               </div>
             </div>
 
@@ -250,6 +248,11 @@
 
             <button type="button" class="btn btn-remove" (click)="removeVariant(i)">Remove Variant</button>
           </div>
+        </div>
+        
+        <button type="button" class="btn btn-add" (click)="addVariant()">Add Variant</button>
+        <div *ngIf="variantsArray.length === 0" class="no-variants-message">
+          <p>Add variants if your product comes in different options (e.g., sizes, colors).</p>
         </div>
       </div>
 
