@@ -33,7 +33,8 @@
     @for (item of wishlist?.wishlistItems; track item.wishlistItemId) {
     <div class="wishlist-item">
       <div class="item-image">
-        <img [src]="item.mainImageUrl" [alt]="item.productName" />
+
+        <img [src]="baseImageUrl+(item.mainImageUrl)" [alt]="item.productName" />
       </div>
 
       <div class="item-details">

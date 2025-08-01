@@ -28,7 +28,7 @@
       <!-- Pickup Station Details -->
       <div *ngIf="option.type === 'pickup' && selectedOption?.type === 'pickup'" class="pickup-details">
         <div class="shipment-info">
-          
+
 
           <div class="delivery-method">
             <!-- <div class="method-header">
@@ -42,7 +42,7 @@
 
             <div class="products-list">
               <div class="product-item" *ngFor="let item of cartItems">
-                <img [src]="item.image" [alt]="item.name" class="product-image">
+                <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
                 <div class="product-details">
                   <span class="product-quantity">x{{item.quantity}}</span>
                   <p class="product-name">{{item.name}}</p>
@@ -88,7 +88,7 @@
 
             <div class="products-list">
               <div class="product-item" *ngFor="let item of cartItems">
-                <img [src]="item.image" [alt]="item.name" class="product-image">
+                <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
                 <div class="product-details">
                   <span class="product-quantity">x{{item.quantity}}</span>
                   <p class="product-name">{{item.name}}</p>
