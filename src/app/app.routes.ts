@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { MainLayout } from './shared/layouts/main-layout/main-layout';
 import { SimpleLayout } from './shared/layouts/simple-layout/simple-layout';
 import { SellerWelcome } from './features/seller-auth/seller-welcome/seller-welcome';
-import { RoleGuard } from './core/guards/roles-guard-guard';
-import { AdminChat } from './features/admin/admin-chat/admin-chat';
+import { RoleGuard } from './core/guards/roles-guard-guard'; 
+import { sellerGuard } from './core/guards/seller-guard';
 import { SearchProducts } from './features/search-products/search-products';
 import { ProductByBrand } from './features/products/components/product-by-brand/product-by-brand';
 
@@ -16,9 +16,7 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () => import('./features/home/home-container/home-container').then(m => m.HomeContainer),
         pathMatch: 'full',
-        // canActivate: [RoleGuard],
-        data: { role: ['none', 'customer'] }
-
+        data: { roles: ['none', 'customer'] }
       },
       {
         path: '',
@@ -28,27 +26,24 @@ export const routes: Routes = [
       {
         path: 'categories/:id',
         loadComponent: () => import('./features/categories/category-container/category-container').then(m => m.CategoryContainer),
-        // canActivate: [RoleGuard],
-
-        data: { preload: true, role: ['none', 'customer'] },
-
+        data: { preload: true, roles: ['none', 'customer'] },
       },
       {
         path: 'user',
         loadChildren: () => import('./features/user/user.routes').then(m => m.routes),
-        data: { role: [ 'customer']},
+        data: { roles: ['customer']},
         canActivate: [RoleGuard]
       },
       {
         path: 'cart',
         loadComponent: () => import('./features/cart/components/cart-items/cart-items').then(m => m.CartItems),
-        data: { preload: true, role: ['Customer'] },
+        data: { preload: true, roles: ['customer'] },
         canActivate: [RoleGuard]
       },
-        {
-    path: 'products-brand/:id',
-    component:ProductByBrand
-  },
+      {
+        path: 'products-brand/:id',
+        component: ProductByBrand
+      },
       {
         path: 'search-products',
         component: SearchProducts,
@@ -61,31 +56,23 @@ export const routes: Routes = [
       {
         path: 'Products/:id',
         loadComponent: () => import('./features/products/components/product-detail/product-detail').then(m => m.ProductDetailC),
-        // canActivate: [RoleGuard],
-        data: { role: ['none', 'customer'] }
-
+        data: { roles: ['none', 'customer'] }
       },
       {
         path: 'success',
-        loadComponent:()=>import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
+        loadComponent: () => import('./shared/components/order-success/order-success').then(m => m.OrderSuccess)
       },
       {
         path: 'Products/:id/reviews',
         loadComponent: () => import('./features/products/components/product-review-show-all/product-review-show-all').then(m => m.ProductReviewShowAll),
-        // canActivate: [RoleGuard],
-        data: { role: ['none', 'customer'] }
-
+        data: { roles: ['none', 'customer'] }
       },
       {
         path: 'place-order',
         loadComponent: () => import('./features/checkout/place-order/place-order').then(m => m.PlaceOrder),
-        // canActivate: [RoleGuard],
-        data: { role: ['customer'] }
+        data: { roles: ['customer'] }
       },
-
     ]
-
-
   },
   {
     path: '',
@@ -112,47 +99,36 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-
     component: SimpleLayout,
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.routes),
-    // canActivate: [RoleGuard],
-    data: { role: ['admin'] }
-
-
+    canActivate: [RoleGuard],
+    data: { roles: ['admin'] }
   },
   {
     path: 'seller',
-    component: SimpleLayout, // or create a separate SellerLayoutComponent
+    component: SimpleLayout,
     loadChildren: () => import('./features/seller/seller.routes').then(m => m.routes),
-    // canActivate: [RoleGuard],
-    data: { role: ['seller'] }
-
-
+    canActivate: [RoleGuard, sellerGuard],
+    data: { roles: ['seller'] }
   },
   {
     path: 'unauthorized',
-    loadComponent:()=>import('./shared/components/unauthorized/unauthorized').then(m => m.Unauthorized)
+    loadComponent: () => import('./shared/components/unauthorized/unauthorized').then(m => m.Unauthorized)
+  },
+  {
+    path: 'rejected',
+    loadComponent: () => import('./features/seller/components/rejected-request/rejected-request').then(m => m.RejectedRequest)
   },
   {
     path: 'pending-review',
-    loadComponent:()=>import('./features/seller/components/rejected-request/rejected-request').then(m => m.RejectedRequest)
+    loadComponent: () => import('./features/seller/components/pending-review/pending-review').then(m => m.PendingReview)
   },
-  {
-    path: 'pending-review',
-    loadComponent:()=>import('./features/seller/components/pending-review/pending-review').then(m => m.PendingReview)
-  },
-
   {
     path: 'SellerAuth',
     component: SellerWelcome,
     loadChildren: () =>
       import('./features/seller-auth/seller-auth.routes').then((m) => m.routes),
   },
-  ///////
-  // create new path called SellerAuth
-  ///Component SellerWelcomeComponent
-  //// LoadChildren      loadChildren: () => import('./features/seller/seller-auth.routes').then(m => m.routes)
-  /// من غير  gard
   {
     path: 'Products',
     loadChildren: () =>
@@ -163,18 +139,5 @@ export const routes: Routes = [
     loadChildren: () =>
       import('../app/features/address/address.routes').then((m) => m.routes),
   },
-  {
-    path: '',
-    loadChildren: () =>
-      import('./features/auth/auth.routes').then((m) => m.routes),
-  },
-  // {
-  //   path: 'chat-dashboard',
-  //   component: AdminChat,
-  //   // canActivate: [AuthGuard], // Apply an AuthGuard for admin role
-  //   // data: { roles: ['Admin'] } // Pass role data for the guard
-  // },
-
-
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

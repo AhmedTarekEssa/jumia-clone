@@ -4,6 +4,7 @@ import { OrderService } from '../../../../../core/services/orders-services/order
 import { Order, OrderItem, SubOrder } from '../../../../../shared/models/order';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-user-order-details',
@@ -48,6 +49,8 @@ export class UserOrderDetails implements OnInit {
     schedule: '2–5 business days',
   };
 
+  baseImageUrl=environment.BaseUrlPath;
+
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
@@ -68,7 +71,7 @@ export class UserOrderDetails implements OnInit {
             quantity: item.quantity,
             currentPrice: item.totalPrice,
             originalPrice: item.priceAtPurchase,
-            image: item.productImageUrl ?? 'assets/images/placeholder.png',
+            image: item.mainImageUrl ?? 'assets/images/placeholder.png',
             status: sub.status.toLowerCase(),
             statusDate: new Date(sub.statusUpdatedAt).toDateString(),
           }))
