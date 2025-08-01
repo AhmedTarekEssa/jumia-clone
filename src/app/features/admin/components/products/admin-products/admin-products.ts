@@ -6,6 +6,7 @@ import { ProductService } from '../../../../../core/services/Product-Service/pro
 import { ProductDetails, ProductUi } from '../../../../products/product-models';
 import { Subject, takeUntil } from 'rxjs';
 import { CategoryService } from '../../../../../core/services/Categories/category';
+import { environment } from '../../../../../../environments/environment.development';
 
 interface Product {
   productId: number;
@@ -65,7 +66,7 @@ export class AdminProducts implements OnInit , OnDestroy {
   categoryFilter = '';
   statusFilter = '';
   isAvailableFilter : boolean | null = null;
-
+  baseImageUrl=environment.ImageUrlBase;
   products: Product[] = [];
   isLoading = true;
   error = '';
