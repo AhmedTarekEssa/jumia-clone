@@ -26,7 +26,7 @@ export class AdminChat implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   ngOnInit(): void {
-    this.chatService.startConnection(); // Ensure SignalR connection is active for admin
+    this.chatService.startConnection(); 
     this.loadActiveChatRequests();
     this.loadMyAdminChats();
 

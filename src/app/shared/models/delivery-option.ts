@@ -75,6 +75,7 @@ export interface IOrderItem {
   productName: string;
   priceAtPurchase: number;
   totalPrice: number;
+  mainImageUrl:string
 }
 
 

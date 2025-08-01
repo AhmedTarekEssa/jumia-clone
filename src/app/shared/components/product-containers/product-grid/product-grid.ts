@@ -95,7 +95,7 @@ export class ProductGrid implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.productService.productsByFilters(this.productsFilters, 1, 10).subscribe({
+    this.productService.productsByFilters(this.productsFilters, 1, 10000).subscribe({
       next: (data) => {
         console.log(data)
         this.products = data.items

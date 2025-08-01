@@ -118,6 +118,10 @@ export const environment = {
     Ask:`/AiQuery/Ask`,
     SemanticSearch:(query:string)=>`/AiQuery/semantic-search?query=${query}`
 
+  },
+  Campaign:{
+    requestCampaign:(sellerId:number)=>`/Campaign/request-email/${sellerId}`,
+    requestMonthlyReport:(sellerId:number,year:number,month:number)=>`/Campaign/request-monthly-report/${sellerId}/${year}/${month}`
   }
 
   };
