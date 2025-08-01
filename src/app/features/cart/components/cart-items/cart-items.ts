@@ -9,12 +9,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CartEmpty } from "../cart-empty/cart-empty";
 
 import { environment } from '../../../../../environments/environment.development';
+import { RecommendedProducts } from "../../../../shared/components/recommended-products/recommended-products";
 
 
 
 @Component({
   selector: 'app-cart-items',
-  imports: [CommonModule, RouterModule, CartEmpty],
+  imports: [CommonModule, RouterModule, CartEmpty, RecommendedProducts],
   templateUrl: './cart-items.html',
   styleUrl: './cart-items.css'
 })

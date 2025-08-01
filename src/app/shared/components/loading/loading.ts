@@ -423,7 +423,7 @@ export class Loading {
   @Input() text: string = 'Loading...';
   @Input() showText: boolean = true;
   @Input() fullscreen: boolean = false;
-  @Input() overlay: boolean = true;
+  @Input() overlay: boolean = false;
 
   get sizeClass(): string {
     return this.size;
