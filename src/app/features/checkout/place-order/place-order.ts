@@ -131,72 +131,7 @@ export class PlaceOrder implements OnInit {
     );
   }
 
-  // makeorderpayload(): void {
-  //   const productDetailsObservables = this.cartItems.map(item =>
-  //     this.productService.getProductDetails(item.productId)
-  //   );
-  //   console.log('Fetching product details for cart items:', this.cartItems);
-  //   console.log('Product details observables:', productDetailsObservables);
-
-  //   forkJoin(productDetailsObservables).subscribe({
-  //     next: (products) => {
-  //       this.productsdetails = products;
-  //       console.log( this.productsdetails);
-
-  //       this.subOrders = this.cartItems.map(item => {
-  //         const productDetails = this.productsdetails.find(p => p.productId === item.productId);
-
-  //         return {
-  //           sellerId: productDetails?.sellerId || 0,
-  //           subtotal: item.price * item.quantity,
-  //           status: 'pending',
-  //           statusUpdatedAt: new Date().toISOString(),
-  //           trackingNumber: null,
-  //           shippingProvider: null,
-  //           orderItems: [{
-  //             productId: item.productId,
-  //             variationId: item.variantId,
-  //             quantity: item.quantity,
-  //             priceAtPurchase: item.price,
-  //             totalPrice: item.price * item.quantity,
-  //           }]
-  //         };
-  //       });
-
-  //       const payload: OrderPayload = {
-  //         customerId: this.userId,
-  //         addressId: this.selectedAddress?.addressId || 0,
-  //         couponId: 0,
-  //         totalAmount: this.getItemsTotal(),
-  //         discountAmount: Math.abs(this.getFreeDeliveryDiscount()),
-  //         shippingFee: this.getDeliveryFee(),
-  //         taxAmount: 0,
-  //         finalAmount: this.getTotal(),
-  //         paymentMethod: this.selectedPaymentMethod,
-  //         affiliateId: null,
-  //         affiliateCode: null,
-  //         status: 'pending',
-  //         subOrders: this.subOrders
-  //       };
-
-  //       console.log('✅ OrderPayload ready:', payload);
-  //       this.orderBody = payload;
-  //       this.cdr.detectChanges();
-  //       this.orderService.createOrder(this.orderBody).subscribe(
-  //       order => {
-  //         console.log('Order created successfully:', this.orderBody);
-  //         // Navigate to order confirmation page
-  //         this.cdr.detectChanges(); // Add change detection after order creation
-  //       },
-  //       error => console.log(this.orderBody)
-
-  //     );
-  //     },
-  //     error: (err) => {
-  //       console.error('❌ Error fetching product details:', err);
-  //     }
-  //   });
-  // }
+  
   makeorderpayload(): void {
     const productDetailsObservables = this.cartItems.map(item => {
 
@@ -232,7 +167,8 @@ export class PlaceOrder implements OnInit {
             quantity: item.quantity,
             productName: productDetails?.name || '',
             priceAtPurchase: item.price,
-            totalPrice
+            totalPrice,
+            mainImageUrl:item.image
           });
 
           subOrdersMap[sellerId].subtotal += totalPrice;
@@ -255,25 +191,16 @@ export class PlaceOrder implements OnInit {
         this.cdr.detectChanges();
         if (payload.paymentMethod === "cod") {
           console.log(payload);
-          this.orderService.createOrder(this.orderBody).subscribe(
-            order => {
-              this.cdr.detectChanges();
-              console.log('Order created successfully:', order);
-              this.cartService.ClearCart().subscribe(
-                () => {
-                  console.log('Cart cleared after order creation');
-                  // Optionally, navigate to order confirmation page or show success message
-                },
-                error => console.error('Error clearing cart:', error)
-              );
-              this.router.navigate(['/success']);
-
-
+         this.orderService.createOrder(this.orderBody).subscribe(
+          {
+            next:(order)=>{
+              this.cdr.detectChanges()
+              console.log('order created succssfully',order)
+              
             },
-            error => {
-              console.error('Error creating order:', error);
-            }
-          );
+            error:(err)=>console.log(err)
+          }
+         )
         } else {
           this.paymentService.intiatePayment(this.orderBody).subscribe({
             next: (response:paymentResponse) => {

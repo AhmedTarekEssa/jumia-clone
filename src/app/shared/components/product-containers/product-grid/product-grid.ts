@@ -110,10 +110,31 @@ export class ProductGrid implements OnInit, OnChanges {
     }
   }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.productService.productsByFilters(this.productsFilters, 1, 10000).subscribe({
+      next: (data) => {
+        console.log(data)
+        this.products = data.items
+        this.cdr.detectChanges();
+      },
+      error:()=>{
+        this.products = [];
+          Swal.fire(
+                    
+                    'No Products Found',
+                    'warning'
+                  );
+                }
+              
+     
+    })
+
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.loadProducts(this.currentPage + 1);
     }
+
   }
 
   prevPage(): void {
