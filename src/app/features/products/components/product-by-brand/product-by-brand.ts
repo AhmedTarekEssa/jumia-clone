@@ -12,18 +12,15 @@ import { FormsModule } from '@angular/forms';
 import { DiscountPricePipe } from "../../../../shared/pipes/discount-price-pipe";
 import { SellerService } from '../../../../core/services/SellerService/seller-service';
 
-
-// --- Type Definitions (Copy from ProductGrid, ensure consistency) ---
 type SearchSelectableItem = ProductUi | Variant;
 
 interface SearchCartSelection {
-  productId: number; // The parent product's ID
-  item: SearchSelectableItem; // The actual selectable item (ProductUi or Variant)
+  productId: number;
+  item: SearchSelectableItem;
   quantity: number;
-  availableStockQuantity: number; // Calculated remaining stock
+  availableStockQuantity: number;
 }
 
-// Type guard function (can be shared or defined locally)
 function isVariant(item: SearchSelectableItem): item is Variant {
   return (item as Variant).variantId !== undefined;
 }
@@ -35,74 +32,70 @@ function isVariant(item: SearchSelectableItem): item is Variant {
   styleUrl: './product-by-brand.css'
 })
 export class ProductByBrand implements OnInit {
-
-  
-
   private router = inject(Router)
   private productService = inject(ProductService)
   private cartService = inject(CartService)
   private sellerService = inject(SellerService)
   private route = inject(ActivatedRoute)
   private cdr = inject(ChangeDetectorRef)
+
   baseImageUrl = environment.ImageUrlBase;
   products!: ProductUi[];
-  product!: ProductUi; // Single product variable, be mindful of its usage
+  product!: ProductUi;
   lowStock: boolean = false;
   isWishlisted: boolean = false;
-  selectedVariant!: Variant; // Less relevant for a grid, but exists
+  selectedVariant!: Variant;
   currentImageIndex: number = 0;
   allImages: string[] = [];
   showCartPopup: boolean = false;
-  cartSelections: SearchCartSelection[] | undefined = []; // Use the new type
-  cartQuantities: { [id: number]: number } = {}; // Stores existing cart quantities (variantId or productId)
+  cartSelections: SearchCartSelection[] | undefined = [];
+  cartQuantities: { [id: number]: number } = {};
   item!: AddToCart;
-  sellerId!:number
-  bussinessName:string='';
-  bussinessLogo!:string;
-  sellerLoaded:boolean=false;
-  // Instantiate pipes for use in component logic
-  private parseNumberPipe = new ParseNumberPipe();
+  sellerId!: number
+  bussinessName: string = '';
+  bussinessLogo!: string;
+  sellerLoaded: boolean = false;
 
+  // Pagination properties
+  currentPage: number = 1;
+  totalPages: number = 1;
+  pageSize: number = 20;
+  totalItems: number = 0;
+
+  private parseNumberPipe = new ParseNumberPipe();
 
   ngOnInit(): void {
     this.sellerId = Number(this.route.snapshot.paramMap.get('id'));
     this.cdr.detectChanges()
-   this.sellerService.getSellerById(this.sellerId).subscribe(
+    this.sellerService.getSellerById(this.sellerId).subscribe(
       {
-        next:(data)=>{
-          console.log(data);
+        next: (data) => {
           this.bussinessName = data[0].businessName;
-          console.log(this.bussinessName)
-          this.bussinessLogo = data[0].businessLogo
-          console.log(this.bussinessLogo)
-
+          this.bussinessLogo = data[0].businessLogo;
           this.sellerLoaded = true;
           this.cdr.detectChanges();
-        
         }
       }
     )
-      this.fetchdata(); 
-      this.cdr.detectChanges()
-    }
-  
+    this.fetchdata();
+    this.cdr.detectChanges()
+  }
 
-
-  fetchdata() {
-    
-    this.productService.getBySellerIdUi(this.sellerId,"Customer").subscribe({
+  fetchdata(page: number = 1) {
+    this.currentPage = page;
+    this.productService.getBySellerIdUi(this.sellerId, "Customer").subscribe({
       next: (data) => {
-        console.log("Search results:", data);
         this.products = data;
+        this.totalItems = data.length;
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
         this.cdr.detectChanges();
 
-        // Fetch cart quantities when products are loaded
         this.cartService.getCart().subscribe({
           next: (cart) => {
             cart.cartItems.forEach(item => {
-              if (item.variationId) { // Use variationId for variants
+              if (item.variationId) {
                 this.cartQuantities[item.variationId] = item.quantity;
-              } else { // Use productId for base products
+              } else {
                 this.cartQuantities[item.productId] = item.quantity;
               }
             });
@@ -111,10 +104,52 @@ export class ProductByBrand implements OnInit {
           error: (err) => console.error("Error fetching cart", err)
         });
       },
-      error: (err) => console.error("Error fetching search products", err)
+      error: (err) => console.error("Error fetching products", err)
     });
   }
 
+  // Pagination methods
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.fetchdata(page);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.fetchdata(this.currentPage + 1);
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.fetchdata(this.currentPage - 1);
+    }
+  }
+
+  getVisiblePages(): number[] {
+    const visiblePages: number[] = [];
+    const maxVisible = 5;
+
+    if (this.totalPages <= maxVisible) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        visiblePages.push(i);
+      }
+    } else {
+      const startPage = Math.max(1, Math.min(
+        this.currentPage - Math.floor(maxVisible / 2),
+        this.totalPages - maxVisible + 1
+      ));
+
+      const endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        visiblePages.push(i);
+      }
+    }
+
+    return visiblePages;
+  }
 
   goToProductDetails(productId: number) {
     console.log("Navigating to product details for ID:", productId);
@@ -122,15 +157,13 @@ export class ProductByBrand implements OnInit {
   }
 
   addToWishlist(productId: number): void {
-    // Implement wishlist functionality
     console.log('Added to wishlist:', productId);
   }
 
   addToCart(productId: number, $event: MouseEvent) {
-    $event.stopPropagation(); // Prevent navigating to product details
+    $event.stopPropagation();
     this.openCartPopup(productId);
   }
-
 
   openCartPopup(productId: number): void {
     this.showCartPopup = true;
@@ -142,57 +175,41 @@ export class ProductByBrand implements OnInit {
       return;
     }
 
-    console.log("Opening cart popup for product:", product);
-
     if (product.variants && product.variants.length > 0) {
-      // Logic for products WITH variants
       this.cartSelections = product.variants
-        .filter(v => v.isAvailable) // Only consider available variants
+        .filter(v => v.isAvailable)
         .map(v => {
           const currentCartQty = this.cartQuantities[v.variantId] || 0;
           const remainingStock = v.stockQuantity - currentCartQty;
           return {
             productId: product.productId,
-            item: v, // 'item' is the Variant
+            item: v,
             quantity: 0,
-            availableStockQuantity: remainingStock > 0 ? remainingStock : 0 // Ensure non-negative stock
+            availableStockQuantity: remainingStock > 0 ? remainingStock : 0
           };
         });
-      // Filter out selections where availableStockQuantity is 0 if you don't want them visible
       this.cartSelections = this.cartSelections.filter(s => s.availableStockQuantity > 0);
-
     } else {
-      // Logic for products WITHOUT variants
-      // Always add the base product if it's available.
-      // Stock check for interaction will happen on the buttons themselves.
       if (product.isAvailable) {
         const currentCartQty = this.cartQuantities[product.productId] || 0;
         const remainingStock = product.stockQuantity - currentCartQty;
 
         this.cartSelections = [{
           productId: product.productId,
-          item: product, // 'item' is the ProductUi
+          item: product,
           quantity: 0,
-          availableStockQuantity: remainingStock > 0 ? remainingStock : 0 // Ensure non-negative stock
+          availableStockQuantity: remainingStock > 0 ? remainingStock : 0
         }];
-        // If the product is truly out of available stock, you might still want it to show
-        // but its quantity controls will be disabled. Or you could filter it out here:
-        // if (this.cartSelections[0].availableStockQuantity <= 0) {
-        //   this.cartSelections = [];
-        // }
       } else {
-        this.cartSelections = []; // Product not available, so no selection possible
+        this.cartSelections = [];
       }
     }
     this.cdr.detectChanges();
   }
 
-
   closeCartPopup(): void {
     this.showCartPopup = false;
   }
-
-  // --- Helper Functions (Copied/Adapted from ProductGrid) ---
 
   getItemIdentifier(item: SearchSelectableItem): number {
     return isVariant(item) ? item.variantId : item.productId;
@@ -203,7 +220,7 @@ export class ProductByBrand implements OnInit {
   }
 
   getItemImageUrl(item: SearchSelectableItem): string {
-    return isVariant(item) ? (item.variantImageUrl as string) : item.imageUrl; // Use imageUrl from ProductUi
+    return isVariant(item) ? (item.variantImageUrl as string) : item.imageUrl;
   }
 
   getItemPrice(item: SearchSelectableItem): number {
@@ -226,9 +243,6 @@ export class ProductByBrand implements OnInit {
   getItemIsAvailable(item: SearchSelectableItem): boolean {
     return item.isAvailable;
   }
-
-  // --- End Helper Functions ---
-
 
   updateVariantQuantity(itemId: number, change: number): void {
     const selection = this.cartSelections!.find(s => this.getItemIdentifier(s.item) === itemId);
@@ -261,41 +275,31 @@ export class ProductByBrand implements OnInit {
   }
 
   addToCartApi() {
-   const itemsToAdd = this.cartSelections!.filter(s => s.quantity > 0);
-       if (itemsToAdd.length === 0) {
-         alert('Please select at least one item with quantity.');
-         return;
-       }
-   
-       console.log('Adding to cart:', itemsToAdd);
-   
-       const items = itemsToAdd.map(i => ({
-         productId: i.productId,
-         // Use the getItemIdentifier helper for the variantId/productId
-         // productId is always required
-         variantId: isVariant(i.item) ? i.item.variantId : null, // variantId is optional for base products
-         quantity: i.quantity
-       }));
-   
-       // Ensure you're sending the correct structure to your backend.
-       // If your backend distinguishes by `variantId` being null/undefined for base products,
-       // then the mapping above is correct. If it expects `productId` in place of `variantId`,
-       // you might need to adjust the `variantId` line above.
-       // For `AddToCart` interface, `variationId` seems to be the one for variants.
-       const cartItemsPayload: AddToCart[] = items.map(i => ({
-         productId: i.productId,
-         variantId: i.variantId , // Pass undefined if no variant
-         quantity: i.quantity
-       }));
+    const itemsToAdd = this.cartSelections!.filter(s => s.quantity > 0);
+    if (itemsToAdd.length === 0) {
+      alert('Please select at least one item with quantity.');
+      return;
+    }
+
+    const items = itemsToAdd.map(i => ({
+      productId: i.productId,
+      variantId: isVariant(i.item) ? i.item.variantId : null,
+      quantity: i.quantity
+    }));
+
+    const cartItemsPayload: AddToCart[] = items.map(i => ({
+      productId: i.productId,
+      variantId: i.variantId,
+      quantity: i.quantity
+    }));
 
     this.cartService.addToCart(cartItemsPayload).subscribe({
       next: () => {
         console.log("added to cart");
-
         itemsToAdd.forEach(selection => {
           const id = this.getItemIdentifier(selection.item);
           this.cartQuantities[id] = (this.cartQuantities[id] || 0) + selection.quantity;
-          selection.availableStockQuantity -= selection.quantity; // Update available stock in current popup
+          selection.availableStockQuantity -= selection.quantity;
         });
 
         this.closeCartPopup();
@@ -306,7 +310,6 @@ export class ProductByBrand implements OnInit {
       }
     });
   }
-
 
   generateStars(rating: number): number[] {
     return Array(5).fill(0).map((_, i) => i < Math.floor(rating) ? 1 : 0);

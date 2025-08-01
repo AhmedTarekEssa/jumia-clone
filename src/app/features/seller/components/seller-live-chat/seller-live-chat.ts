@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {Component,OnInit,OnDestroy,ChangeDetectorRef,inject} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../../../../core/services/Livechatservice/chat-service';
@@ -7,10 +7,6 @@ import { Chat } from '../../../../shared/models/Livechatmodels/chat';
 import { Message } from '../../../../shared/models/Livechatmodels/message';
 import { SendMessageRequest } from '../../../../shared/models/Livechatmodels/send-message-request';
 
-// import { ChatService } from '../';
-// import { Chat }        from '../../models/Livechatmodels/chat';
-// import { Message }     from '../../models/Livechatmodels/message';
-// import { SendMessageRequest } from '../../models/Livechatmodels/send-message-request';
 @Component({
   selector: 'app-seller-live-chat',
   imports: [CommonModule, FormsModule],
@@ -22,15 +18,15 @@ export class SellerLiveChat implements OnInit, OnDestroy {
   currentView: 'list' | 'conversation' = 'list';
 
   // Data models
-  conversations: Chat[]       = [];
+  conversations: Chat[] = [];
   selectedConversation: Chat | null = null;
-  messages: Message[]         = [];
+  messages: Message[] = [];
   newMessage = '';
 
   // Services & utilities
   private chatService = inject(ChatService);
-  private cdr         = inject(ChangeDetectorRef);
-  private subs        = new Subscription();
+  private cdr = inject(ChangeDetectorRef);
+  private subs = new Subscription();
 
   ngOnInit(): void {
     // Start SignalR connection
@@ -51,8 +47,12 @@ export class SellerLiveChat implements OnInit, OnDestroy {
     this.subs.add(
       this.chatService.newMessage$.subscribe(msg => {
         if (this.selectedConversation?.id === msg.chatId) {
-          this.messages.push(msg);
-          this.cdr.detectChanges();
+          // Push the new message to the messages array if it's not a duplicate.
+          // This is the only place new messages are added.
+          if (!this.messages.some(m => m.id === msg.id)) {
+            this.messages.push(msg);
+            this.cdr.detectChanges();
+          }
         }
       })
     );
@@ -77,7 +77,6 @@ export class SellerLiveChat implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-    // Optionally: this.chatService.stopConnection();
   }
 
   // Load all messages for the selected chat
@@ -94,7 +93,7 @@ export class SellerLiveChat implements OnInit, OnDestroy {
     });
   }
 
-  // Send a text message
+  // Send a text message (without optimistic UI update)
   sendMessage(): void {
     if (!this.newMessage.trim() || !this.selectedConversation?.id) return;
 
@@ -104,34 +103,18 @@ export class SellerLiveChat implements OnInit, OnDestroy {
       type: 'Text'
     };
 
-    // Optimistic update
-    const temp: Message = {
-      id: 'temp-' + Date.now(),
-      chatId: this.selectedConversation.id,
-      senderId: 'seller',
-      senderName: 'You',
-      message: this.newMessage,
-      type: 'Text',
-      isFromAdmin: false,
-      sentAt: new Date().toLocaleString(),
-      isRead: false
-    };
-    this.messages.push(temp);
-    this.cdr.detectChanges();
+    const messageToSend = this.newMessage;
+    this.newMessage = ''; // Clear input immediately for better UX
 
     this.chatService.sendMessage(payload).subscribe({
-      next: msg => {
-        const i = this.messages.findIndex(m => m.id === temp.id);
-        if (i > -1) this.messages[i] = msg;
-        else if (!this.messages.some(m => m.id === msg.id)) {
-          this.messages.push(msg);
-        }
-        this.newMessage = '';
-        this.cdr.detectChanges();
+      next: () => {
+        // The message will be rendered via the SignalR subscription,
+        // so no manual push is needed here.
       },
       error: err => {
         console.error('Send failed:', err);
-        this.messages = this.messages.filter(m => m.id !== temp.id);
+        // Re-populate the input field if the message fails to send
+        this.newMessage = messageToSend;
         this.cdr.detectChanges();
       }
     });
