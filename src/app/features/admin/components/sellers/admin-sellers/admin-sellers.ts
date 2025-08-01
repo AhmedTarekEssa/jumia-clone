@@ -64,21 +64,37 @@ export class AdminSellers implements OnInit {
     })
 
   }
-toggleVerification(sellerId: number): void {
-  this.sellerService.IsVerify(sellerId).subscribe({
-    next: res => {
+
+  toggleBlockSeller(sellerId: number): void {
+  this.sellerService.ToggleBlock(sellerId).subscribe({
+    next: (res) => {
       const seller = this.sellers.find(s => s.sellerId === sellerId);
       if (seller) {
-        seller.isVerified = !seller.isVerified;
+        seller.isVerified = seller.isVerified === 'Blocked' ? 'Authorized' : 'Blocked';
       }
-      console.log(res.message);
       this.cdr.detectChanges();
     },
-    error: err => {
-      console.error('Verification toggle failed', err);
+    error: (err) => {
+      console.error('Block toggle failed', err);
     }
   });
 }
+
+verifySeller(sellerId: number): void {
+  const seller = this.sellers.find(s => s.sellerId === sellerId);
+  if (seller && seller.isVerified?.toLowerCase() !== 'authorized') {
+    this.sellerService.IsVerify(sellerId).subscribe({
+      next: res => {
+        seller.isVerified = 'Authorized'; // Update to reflect the new state
+        this.cdr.detectChanges();
+      },
+      error: err => {
+        console.error('Verification failed', err);
+      }
+    });
+  }
+}
+
 
 
 

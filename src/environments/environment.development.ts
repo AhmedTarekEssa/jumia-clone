@@ -52,6 +52,9 @@ export const environment = {
     AddItem: (productId: number) => `/Wishlist/items/${productId}`,
     RemoveItem: (id: number) => `/Wishlist/items/${id}`
   },
+  Recommendation: {
+    GetAll: "/Recommendation/user-recommendations",
+  },
 
   Categories: {
 

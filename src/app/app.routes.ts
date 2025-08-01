@@ -133,6 +133,14 @@ export const routes: Routes = [
     path: 'unauthorized',
     loadComponent:()=>import('./shared/components/unauthorized/unauthorized').then(m => m.Unauthorized)
   },
+  {
+    path: 'pending-review',
+    loadComponent:()=>import('./features/seller/components/rejected-request/rejected-request').then(m => m.RejectedRequest)
+  },
+  {
+    path: 'pending-review',
+    loadComponent:()=>import('./features/seller/components/pending-review/pending-review').then(m => m.PendingReview)
+  },
 
   {
     path: 'SellerAuth',
