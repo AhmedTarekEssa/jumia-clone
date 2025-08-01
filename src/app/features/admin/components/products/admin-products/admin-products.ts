@@ -97,7 +97,11 @@ export class AdminProducts implements OnInit , OnDestroy {
       takeUntil(this.destroyed)
     ).subscribe({
       next: (apiProducts) => {
+              console.log('API Products:', apiProducts); // Debug log
+
         this.products = this.mapApiProductsToUiModel(apiProducts);
+              console.log('Mapped Products:', this.products); // Debug log
+
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -122,7 +126,7 @@ acceptProduct(product: Product): void {
         // Update local product status
         this.products = this.products.map(p => 
           p.productId === product.productId ? 
-          { ...p, approvalStatus: 'Active', isAvailable: true } : 
+          { ...p, approvalStatus: 'approved', isAvailable: true } : 
           p
         );
         this.isLoading = false;
@@ -149,7 +153,7 @@ declineProduct(product: Product): void {
         // Update local product status
         this.products = this.products.map(p => 
           p.productId === product.productId ? 
-          { ...p, approvalStatus: 'Inactive', isAvailable: false } : 
+          { ...p, approvalStatus: 'rejected', isAvailable: false } : 
           p
         );
         this.isLoading = false;
@@ -211,11 +215,12 @@ declineProduct(product: Product): void {
     return this.products.filter(product => {
 
       const matchesSearch = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
-      const matchesStatus = !this.statusFilter || product.approvalStatus.toLowerCase() === this.statusFilter.toLowerCase();
-      const matchesAvailability = this.isAvailableFilter === null ||Boolean( product.isAvailable ) === this.isAvailableFilter;
-      console.log(`Product: ${product.name}, Status: ${product.approvalStatus}, Available: ${product.isAvailable} ,matchesStatus: ${matchesStatus}, matchesAvailability: ${matchesAvailability}`);
+      const matchesStatus = !this.statusFilter || 
+        product.approvalStatus.toLowerCase() === this.statusFilter.toLowerCase();
+      // const matchesAvailability = this.isAvailableFilter === null || product.isAvailable === (this.isAvailableFilter === 'true');
+      // console.log(`Product: ${product.name}, Status: ${product.approvalStatus}, Available: ${product.isAvailable} ,matchesStatus: ${matchesStatus}, matchesAvailability: ${matchesAvailability}`);
       console.log("isAvailableFilter: " , this.isAvailableFilter);
-      return matchesSearch && matchesStatus && matchesAvailability;
+      return matchesSearch && matchesStatus ;
     });
   }
 
@@ -238,7 +243,10 @@ declineProduct(product: Product): void {
       ).subscribe({
         next: () => {
           // Remove from local array
-          this.products = this.products.filter(p => p.productId !== product.productId);
+          this.products = this.products.map(p => p.productId === product.productId ? 
+            {...p, approvalStatus: 'rejected' , isAvailable: false} :
+            p
+          );
           this.isLoading = false;
           this.cdr.detectChanges();
         },
