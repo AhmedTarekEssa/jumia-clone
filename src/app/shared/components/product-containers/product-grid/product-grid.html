@@ -17,7 +17,7 @@
               EGP {{ product.basePrice | number:'1.2-2' }}
             </span>
             <span *ngIf="product.discountPercentage" class="discount-percent">
-              -{{ product.discountPercentage }}
+              -{{ product.discountPercentage }}%
             </span>
           </div>
         </div>
@@ -28,6 +28,29 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn prev" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
+
+    <button *ngFor="let page of getVisiblePages()"
+            class="page-number"
+            [class.active]="currentPage === page"
+            (click)="goToPage(page)">
+      {{ page }}
+    </button>
+
+    <button *ngIf="totalPages > 5 && currentPage < totalPages - 2" class="page-number disabled">...</button>
+
+    <button *ngIf="totalPages > 5 && currentPage < totalPages - 1"
+            class="page-number"
+            [class.active]="currentPage === totalPages"
+            (click)="goToPage(totalPages)">
+      {{ totalPages }}
+    </button>
+
+    <button class="page-btn next" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
   </div>
 
   <div class="modal-overlay" *ngIf="showCartPopup" (click)="closeCartPopup()">

@@ -26,7 +26,7 @@ export class AdminChat implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   ngOnInit(): void {
-    this.chatService.startConnection(); // Ensure SignalR connection is active for admin
+    this.chatService.startConnection(); 
     this.loadActiveChatRequests();
     this.loadMyAdminChats();
 
@@ -38,7 +38,7 @@ export class AdminChat implements OnInit, OnDestroy {
         console.log('New chat request received:', chat);
       }
     }));
-    
+
 
     this.subscriptions.add(this.chatService.chatAssignedToAdmin$.subscribe(chat => {
       if (chat) {
@@ -86,6 +86,7 @@ export class AdminChat implements OnInit, OnDestroy {
     onEnterKey(event: KeyboardEvent) {
     if (!event.shiftKey) {
       this.sendMessage();
+      this.newMessage = ''; // Clear input after sending
       event.preventDefault();
     }
   }
@@ -160,7 +161,7 @@ handleKeyDown(event: Event) {
 
     this.chatService.sendMessage(sendMessageData).subscribe({
       next: (msg) => {
-        this.messages.push(msg);
+        // this.messages.push(msg);
         this.newMessage = '';
         this.cdr.detectChanges();
       },

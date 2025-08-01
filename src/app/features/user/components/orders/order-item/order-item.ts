@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../../../../core/services/orders-services/orders-user';
 import { Order } from '../../../../../shared/models/order';
 import { NgClass } from '@angular/common';
+import { environment } from '../../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-order-item',
@@ -14,6 +15,7 @@ import { NgClass } from '@angular/common';
 export class OrderItem {
     @Input() order!: Order;
 
+    baseImageUrl = environment.ImageUrlBase
   productName = '';
   productImage = '';
   orderNumber = '';
@@ -31,7 +33,8 @@ export class OrderItem {
     const firstItem = firstSubOrder?.orderItems[0];
 
     this.productName = firstItem?.productName || 'Unnamed Product';
-    this.productImage = firstItem?.productImageUrl || 'assets/images/placeholder.png';
+    this.productImage = firstItem?.mainImageUrl || 'assets/images/placeholder.png';
+    console.log(this.productImage)
     this.orderNumber = String(this.order.orderId);
     this.date = new Date(this.order.createdAt).toLocaleDateString();
 

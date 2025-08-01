@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { OrderService, SubOrder } from '../../../../core/services/orders-services/orders-user';
 import { ProductService } from '../../../../core/services/Product-Service/product';
 import { ProductUi } from '../../../products/product-models';
+import { Campaign } from '../../../../core/services/campaignService/campaign';
+import Swal from 'sweetalert2';
 
 interface DashboardStats {
   totalOrders: number;
@@ -32,6 +34,7 @@ export class Dashboard implements OnInit {
   private orderService = inject(OrderService);
   private cdr = inject(ChangeDetectorRef);
   private productService = inject(ProductService);
+  private campaignService = inject(Campaign)
 
   recentOrders!: SubOrder[];
   products: ProductUi[] = [];
@@ -67,8 +70,34 @@ export class Dashboard implements OnInit {
   }
   }
   requestreport(): void {
+    if (this.userInfoCookie) {
+      const userInfo = JSON.parse(this.userInfoCookie);
+      const userTypeId = userInfo.UserTypeId;
+    this.campaignService.requestMonthlyReport(Number(userTypeId)).subscribe({
+      next:()=>
+        Swal.fire('your request is under process.','check your email within 5 minutes','info'),
+
+      error:()=>
+        Swal.fire('your request is under process.','check your email within 5 minutes','info')
+
+
+    })
   }
+}
   requestcampain(): void {
+    if (this.userInfoCookie) {
+      const userInfo = JSON.parse(this.userInfoCookie);
+      const userTypeId = userInfo.UserTypeId;
+    this.campaignService.requestCampaign(Number(userTypeId)).subscribe({
+      next:()=>
+        Swal.fire('your request is under review.','info'),
+
+      error:()=>
+        Swal.fire('your request is under review.','info')
+
+
+    })
+  }
   }
   navigatetoorders(): void {
     this.router.navigate(['/seller/orders']);
