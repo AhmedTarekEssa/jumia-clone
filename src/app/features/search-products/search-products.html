@@ -4,8 +4,7 @@
     <div class="product-image-wrapper">
       <img [src]="baseImageUrl + product.imageUrl" [alt]="product.name" class="product-image">
       <button class="wishlist-heart">♡</button>
-
-      </div>
+    </div>
 
     <div class="product-details">
       <p class="product-title">{{ product.name }}</p>
@@ -17,20 +16,40 @@
           <span *ngIf="(product.discountPercentage) as discount" class="old-price">
             EGP {{ product.basePrice | number:'1.2-2' }}
           </span>
-
           <span *ngIf="product.discountPercentage" class="discount-percent">
             -{{ product.discountPercentage }}%
           </span>
         </div>
-
       </div>
-      <div class="brand-row">
-        </div>
+      <div class="brand-row"></div>
       <div class="add-to-cart">
         <button class="add-to-cart-btn" (click)="addToCart(product.productId,$event)">Add to Cart</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Pagination Controls -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button class="page-btn prev" (click)="prevPage()" [disabled]="currentPage === 1">‹</button>
+
+  <button *ngFor="let page of getVisiblePages()"
+          class="page-number"
+          [class.active]="currentPage === page"
+          (click)="goToPage(page)">
+    {{ page }}
+  </button>
+
+  <button *ngIf="totalPages > 5 && currentPage < totalPages - 2" class="page-number disabled">...</button>
+
+  <button *ngIf="totalPages > 5 && currentPage < totalPages - 1"
+          class="page-number"
+          [class.active]="currentPage === totalPages"
+          (click)="goToPage(totalPages)">
+    {{ totalPages }}
+  </button>
+
+  <button class="page-btn next" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
 </div>
 
 <div class="modal-overlay" *ngIf="showCartPopup" (click)="closeCartPopup()">
@@ -44,7 +63,6 @@
         <div class="variant-card">
           <img [src]="baseImageUrl + getItemImageUrl(selection.item)" class="variant-image">
           <div class="variant-info">
-
             <div class="variant-container">
               <div>
                 <h4>{{ getItemName(selection.item) }}</h4>
@@ -58,7 +76,6 @@
                 <p class="variant-stock" [ngClass]="{'low-stock': getItemStockQuantity(selection.item) < 5} ">
                   {{ getSelectionAvailableStock(selection) }} in stock
                 </p>
-
               </div>
 
               <div class="quantity-controls">
