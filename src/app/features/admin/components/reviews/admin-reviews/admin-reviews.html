@@ -1,63 +1,71 @@
 <div class="reviews-container">
-      <div class="header">
-        <h2>Reviews Management</h2>
-        <div class="stats">
-          <div class="stat-card">
-            <h4>Total Reviews</h4>
-            <p>{{RatingList.length}}</p>
-          </div>
-          <div class="stat-card">
-            <h4>Average Rating</h4>
-            <p>{{getAverageRating()}}</p>
-          </div>
-        </div>
+  <div class="header">
+    <h2>Reviews Management</h2>
+    <div class="stats">
+      <div class="stat-card">
+        <h4>Total Reviews</h4>
+        <p>{{RatingList.length}}</p>
       </div>
-
-      <div class="search-filter">
-        <input 
-          type="text" 
-          placeholder="Search reviews..." 
-          [(ngModel)]="searchTerm"
-          class="search-input">
-        <select [(ngModel)]="ratingFilter" class="filter-select">
-          <option value="">All Ratings</option>
-          <option value="5">5 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="2">2 Stars</option>
-          <option value="1">1 Star</option>
-        </select>
-      </div>
-
-      <div class="reviews-list">
-        <div class="review-card" *ngFor="let review of filteredReviews">
-          <div class="review-header">
-            <div class="product-info">
-              <h4>{{review.productName}}</h4>
-              <p class="customer">by {{review.customerName}}</p>
-            </div>
-            <div class="review-meta">
-              <div class="rating">
-                <span class="stars">
-                  <span *ngFor="let star of [1,2,3,4,5]" 
-                        class="star" 
-                        [class.filled]="star <= review.stars">★</span>
-                </span>
-                <span class="rating-text">({{review.stars}}/5)</span>
-              </div>
-              <p class="date">{{review.createdAt}}</p>
-            </div>
-          </div>
-          
-          <div class="review-content">
-            <p>{{review.comment}}</p>
-          </div>
-          
-          <div class="review-footer">
-            <div class="helpful">
-              <span>{{review.helpfulCount}} people found this helpful</span>
-            </div>
-          </div>
-        </div>
+      <div class="stat-card">
+        <h4>Average Rating</h4>
+        <p>{{getAverageRating()}}</p>
       </div>
     </div>
+  </div>
+
+  <div class="search-filter">
+    <input type="text" placeholder="Search reviews..." [(ngModel)]="searchTerm" class="search-input">
+    <select [(ngModel)]="ratingFilter" class="filter-select">
+      <option value="">All Ratings</option>
+      <option value="5">5 Stars</option>
+      <option value="4">4 Stars</option>
+      <option value="3">3 Stars</option>
+      <option value="2">2 Stars</option>
+      <option value="1">1 Star</option>
+    </select>
+  </div>
+
+  <div class="reviews-list">
+    <div class="review-card" *ngFor="let review of filteredReviews">
+      <div class="review-header">
+        <div class="product-info">
+          <h4>{{review.productName}}</h4>
+          <p class="customer">by {{review.customerName}}</p>
+        </div>
+        <div class="review-meta">
+          <div class="rating">
+            <span class="stars">
+              <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= review.stars">★</span>
+            </span>
+            <span class="rating-text">({{review.stars}}/5)</span>
+          </div>
+          <p class="date">{{review.createdAt}}</p>
+        </div>
+      </div>
+
+      <div class="review-content">
+        <p>{{review.comment}}</p>
+      </div>
+
+      <div class="review-footer">
+        <div class="helpful">
+          <span>{{review.helpfulCount}} people found this helpful</span>
+        </div>
+        <div class="status" [ngClass]="review.isAccepted.toLowerCase()">
+          Status: {{
+          review.isAccepted.toLowerCase() === 'pending' ? 'Pending' :
+          review.isAccepted.toLowerCase() === 'rejected' ? 'Rejected' :
+          'Approved'
+          }}
+        </div>
+
+        <!-- Action Buttons (only show if pending) -->
+        <div class="actions" *ngIf="review.isAccepted.toLowerCase() === 'pending'">
+          <button class="btn btn-success" (click)="acceptReview(review.ratingId)">Accept</button>
+          <button class="btn btn-danger" (click)="rejectReview(review.ratingId)">Reject</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

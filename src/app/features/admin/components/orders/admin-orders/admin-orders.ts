@@ -34,6 +34,7 @@ export class AdminOrders implements OnInit {
 
   ngOnInit(): void {
     this.getAllorders();
+    this.cdr.detectChanges();
   }
 
   getAllorders(): void {
@@ -100,6 +101,7 @@ export class AdminOrders implements OnInit {
             order.status = this.capitalize(nextStatus);
             this.cdr.detectChanges();
             order = { ...order }; // trigger UI update
+            this.cdr.detectChanges(); // ensure view updates
           }
         },
         error: (err) => {
@@ -117,7 +119,7 @@ export class AdminOrders implements OnInit {
     this.orderservice.CancelOrder(order.id, 'Cancelled by admin').subscribe({
       next: (res) => {
         order.status = 'Cancelled';
-        order = { ...order }; // ensure change detection
+        order = { ...order }; 
         this.cdr.detectChanges();
       },
       error: (err) => {

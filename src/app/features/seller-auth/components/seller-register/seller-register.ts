@@ -34,13 +34,12 @@ export class SellerRegister {
       email: [{ value: tempEmail, disabled: true }, [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
-      BussinessName: ['', Validators.required], // ✅ Add this line
+      BussinessName: ['', Validators.required],
       BussinessDiscreption: ['', [Validators.required, Validators.minLength(10)]],
       terms: [false, Validators.requiredTrue]
     }, {
       validators: this.matchPasswords
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -51,6 +50,10 @@ export class SellerRegister {
     const password = group.get('password')?.value;
     const confirm = group.get('confirmPassword')?.value;
     return password === confirm ? null : { mismatch: true };
+  }
+
+  get f() {
+    return this.registerForm.controls;
   }
 
   onFileSelected(event: Event): void {
@@ -74,6 +77,7 @@ export class SellerRegister {
       this.errorMessage = 'Please fill all required fields and upload both images.';
       return;
     }
+
     this.cdr.detectChanges();
     const formValue = this.registerForm.getRawValue();
 
@@ -89,8 +93,8 @@ export class SellerRegister {
     formData.append('OtpCode', this.authService.otpCodeFromBackend.toString());
     formData.append('BusinessDescription', formValue.BussinessDiscreption);
     formData.append('BusinessName', formValue.BussinessName);
-    formData.append('Image', this.selectedImageFile);              // Personal image
-    formData.append('BusinessLogo', this.selectedBusinessLogoFile); // Business logo
+    formData.append('Image', this.selectedImageFile);
+    formData.append('BusinessLogo', this.selectedBusinessLogoFile);
 
     this.authService.registerSeller(formData).subscribe({
       next: (res) => {
