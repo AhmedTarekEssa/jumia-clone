@@ -1,8 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../../core/services/Product-Service/product';
-import { ProductFilterRequest, ProductUi, Variant } from '../../../../features/products/product-models';
+import {
+  ProductFilterRequest,
+  ProductUi,
+  Variant,
+} from '../../../../features/products/product-models';
 import { DiscountPricePipe } from '../../../pipes/discount-price-pipe';
 import { Router } from '@angular/router';
 import { AddToCart } from '../../../../features/cart/cart-models';
@@ -27,9 +39,15 @@ function isVariant(item: ProductGridSelectableItem): item is Variant {
 
 @Component({
   selector: 'app-product-grid',
-  imports: [CommonModule, FormsModule, DiscountPricePipe, IsVariantPipe, ParseNumberPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DiscountPricePipe,
+    IsVariantPipe,
+    ParseNumberPipe,
+  ],
   templateUrl: './product-grid.html',
-  styleUrl: './product-grid.css'
+  styleUrl: './product-grid.css',
 })
 export class ProductGrid implements OnInit, OnChanges {
   private productService = inject(ProductService);
@@ -62,45 +80,44 @@ export class ProductGrid implements OnInit, OnChanges {
     this.loadProducts(this.currentPage);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['productsFilters']) {
-      this.currentPage = 1;
-      this.loadProducts(this.currentPage);
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges): void {
+
+  // }
 
   loadProducts(page: number): void {
-    this.productService.productsByFilters(this.productsFilters, page, this.pageSize).subscribe({
-      next: (data) => {
-        this.products = data.items;
-        this.totalItems = data.totalCount;
-        this.totalPages = Math.ceil(data.totalCount / this.pageSize);
-        this.currentPage = page;
-        this.cdr.detectChanges();
+    this.productService
+      .productsByFilters(this.productsFilters, page, this.pageSize)
+      .subscribe({
+        next: (data) => {
+          this.products = data.items;
+          this.totalItems = data.totalCount;
+          this.totalPages = Math.ceil(data.totalCount / this.pageSize);
+          this.currentPage = page;
+          this.cdr.detectChanges();
 
-        this.cartService.getCart().subscribe({
-          next: (cart) => {
-            cart.cartItems.forEach(item => {
-              if (item.variationId) {
-                this.cartQuantities[item.variationId] = item.quantity;
-              } else {
-                this.cartQuantities[item.productId] = item.quantity;
-              }
-            });
-            this.cdr.detectChanges();
-          },
-          error: (err) => console.error("Error fetching cart", err)
-        });
-      },
-      error: (err) => {
-        this.products = [];
-        if (err.status === 404) {
-          Swal.fire('No Products Found', '', 'warning');
-        } else {
-          console.error("Error fetching products", err);
-        }
-      }
-    });
+          this.cartService.getCart().subscribe({
+            next: (cart) => {
+              cart.cartItems.forEach((item) => {
+                if (item.variationId) {
+                  this.cartQuantities[item.variationId] = item.quantity;
+                } else {
+                  this.cartQuantities[item.productId] = item.quantity;
+                }
+              });
+              this.cdr.detectChanges();
+            },
+            error: (err) => console.error('Error fetching cart', err),
+          });
+        },
+        error: (err) => {
+          this.products = [];
+          if (err.status === 404) {
+            Swal.fire('No Products Found', '', 'warning');
+          } else {
+            console.error('Error fetching products', err);
+          }
+        },
+      });
   }
 
   // Pagination methods
@@ -110,31 +127,29 @@ export class ProductGrid implements OnInit, OnChanges {
     }
   }
 
-
   ngOnChanges(changes: SimpleChanges): void {
-    this.productService.productsByFilters(this.productsFilters, 1, 10000).subscribe({
-      next: (data) => {
-        console.log(data)
-        this.products = data.items
-        this.cdr.detectChanges();
-      },
-      error:()=>{
-        this.products = [];
-          Swal.fire(
-                    
-                    'No Products Found',
-                    'warning'
-                  );
-                }
-              
-     
-    })
-
+    this.productService
+      .productsByFilters(this.productsFilters, 1, 10000)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.products = data.items;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.products = [];
+          Swal.fire('No Products Found', 'warning');
+        },
+      });
+       if (changes['productsFilters']) {
+      this.currentPage = 1;
+      this.loadProducts(this.currentPage);
+    }
+  }
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.loadProducts(this.currentPage + 1);
     }
-
   }
 
   prevPage(): void {
@@ -152,10 +167,13 @@ export class ProductGrid implements OnInit, OnChanges {
         visiblePages.push(i);
       }
     } else {
-      const startPage = Math.max(1, Math.min(
-        this.currentPage - Math.floor(maxVisible / 2),
-        this.totalPages - maxVisible + 1
-      ));
+      const startPage = Math.max(
+        1,
+        Math.min(
+          this.currentPage - Math.floor(maxVisible / 2),
+          this.totalPages - maxVisible + 1
+        )
+      );
 
       const endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
 
@@ -169,7 +187,7 @@ export class ProductGrid implements OnInit, OnChanges {
 
   // Rest of your existing methods remain unchanged...
   goToProductDetails(productId: number) {
-    console.log("Navigating to product details for ID:", productId);
+    console.log('Navigating to product details for ID:', productId);
     this.router.navigate(['/Products', productId]);
   }
 
@@ -184,7 +202,7 @@ export class ProductGrid implements OnInit, OnChanges {
 
   openCartPopup(productId: number): void {
     this.showCartPopup = true;
-    const product = this.products.find(p => p.productId === productId);
+    const product = this.products.find((p) => p.productId === productId);
 
     if (!product) {
       console.warn(`Product with ID ${productId} not found.`);
@@ -192,33 +210,37 @@ export class ProductGrid implements OnInit, OnChanges {
       return;
     }
 
-    console.log("Opening cart popup for product:", product);
+    console.log('Opening cart popup for product:', product);
 
     if (product.variants && product.variants.length > 0) {
       this.cartSelections = product.variants
-        .filter(v => v.isAvailable)
-        .map(v => {
+        .filter((v) => v.isAvailable)
+        .map((v) => {
           const currentCartQty = this.cartQuantities[v.variantId] || 0;
           const remainingStock = v.stockQuantity - currentCartQty;
           return {
             productId: product.productId,
             item: v,
             quantity: 0,
-            availableStockQuantity: remainingStock > 0 ? remainingStock : 0
+            availableStockQuantity: remainingStock > 0 ? remainingStock : 0,
           };
         });
-      this.cartSelections = this.cartSelections.filter(s => s.availableStockQuantity > 0);
+      this.cartSelections = this.cartSelections.filter(
+        (s) => s.availableStockQuantity > 0
+      );
     } else {
       if (product.isAvailable) {
         const currentCartQty = this.cartQuantities[product.productId] || 0;
         const remainingStock = product.stockQuantity - currentCartQty;
 
-        this.cartSelections = [{
-          productId: product.productId,
-          item: product,
-          quantity: 0,
-          availableStockQuantity: remainingStock > 0 ? remainingStock : 0
-        }];
+        this.cartSelections = [
+          {
+            productId: product.productId,
+            item: product,
+            quantity: 0,
+            availableStockQuantity: remainingStock > 0 ? remainingStock : 0,
+          },
+        ];
       } else {
         this.cartSelections = [];
       }
@@ -247,7 +269,9 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   getItemDiscountPercentage(item: ProductGridSelectableItem): number {
-    const discount = isVariant(item) ? item.discountPercentage : this.parseNumberPipe.transform(item.discountPercentage);
+    const discount = isVariant(item)
+      ? item.discountPercentage
+      : this.parseNumberPipe.transform(item.discountPercentage);
     return discount || 0;
   }
 
@@ -264,7 +288,9 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   updateVariantQuantity(itemId: number, change: number): void {
-    const selection = this.cartSelections!.find(s => this.getItemIdentifier(s.item) === itemId);
+    const selection = this.cartSelections!.find(
+      (s) => this.getItemIdentifier(s.item) === itemId
+    );
     if (selection) {
       const currentAvailableStock = selection.availableStockQuantity;
       const newQty = selection.quantity + change;
@@ -275,10 +301,15 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   setVariantQuantity(itemId: number, quantity: number): void {
-    const selection = this.cartSelections!.find(s => this.getItemIdentifier(s.item) === itemId);
+    const selection = this.cartSelections!.find(
+      (s) => this.getItemIdentifier(s.item) === itemId
+    );
     if (selection) {
       const currentAvailableStock = selection.availableStockQuantity;
-      selection.quantity = Math.max(0, Math.min(quantity, currentAvailableStock));
+      selection.quantity = Math.max(
+        0,
+        Math.min(quantity, currentAvailableStock)
+      );
     }
   }
 
@@ -287,12 +318,18 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   getTotalPrice(): number {
-    return this.cartSelections!.reduce((total, s) =>
-      total + (s.quantity * (this.getItemPrice(s.item) * (1 - this.getItemDiscountPercentage(s.item) / 100))), 0);
+    return this.cartSelections!.reduce(
+      (total, s) =>
+        total +
+        s.quantity *
+          (this.getItemPrice(s.item) *
+            (1 - this.getItemDiscountPercentage(s.item) / 100)),
+      0
+    );
   }
 
   addToCartApi() {
-    const itemsToAdd = this.cartSelections!.filter(s => s.quantity > 0);
+    const itemsToAdd = this.cartSelections!.filter((s) => s.quantity > 0);
     if (itemsToAdd.length === 0) {
       alert('Please select at least one item with quantity.');
       return;
@@ -300,24 +337,25 @@ export class ProductGrid implements OnInit, OnChanges {
 
     console.log('Adding to cart:', itemsToAdd);
 
-    const items = itemsToAdd.map(i => ({
+    const items = itemsToAdd.map((i) => ({
       productId: i.productId,
       variantId: isVariant(i.item) ? i.item.variantId : null,
-      quantity: i.quantity
+      quantity: i.quantity,
     }));
 
-    const cartItemsPayload: AddToCart[] = items.map(i => ({
+    const cartItemsPayload: AddToCart[] = items.map((i) => ({
       productId: i.productId,
       variantId: i.variantId,
-      quantity: i.quantity
+      quantity: i.quantity,
     }));
 
     this.cartService.addToCart(cartItemsPayload).subscribe({
       next: () => {
-        console.log("added to cart");
-        itemsToAdd.forEach(selection => {
+        console.log('added to cart');
+        itemsToAdd.forEach((selection) => {
           const id = this.getItemIdentifier(selection.item);
-          this.cartQuantities[id] = (this.cartQuantities[id] || 0) + selection.quantity;
+          this.cartQuantities[id] =
+            (this.cartQuantities[id] || 0) + selection.quantity;
           selection.availableStockQuantity -= selection.quantity;
         });
 
@@ -325,12 +363,14 @@ export class ProductGrid implements OnInit, OnChanges {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error("Error adding to cart", err);
-      }
+        console.error('Error adding to cart', err);
+      },
     });
   }
 
   generateStars(rating: number): number[] {
-    return Array(5).fill(0).map((_, i) => i < Math.floor(rating) ? 1 : 0);
+    return Array(5)
+      .fill(0)
+      .map((_, i) => (i < Math.floor(rating) ? 1 : 0));
   }
 }
