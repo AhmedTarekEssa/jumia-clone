@@ -39,7 +39,7 @@ export interface OrderItem {
   priceAtPurchase: number;
   totalPrice: number;
   productName: string;
-  productImageUrl: string | null;
+  mainImageUrl: string | null;
   productSlug: string | null;
   productBrand: string | null;
   productCategory: string | null;

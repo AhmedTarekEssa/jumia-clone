@@ -28,8 +28,8 @@
       <select [(ngModel)]="statusFilter" class="filter-select">
         <option value="">All Statuses</option>
         <option value="Pending">Pending</option>
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
       </select>
     </div>
     
@@ -63,9 +63,10 @@
     <div class="product-card" *ngFor="let product of filteredProducts">
       <div class="product-image">
   <img 
-    [src]="product.imageUrl || ''" 
+    [src]=" baseImageUrl+ product.imageUrl || ''" 
     [alt]="product.name"
     (error)="handleImageError($event)">
+    
 </div>
       <div class="product-info">
         <h4>{{product.name}}</h4>
@@ -91,14 +92,14 @@
   <!-- Accept Button (only shows for pending products) -->
   <button class="btn btn-sm btn-success" 
           (click)="acceptProduct(product)"
-          *ngIf="product.approvalStatus === 'Pending'">
+          *ngIf="product.approvalStatus === 'pending'">
     Accept
   </button>
 
   <!-- Decline Button (only shows for pending products) -->
   <button class="btn btn-sm btn-warning" 
           (click)="declineProduct(product)"
-          *ngIf="product.approvalStatus === 'Pending'">
+          *ngIf="product.approvalStatus === 'pending'">
     Decline
   </button>
 
@@ -110,9 +111,9 @@
 
   <!-- Status Badge -->
   <span class="status-badge" 
-        [class.pending]="product.approvalStatus === 'Pending'"
-        [class.active]="product.approvalStatus === 'Active'"
-        [class.inactive]="product.approvalStatus === 'Inactive'">
+        [class.pending]="product.approvalStatus === 'pending'"
+        [class.approved]="product.approvalStatus === 'approved'"
+        [class.rejected]="product.approvalStatus === 'rejected'">
     {{product.approvalStatus}}
   </span>
   

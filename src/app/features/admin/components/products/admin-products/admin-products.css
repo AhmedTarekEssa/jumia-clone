@@ -221,7 +221,7 @@ body {
 }
 
 .product-image::after {
-  content: '📦';
+ 
   position: absolute;
   top: 50%;
   left: 50%;
@@ -394,12 +394,21 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-left: auto;
+  /* color: white; */
 }
 
 .status-badge.pending {
   background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
   color: white;
   box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.status-badge.approved {
+  background-color: #28a745; /* Green for approved */
+}
+
+.status-badge.rejected {
+  background-color: #dc3545; /* Red for rejected */
 }
 
 .status-badge.active {
