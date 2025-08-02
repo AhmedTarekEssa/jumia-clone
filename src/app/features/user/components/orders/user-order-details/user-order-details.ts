@@ -49,7 +49,7 @@ export class UserOrderDetails implements OnInit {
     schedule: '2–5 business days',
   };
 
-  baseImageUrl=environment.BaseUrlPath;
+  baseImageUrl=environment.ImageUrlBase;
 
   constructor(
     private route: ActivatedRoute,

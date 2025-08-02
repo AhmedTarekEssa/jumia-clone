@@ -10,10 +10,10 @@ export class Campaign {
   private httpClient = inject(HttpClient)
 
   requestCampaign(sellerId:number){
-    return this.httpClient.post(environment.Campaign.requestCampaign(sellerId),{})
+    return this.httpClient.post(environment.BaseUrlPath + environment.Campaign.requestCampaign(sellerId),{})
   }
   requestMonthlyReport(sellerId:number){
-    return this.httpClient.post(environment.Campaign.requestMonthlyReport(sellerId,new Date().getFullYear(),new Date().getMonth()+1),{})
+    return this.httpClient.post(environment.BaseUrlPath + environment.Campaign.requestMonthlyReport(sellerId,new Date().getFullYear(),new Date().getMonth()+1),{})
   }
 
   

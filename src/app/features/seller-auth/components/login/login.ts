@@ -39,6 +39,11 @@ export class Login implements OnInit{
     //   password: ['',Validators.required]
     // });
   }
+  hidePassword = true;
+
+togglePasswordVisibility() {
+  this.hidePassword = !this.hidePassword;
+}
 
   onSubmit(){
     if (this.loginForm.invalid) return;

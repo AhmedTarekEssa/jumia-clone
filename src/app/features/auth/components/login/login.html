@@ -27,53 +27,63 @@
 </div> -->
 
 <div class="center-wrapper">
-<div class="login-container">
-        <div class="logo"></div>
-        
-        <h1>Welcome to Jumia</h1>
-        <p class="subtitle">Type your e-mail or phone number to log in or create a Jumia account.</p>
-        
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            
-            <div class="form-group">
-                <label for="email">Email or Mobile Number<span class="required">*</span></label>
-                <input type="text" id="email" name="email" formControlName="email">
-                <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
-                    Valid email is required.
-                </div>
-            </div>
+  <div class="login-container">
+    <div class="logo"></div>
 
-            <div class="form-group">
-                <label for="password">Password<span class="required">*</span></label>
-                <input type="text" id="password" name="password" formControlName="password">
-                <div *ngIf="isPasswordInvalid()" class="invalid-feedback">
-                  <div *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</div>
-                  <div *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 6 characters long.</div>
-                </div>
-            </div>
+    <h1>Welcome to Jumia</h1>
+    <p class="subtitle">Type your e-mail or phone number to log in or create a Jumia account.</p>
 
-              <!-- <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button> -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-              <div *ngIf="errorMessage" class="alert alert-danger m-3">
-                {{ errorMessage }}
-              </div>
+      <div class="form-group">
+        <label for="email">Email or Mobile Number<span class="required">*</span></label>
+        <input type="text" id="email" name="email" formControlName="email">
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
+          Valid email is required.
+        </div>
+      </div>
 
-            
-            <button type="submit" class="continue-btn">Continue</button>
-            
-            <p class="terms">By continuing you agree to Jumia's <a href="#">Terms and Conditions</a></p>
-        
-             <!-- Forgot Password Link -->
-              <div class="forgot-password-link">
-                      <button class="forget-password" (click)="ForgetPassword()"> Forget Password</button>
+      <div class="form-group">
+        <label for="password">Password<span class="required">*</span></label>
 
-              </div>
-        
-        
-          </form>
-        
-        <p class="support-text">For further support, you may visit the Help Center or contact our customer service team.</p>
-        
-        <div class="jumia-logo">JUMIA</div>
-    </div>
-    </div>
+        <div class="password-wrapper">
+          <input [type]="hidePassword ? 'password' : 'text'" id="password" name="password" formControlName="password" />
+          <button type="button" class="toggle-visibility" (click)="togglePasswordVisibility()"
+            aria-label="Toggle password visibility">
+            {{ hidePassword ? '👁️' : '🙈' }}
+          </button>
+        </div>
+
+        <div *ngIf="isPasswordInvalid()" class="invalid-feedback">
+          <div *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</div>
+          <div *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 6 characters long.
+          </div>
+        </div>
+      </div>
+
+
+      <!-- <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button> -->
+
+      <div *ngIf="errorMessage" class="alert alert-danger m-3">
+        {{ errorMessage }}
+      </div>
+
+
+      <button type="submit" class="continue-btn">Continue</button>
+
+      <p class="terms">By continuing you agree to Jumia's <a href="#">Terms and Conditions</a></p>
+
+      <!-- Forgot Password Link -->
+      <div class="forgot-password-link">
+        <button class="forget-password" (click)="ForgetPassword()"> Forget Password</button>
+
+      </div>
+
+
+    </form>
+
+    <p class="support-text">For further support, you may visit the Help Center or contact our customer service team.</p>
+
+    <div class="jumia-logo">JUMIA</div>
+  </div>
+</div>
