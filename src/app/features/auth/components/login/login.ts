@@ -85,7 +85,11 @@ export class Login implements OnInit {
       }
     });
   }
+  hidePassword = true;
 
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
   isPasswordInvalid(): boolean {
     const passwordControl = this.loginForm.get('password');
 

@@ -20,9 +20,10 @@ import { Router } from '@angular/router';
 import { AddToCart } from '../../../../features/cart/cart-models';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { environment } from '../../../../../environments/environment.development';
+
+import Swal from 'sweetalert2';
 import { IsVariantPipe } from '../../../pipes/is-variant-pipe';
 import { ParseNumberPipe } from '../../../pipes/parse-number-pipe';
-import Swal from 'sweetalert2';
 
 type ProductGridSelectableItem = ProductUi | Variant;
 
@@ -44,7 +45,7 @@ function isVariant(item: ProductGridSelectableItem): item is Variant {
     FormsModule,
     DiscountPricePipe,
     IsVariantPipe,
-    ParseNumberPipe,
+    ParseNumberPipe
   ],
   templateUrl: './product-grid.html',
   styleUrl: './product-grid.css',
@@ -54,8 +55,10 @@ export class ProductGrid implements OnInit, OnChanges {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private cartService = inject(CartService);
+
   baseImageUrl = environment.ImageUrlBase;
-  products!: ProductUi[];
+  products: ProductUi[] = [];
+  filteredProducts: ProductUi[] = [];
   product!: ProductUi;
   lowStock: boolean = false;
   isWishlisted: boolean = false;
@@ -63,10 +66,13 @@ export class ProductGrid implements OnInit, OnChanges {
   currentImageIndex: number = 0;
   allImages: string[] = [];
   showCartPopup: boolean = false;
-  cartSelections: ProductGridCartSelection[] | undefined = [];
+  cartSelections: ProductGridCartSelection[] = [];
   cartQuantities: { [id: number]: number } = {};
   item!: AddToCart;
+
   @Input() productsFilters!: ProductFilterRequest;
+  searchQuery: string = '';
+  isSearchActive: boolean = false;
 
   // Pagination properties
   currentPage: number = 1;
@@ -80,15 +86,19 @@ export class ProductGrid implements OnInit, OnChanges {
     this.loadProducts(this.currentPage);
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-
-  // }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['productsFilters']) {
+      this.currentPage = 1;
+      this.loadProducts(this.currentPage);
+    }
+  }
 
   loadProducts(page: number): void {
     this.productService
       .productsByFilters(this.productsFilters, page, this.pageSize)
       .subscribe({
         next: (data) => {
+          this.filteredProducts= data.items;
           this.products = data.items;
           this.totalItems = data.totalCount;
           this.totalPages = Math.ceil(data.totalCount / this.pageSize);
@@ -120,6 +130,38 @@ export class ProductGrid implements OnInit, OnChanges {
       });
   }
 
+  onSearchInput(): void {
+    if (!this.searchQuery.trim()) {
+      this.clearSearch();
+    } else {
+      this.filterProducts();
+    }
+  }
+
+  onSearch(): void {
+    if (this.searchQuery.trim()) {
+      this.isSearchActive = true;
+      this.filterProducts();
+    } else {
+      this.clearSearch();
+    }
+  }
+
+  filterProducts(): void {
+    const searchTerm = this.searchQuery.trim().toLowerCase();
+    this.filteredProducts = this.products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm)
+    );
+    this.cdr.detectChanges();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.isSearchActive = false;
+    this.filteredProducts = this.products;
+    this.cdr.detectChanges();
+  }
+
   // Pagination methods
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
@@ -127,25 +169,6 @@ export class ProductGrid implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.productService
-      .productsByFilters(this.productsFilters, 1, 10000)
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-          this.products = data.items;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.products = [];
-          Swal.fire('No Products Found', 'warning');
-        },
-      });
-       if (changes['productsFilters']) {
-      this.currentPage = 1;
-      this.loadProducts(this.currentPage);
-    }
-  }
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.loadProducts(this.currentPage + 1);
@@ -185,9 +208,7 @@ export class ProductGrid implements OnInit, OnChanges {
     return visiblePages;
   }
 
-  // Rest of your existing methods remain unchanged...
-  goToProductDetails(productId: number) {
-    console.log('Navigating to product details for ID:', productId);
+  goToProductDetails(productId: number): void {
     this.router.navigate(['/Products', productId]);
   }
 
@@ -195,22 +216,21 @@ export class ProductGrid implements OnInit, OnChanges {
     console.log('Added to wishlist:', productId);
   }
 
-  addToCart(productId: number, $event: MouseEvent) {
+  addToCart(productId: number, $event: MouseEvent): void {
     $event.stopPropagation();
     this.openCartPopup(productId);
   }
 
   openCartPopup(productId: number): void {
     this.showCartPopup = true;
-    const product = this.products.find((p) => p.productId === productId);
+    const products = this.isSearchActive ? this.filteredProducts : this.products;
+    const product = products.find((p) => p.productId === productId);
 
     if (!product) {
       console.warn(`Product with ID ${productId} not found.`);
       this.cartSelections = [];
       return;
     }
-
-    console.log('Opening cart popup for product:', product);
 
     if (product.variants && product.variants.length > 0) {
       this.cartSelections = product.variants
@@ -224,10 +244,8 @@ export class ProductGrid implements OnInit, OnChanges {
             quantity: 0,
             availableStockQuantity: remainingStock > 0 ? remainingStock : 0,
           };
-        });
-      this.cartSelections = this.cartSelections.filter(
-        (s) => s.availableStockQuantity > 0
-      );
+        })
+        .filter((s) => s.availableStockQuantity > 0);
     } else {
       if (product.isAvailable) {
         const currentCartQty = this.cartQuantities[product.productId] || 0;
@@ -288,7 +306,7 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   updateVariantQuantity(itemId: number, change: number): void {
-    const selection = this.cartSelections!.find(
+    const selection = this.cartSelections.find(
       (s) => this.getItemIdentifier(s.item) === itemId
     );
     if (selection) {
@@ -301,7 +319,7 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   setVariantQuantity(itemId: number, quantity: number): void {
-    const selection = this.cartSelections!.find(
+    const selection = this.cartSelections.find(
       (s) => this.getItemIdentifier(s.item) === itemId
     );
     if (selection) {
@@ -314,11 +332,11 @@ export class ProductGrid implements OnInit, OnChanges {
   }
 
   getTotalItems(): number {
-    return this.cartSelections!.reduce((sum, s) => sum + s.quantity, 0);
+    return this.cartSelections.reduce((sum, s) => sum + s.quantity, 0);
   }
 
   getTotalPrice(): number {
-    return this.cartSelections!.reduce(
+    return this.cartSelections.reduce(
       (total, s) =>
         total +
         s.quantity *
@@ -328,14 +346,12 @@ export class ProductGrid implements OnInit, OnChanges {
     );
   }
 
-  addToCartApi() {
-    const itemsToAdd = this.cartSelections!.filter((s) => s.quantity > 0);
+  addToCartApi(): void {
+    const itemsToAdd = this.cartSelections.filter((s) => s.quantity > 0);
     if (itemsToAdd.length === 0) {
       alert('Please select at least one item with quantity.');
       return;
     }
-
-    console.log('Adding to cart:', itemsToAdd);
 
     const items = itemsToAdd.map((i) => ({
       productId: i.productId,
@@ -351,7 +367,6 @@ export class ProductGrid implements OnInit, OnChanges {
 
     this.cartService.addToCart(cartItemsPayload).subscribe({
       next: () => {
-        console.log('added to cart');
         itemsToAdd.forEach((selection) => {
           const id = this.getItemIdentifier(selection.item);
           this.cartQuantities[id] =

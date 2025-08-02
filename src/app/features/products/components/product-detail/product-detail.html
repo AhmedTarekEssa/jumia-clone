@@ -37,8 +37,8 @@
             EGP {{ selectedVariant.price }}
           </span>
         </div>
-        <div class="stock-info" [ngClass]="{ 'low-stock':lowStock }">
-          {{ lowStock ? 'Some variations with low stock' : 'In Stock' }}
+        <div class="stock-info text-warning fw-bold" [ngClass]="{ 'low-stock':lowStock }">
+          {{ lowStock ? 'Some variations with low stock' : 'In Stock  :  '+ product.stockQuantity }}
         </div>
         <p>Free delivery to Al Salam City</p>
 
