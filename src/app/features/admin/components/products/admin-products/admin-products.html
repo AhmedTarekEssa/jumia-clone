@@ -62,10 +62,13 @@
 
     <div class="product-card" *ngFor="let product of filteredProducts">
       <div class="product-image">
-  <img 
-    [src]=" baseImageUrl+ product.imageUrl || ''" 
-    [alt]="product.name"
-    (error)="handleImageError($event)">
+        <div class="image-container">
+          <img 
+            [src]=" baseImageUrl+ product.imageUrl || ''" 
+            [alt]="product.name"
+            (error)="handleImageError($event)"
+            class="product-img">
+        </div>
     
 </div>
       <div class="product-info">

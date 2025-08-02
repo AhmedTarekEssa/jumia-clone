@@ -67,13 +67,19 @@
                     <span>Reviews</span>
                 </a>
             </div>
-
             <div class="nav-item">
+                <a  class="nav-link" [routerLink]="['/admin/Coupons']" [routerLinkActive]="'active'">
+                    <i class="fa-solid fa-ticket"></i>
+                    <span>Coupons</span>
+                </a>
+            </div>
+
+            <!-- <div class="nav-item">
                 <a class="nav-link" [routerLink]="['/admin/settings']" [routerLinkActive]="'active'">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
-            </div>
+            </div> -->
 
             <div class="nav-item">
                 <a class="nav-link" (click)="logout()" >

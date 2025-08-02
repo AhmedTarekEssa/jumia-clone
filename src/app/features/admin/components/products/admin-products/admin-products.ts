@@ -227,9 +227,10 @@ declineProduct(product: Product): void {
 
  handleImageError(event: Event) {
   const img = event.target as HTMLImageElement;
-  img.style.display = 'none'; // Hide the broken image
+  // img.style.display = 'none'; // Hide the broken image
+    img.style.opacity = '0';
   // OR
-  img.parentElement!.classList.add('no-image'); // Add CSS class to parent
+  img.parentElement!.classList.add('image-error'); // Add CSS class to parent
 }
 
 

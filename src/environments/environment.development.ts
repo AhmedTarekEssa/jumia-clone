@@ -37,6 +37,18 @@ export const environment = {
         GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`,
         UpdateProduct:'/Product/update'
     },
+    Coupon:{
+      GetAllActiveCoupons:"/Coupon/GetAllCoupons",
+      GetCouponByCode:(code:string) => `/Coupon/GetCouponByCode/${code}`,
+      CreateCoupon:"/Coupon/CreateCoupon",
+      UpdateCoupon:(couponId:number) => `/Coupon/UpdateCoupon/${couponId}`,
+      DeleteCoupon:(couponId: number) => `/Coupon/DeleteCoupon/${couponId}`,
+      ApplyCoupon:(code:string) => `/Coupon/ApplyCoupon/${code}`,
+      AssignCoupon:"/Coupon/AssignCoupon",
+      MarkCouponAsUsed:"/Coupon/MarkCouponAsUsed",
+      GetUserCoupons:(userId: number) => `/Coupon/UserCoupons/${userId}`,
+      DeleteUserCoupon: (userCouponId: number) => `/Coupon/DeleteUserCoupon/${userCouponId}`
+    },
     Cart:{
         GetCart:"/Cart",
         ClearCart:"/Cart",
