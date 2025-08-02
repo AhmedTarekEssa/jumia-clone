@@ -12,29 +12,53 @@ import { CategoryList } from '../../../shared/components/category-list/category-
 import { CenterSliderComponent } from "../../../shared/components/center-slider/center-slider.component";
 import { CategoryService } from '../../../core/services/Categories/category';
 import { ProductService } from '../../../core/services/Product-Service/product';
+import { RecommendedProducts } from "../../../shared/components/recommended-products/recommended-products";
+import { CookieService } from 'ngx-cookie-service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-home-container',
-  imports: [FlashSale, AllEssentials, CategoryShowcase, MegaSale, InfoComponent, PromoSliderComponent, ImageContainer, CategoryList, CenterSliderComponent],
+  imports: [FlashSale, AllEssentials, CategoryShowcase, MegaSale, InfoComponent, PromoSliderComponent, ImageContainer, CategoryList, CenterSliderComponent, RecommendedProducts, CommonModule],
   templateUrl: './home-container.html',
   styleUrl: './home-container.css'
 })
 export class HomeContainer implements OnInit {
   categoriesWithProducts: {id: number, name: string}[] = [];
+  isUser:boolean=false;
 
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    private cookieService: CookieService,
+
       
     
   ) {}
 
   ngOnInit(): void {
+    this.checkUserLogin();
+
     this.loadCategoriesWithProducts();
   }
 
+  checkUserLogin() {
+    const userInfoCookie = this.cookieService.get('UserInfo');
+    if (userInfoCookie) {
+      try {
+        // Decode the URL encoded cookie
+        const decodedCookie = decodeURIComponent(userInfoCookie);
+        if (decodedCookie){
+          this.isUser = true;
+          this.cdr.detectChanges();
+        }
+
+      } catch (e) {
+        console.error('Error parsing user info cookie', e);
+      }
+    }
+  }
   loadCategoriesWithProducts() {
   // First get all categories
   this.categoryService.getAllCategories().subscribe({

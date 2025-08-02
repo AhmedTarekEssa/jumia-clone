@@ -19,6 +19,10 @@
   @for (category of categoriesWithProducts; track category.id) {
     <app-category-showcase [categoryId]="category.id"></app-category-showcase>
   }
+  <div *ngIf="isUser">
+  <app-recommended-products></app-recommended-products>
+
+  </div>
   <!-- <app-category-showcase [categoryId]="1"></app-category-showcase> -->
 
   <app-mega-sale></app-mega-sale>
