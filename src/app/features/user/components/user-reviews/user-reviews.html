@@ -1,1 +1,71 @@
-<p>user-reviews works!</p>
+<div class="container mt-4">
+  <div class="reviews-container">
+    <div class="header-section">
+      <h3 class="reviews-title">My Pending Reviews</h3>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading your pending reviews...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && pendingReviews.length === 0" class="empty-state">
+      <div class="text-center py-5">
+        <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+        <h4>No Pending Reviews</h4>
+        <p class="text-muted">You've reviewed all your recent purchases.</p>
+        <p>Check back after your next order!</p>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && pendingReviews.length > 0" class="pending-reviews-list">
+      <div *ngFor="let review of pendingReviews" class="pending-review-item card mb-3">
+        <div class="card-body">
+          <div class="d-flex align-items-start">
+            <div class="product-image me-3" style="width: 80px; height: 80px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-box-open text-muted" style="font-size: 2rem;"></i>
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="product-name">{{ review.productName || 'Product' }}</h5>
+              <p class="text-muted small mb-2">Purchased on {{ review.createdAt | date }}</p>
+
+              <div class="d-flex align-items-center">
+                <div class="me-2">
+                  <span class="verified-badge">
+                    <i class="fas fa-check-circle"></i>
+                    Verified Purchase
+                  </span>
+                </div>
+                <div>
+                  <span class="status-badge" [ngClass]="{
+                    'status-pending': review.isAccepted === 'Pending',
+                    'status-rejected': review.isAccepted === 'Rejected'
+                  }">
+                    {{ review.isAccepted }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <a *ngIf="getProductId(review.productName)"
+                   [routerLink]="['/Products/', getProductId(review.productName)]"
+                   class="btn btn-review">
+                  Write Review
+                </a>
+                <button *ngIf="!getProductId(review.productName)" class="btn btn-review" disabled>
+                  Write Review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
