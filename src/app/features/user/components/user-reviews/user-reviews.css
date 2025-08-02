@@ -1,0 +1,109 @@
+.reviews-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 20px 0;
+}
+
+.header-section {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.reviews-title {
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.pending-review-item {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  border: 1px solid #e9ecef;
+}
+
+.pending-review-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.product-name {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.verified-badge {
+  background-color: #e8f5e8;
+  color: #28a745;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.btn-review {
+  background-color: #ff9900;
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-review:hover {
+  background-color: #e68a00;
+  color: white;
+}
+
+.btn-review:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .reviews-container {
+    padding: 15px;
+  }
+
+  .pending-review-item .d-flex {
+    flex-direction: column;
+  }
+
+  .product-image {
+    margin-bottom: 15px;
+  }
+}
