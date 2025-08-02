@@ -1,3 +1,4 @@
+<!-- orders.component.html -->
 <div class="order-container">
   <h1 class="page-title">Orders</h1>
 
@@ -21,11 +22,52 @@
     <app-user-no-orders *ngIf="!hasOrders"></app-user-no-orders>
 
     <!-- Orders List -->
-    <div *ngIf="currentOrders.length > 0" class="orders-list">
+    <div *ngIf="paginatedOrders.length > 0" class="orders-list">
       <app-order-item
-        *ngFor="let order of currentOrders"
+        *ngFor="let order of paginatedOrders"
         [order]="order">
       </app-order-item>
+    </div>
+
+    <!-- Enhanced Pagination -->
+    <div *ngIf="currentOrders.length > itemsPerPage" class="sticky-pagination-container">
+      <div class="pagination-info">
+        Showing {{ getStartIndex() }}-{{ getEndIndex() }} of {{ currentOrders.length }} orders
+      </div>
+
+      <nav aria-label="Orders pagination">
+        <ul class="pagination">
+          <!-- Previous Button -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link"
+               [class.disabled-link]="currentPage === 1"
+               (click)="currentPage > 1 && goToPage(currentPage - 1)">
+              &laquo;
+            </a>
+          </li>
+
+          <!-- Page Numbers -->
+          <li *ngFor="let page of getPageNumbers()"
+              class="page-item"
+              [class.active]="page === currentPage"
+              [class.disabled]="page === '...'">
+            <a class="page-link"
+               (click)="page !== '...' && goToPage(page)"
+               [class.ellipsis]="page === '...'">
+              {{ page }}
+            </a>
+          </li>
+
+          <!-- Next Button -->
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link"
+               [class.disabled-link]="currentPage === totalPages"
+               (click)="currentPage < totalPages && goToPage(currentPage + 1)">
+              &raquo;
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

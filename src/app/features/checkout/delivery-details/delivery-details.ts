@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DeliveryOption } from '../../../shared/models/delivery-option';
 import { ChangeDetectorRef } from '@angular/core';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-delivery-details',
@@ -34,6 +35,8 @@ export class DeliveryDetails {
   ];
 
   constructor(private cdr: ChangeDetectorRef) {}
+
+  baseImageUrl =environment.ImageUrlBase;
 
   selectOption(option: DeliveryOption) {
     this.selectedOption = option;
