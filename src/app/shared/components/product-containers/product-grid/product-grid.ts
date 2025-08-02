@@ -20,9 +20,10 @@ import { Router } from '@angular/router';
 import { AddToCart } from '../../../../features/cart/cart-models';
 import { CartService } from '../../../../core/services/cart-service/cart-service';
 import { environment } from '../../../../../environments/environment.development';
+
+import Swal from 'sweetalert2';
 import { IsVariantPipe } from '../../../pipes/is-variant-pipe';
 import { ParseNumberPipe } from '../../../pipes/parse-number-pipe';
-import Swal from 'sweetalert2';
 
 type ProductGridSelectableItem = ProductUi | Variant;
 
@@ -44,7 +45,7 @@ function isVariant(item: ProductGridSelectableItem): item is Variant {
     FormsModule,
     DiscountPricePipe,
     IsVariantPipe,
-    ParseNumberPipe,
+    ParseNumberPipe
   ],
   templateUrl: './product-grid.html',
   styleUrl: './product-grid.css',
