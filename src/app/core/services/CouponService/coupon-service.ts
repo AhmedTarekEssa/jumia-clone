@@ -89,8 +89,11 @@ updateCoupon(couponId: number, dto: CreateCouponDto): Observable<any> {
 
    // Coupon Application
   applyCoupon(code: string, cartTotal: number): Observable<boolean> {
-    return this.httpClient.get<boolean>(
-      this.apiBaseUrl + this.controller.ApplyCoupon,
+    return this.httpClient.post<boolean>(
+      this.apiBaseUrl + this.controller.ApplyCoupon(code),{
+  code: code,
+  cartTotal: cartTotal
+},
       { withCredentials: true }
     ).pipe(
       catchError(error => {

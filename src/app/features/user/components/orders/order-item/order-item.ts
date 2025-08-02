@@ -29,9 +29,11 @@ export class OrderItem {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.order)
     const firstSubOrder = this.order.subOrders[0];
     const firstItem = firstSubOrder?.orderItems[0];
-
+    console.log(firstItem)
+    this.cdr.detectChanges()
     this.productName = firstItem?.productName || 'Unnamed Product';
     this.productImage = firstItem?.mainImageUrl || 'assets/images/placeholder.png';
     console.log(this.productImage)

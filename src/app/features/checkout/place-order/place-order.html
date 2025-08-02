@@ -140,7 +140,12 @@
         [couponCode]="couponCode"
         [canConfirmOrder]="canConfirmOrder()"
         (confirmOrder)="confirmOrder()"
-        (applyCoupon)="applyCoupon($event)">
+        (applyCoupon)="applyCoupon($event)"
+        (fixedCoupon)="applyDiscountFixed($event)"
+        (percentageCoupon)="applyDiscountPercentage($event)"
+
+        >
+        
       </app-order-summary>
     </div>
   </div>

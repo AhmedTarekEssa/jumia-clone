@@ -3,7 +3,7 @@
 
   <div class="summary-item">
     <span>Item's total ({{cartItems.length}})</span>
-    <span>EGP {{itemsTotal.toFixed(2)}}</span>
+    <span>EGP {{itemsTotal().toFixed(2)}}</span>
   </div>
 
   <div class="summary-item">
@@ -18,7 +18,7 @@
 
   <div class="summary-total">
     <span>Total</span>
-    <span>EGP {{total.toFixed(2)}}</span>
+    <span>EGP {{itemsTotal().toFixed(2)}}</span>
   </div>
 
   <div class="coupon-section">
@@ -28,13 +28,14 @@
         placeholder="Enter code here"
         [(ngModel)]="currentCouponCode"
         class="coupon-field">
-      <button
+        <button
         class="apply-btn"
         (click)="applyCouponCode()"
         [disabled]="!currentCouponCode.trim()">
         APPLY
       </button>
     </div>
+    <span class="text-danger fs-6" *ngIf="show_err">{{msg}}</span>
 
     <div class="voucher-info">
       <span class="info-icon">ℹ️</span>
