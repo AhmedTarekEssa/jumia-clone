@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class AdminOrders implements OnInit {
 
-  constructor(private orderservice: OrderService, private cdr: ChangeDetectorRef, private router:Router) { }
+  constructor(private orderservice: OrderService, private cdr: ChangeDetectorRef, private router: Router) { }
 
   searchTerm = '';
   statusFilter = '';
@@ -31,6 +31,10 @@ export class AdminOrders implements OnInit {
     orderDate: string;
     raw: Order;
   }[] = [];
+
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
 
   ngOnInit(): void {
     this.getAllorders();
@@ -54,7 +58,7 @@ export class AdminOrders implements OnInit {
       this.cdr.detectChanges();
     });
   }
-  redirect(id:number){
+  redirect(id: number) {
     this.router.navigate([`admin/orders/${id}`]);
 
   }
@@ -92,23 +96,78 @@ export class AdminOrders implements OnInit {
     const currentStatus = order.status.toLowerCase();
     const index = this.statusSequence.indexOf(currentStatus);
 
-    if (index >= 0 && index < this.statusSequence.length - 1) {
-      const nextStatus = this.statusSequence[index + 1];
-
-      this.orderservice.UpdateOrderStatus(order.id, nextStatus).subscribe({
-        next: (res) => {
-          if (res) {
-            order.status = this.capitalize(nextStatus);
-            this.cdr.detectChanges();
-            order = { ...order }; // trigger UI update
-            this.cdr.detectChanges(); // ensure view updates
-          }
-        },
-        error: (err) => {
-          console.error('Failed to update status:', err);
-        }
-      });
+    const nextStatus = this.getNextStatusLabel(currentStatus).toLowerCase();
+    if (nextStatus === 'delivered') {
+      order.paymentStatus = 'Paid';
+      this.cdr.detectChanges(); // Automatically mark as refunded if cancelled
+      // Automatically mark as paid if delivered
     }
+    // if(nextStatus === 'cancelled') {
+    //   order.paymentStatus = 'Refunded';
+    //   this.cdr.detectChanges(); // Automatically mark as refunded if cancelled
+    // }
+    this.orderservice.UpdateOrderStatus(order.id, nextStatus).subscribe({
+      next: (res) => {
+        if (res) {
+          order.status = this.capitalize(nextStatus);
+          this.cdr.detectChanges();
+          order = { ...order }; // trigger UI update
+          this.cdr.detectChanges(); // ensure view updates
+        }
+      },
+      error: (err) => {
+        console.error('Failed to update status:', err);
+      }
+    });
+
+  }
+
+  // Pagination methods
+  get paginatedOrders(): typeof this.Orders {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredOrders?.slice(startIndex, endIndex);
+  }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredOrders.length / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show maximum 5 page numbers
+    let startPage = 1;
+    let endPage = this.totalPages;
+
+    if (this.totalPages > maxVisiblePages) {
+      const half = Math.floor(maxVisiblePages / 2);
+      startPage = Math.max(1, this.currentPage - half);
+      endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
 
@@ -119,7 +178,9 @@ export class AdminOrders implements OnInit {
     this.orderservice.CancelOrder(order.id, 'Cancelled by admin').subscribe({
       next: (res) => {
         order.status = 'Cancelled';
-        order = { ...order }; 
+        order.paymentStatus = 'Refunded';
+
+        order = { ...order };
         this.cdr.detectChanges();
       },
       error: (err) => {

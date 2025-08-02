@@ -41,7 +41,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let order of filteredOrders">
+      <tr *ngFor="let order of paginatedOrders">
         <td>#{{order.id}}</td>
         <td>
           <div class="customer-cell">
@@ -103,5 +103,57 @@
       </tr>
     </tbody>
   </table>
+  <!-- Pagination Controls -->
+<div class="pagination-controls" *ngIf="filteredOrders!.length > itemsPerPage">
+  <button
+    (click)="prevPage()"
+    [disabled]="currentPage === 1"
+    class="pagination-button">
+    Previous
+  </button>
+
+  <ng-container *ngFor="let page of pageNumbers">
+    <span
+      *ngIf="page === 1 && pageNumbers[0] !== 1"
+      (click)="goToPage(1)"
+      class="page-number">
+      1
+    </span>
+    <span
+      *ngIf="page === 1 && pageNumbers[0] > 2"
+      class="page-ellipsis">
+      ...
+    </span>
+    <span
+      (click)="goToPage(page)"
+      [class.active]="page === currentPage"
+      class="page-number">
+      {{ page }}
+    </span>
+    <span
+      *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages - 1"
+      class="page-ellipsis">
+      ...
+    </span>
+    <span
+      *ngIf="page === pageNumbers[pageNumbers.length - 1] && page < totalPages"
+      (click)="goToPage(totalPages)"
+      class="page-number">
+      {{ totalPages }}
+    </span>
+  </ng-container>
+
+  <button
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages"
+    class="pagination-button">
+    Next
+  </button>
+
+  <span class="page-info">
+    Page {{ currentPage }} of {{ totalPages }} ({{ filteredOrders?.length }} items)
+  </span>
+</div>
+
 </div>
 </div>
