@@ -67,7 +67,7 @@
 
           <div class="row mb-3">
             <div class="col-md-6">
-              <div class="info-row"><span class="info-label">Subtotal:</span><span class="info-value amount-highlight">${{ sub.subtotal.toFixed(2) }}</span></div>
+              <div class="info-row"><span class="info-label">Subtotal:</span><span class="info-value amount-highlight">EGP{{ sub.subtotal.toFixed(2) }}</span></div>
               <div class="info-row"><span class="info-label">Status Updated:</span><span class="info-value">{{ sub.statusUpdatedAt | date:'medium' }}</span></div>
             </div>
             <div class="col-md-6">
@@ -94,11 +94,11 @@
               </div>
               <div class="col-md-2">
                 <small class="info-label">Unit Price:</small>
-                <div class="info-value">${{ item.priceAtPurchase.toFixed(2) }}</div>
+                <div class="info-value">EGP{{ item.priceAtPurchase.toFixed(2) }}</div>
               </div>
               <div class="col-md-2">
                 <small class="info-label">Total:</small>
-                <div class="info-value amount-highlight">${{ item.totalPrice.toFixed(2) }}</div>
+                <div class="info-value amount-highlight">EGP{{ item.totalPrice.toFixed(2) }}</div>
               </div>
             </div>
           </div>
@@ -110,14 +110,14 @@
     <div class="col-lg-4">
       <div class="info-card">
         <h3 class="card-title"><i class="fas fa-calculator text-warning"></i> Payment Summary</h3>
-        <div class="info-row"><span class="info-label">Total Amount:</span><span class="info-value">${{ order.totalAmount.toFixed(2) }}</span></div>
-        <div class="info-row"><span class="info-label">Discount:</span><span class="info-value text-success">-${{ order.discountAmount.toFixed(2) }}</span></div>
-        <div class="info-row"><span class="info-label">Shipping Fee:</span><span class="info-value">${{ order.shippingFee.toFixed(2) }}</span></div>
-        <div class="info-row"><span class="info-label">Tax Amount:</span><span class="info-value">${{ order.taxAmount.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Total Amount:</span><span class="info-value">EGP{{ order.totalAmount.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Discount:</span><span class="info-value text-success">-EGP{{ order.discountAmount.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Shipping Fee:</span><span class="info-value">EGP{{ order.shippingFee.toFixed(2) }}</span></div>
+        <div class="info-row"><span class="info-label">Tax Amount:</span><span class="info-value">EGP{{ order.taxAmount.toFixed(2) }}</span></div>
         <hr class="my-3">
         <div class="info-row">
           <span class="info-label h5">Final Amount:</span>
-          <span class="info-value amount-highlight h4">${{ order.finalAmount.toFixed(2) }}</span>
+          <span class="info-value amount-highlight h4">EGP{{ order.finalAmount.toFixed(2) }}</span>
         </div>
       </div>
 

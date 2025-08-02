@@ -469,3 +469,40 @@ tbody tr:hover .text-success {
     opacity: 0.5;
   }
 }
+/* Pagination styles */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.page-info {
+  font-weight: 500;
+  color: #495057;
+  min-width: 100px;
+  text-align: center;
+}
+
+.pagination-controls button {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  min-width: 100px;
+}
+
+.pagination-controls button:disabled {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.pagination-controls button:not(:disabled):hover {
+  background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+}

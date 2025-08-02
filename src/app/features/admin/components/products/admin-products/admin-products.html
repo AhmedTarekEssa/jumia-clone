@@ -33,14 +33,14 @@
       </select>
     </div>
     
-    <div class="availability-filter">
+    <!-- <div class="availability-filter">
       <label>Filter by Availability:</label>
       <select [(ngModel)]="isAvailableFilter" class="filter-select">
         <option value="">All Availability</option>
         <option value="true">Available</option>
         <option value="false">Unavailable</option>
       </select>
-    </div>
+    </div> -->
   </div>
 
   <!-- Products Grid -->
@@ -74,7 +74,7 @@
       <div class="product-info">
         <h4>{{product.name}}</h4>
         <p class="price">
-          ${{product.basePrice}}
+          EGP{{product.basePrice}}
           <span *ngIf="product.discountPercentage" class="discount">
             ({{product.discountPercentage}} off)
           </span>
