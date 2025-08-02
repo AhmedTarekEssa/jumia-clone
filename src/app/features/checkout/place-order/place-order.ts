@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ProductService } from '../../../core/services/Product-Service/product';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-place-order',
@@ -190,18 +191,31 @@ export class PlaceOrder implements OnInit {
         this.orderBody = payload;
         this.cdr.detectChanges();
         if (payload.paymentMethod === "cod") {
-          console.log(payload);
-         this.orderService.createOrder(this.orderBody).subscribe(
-          {
-            next:(order)=>{
-              this.cdr.detectChanges()
-              console.log('order created succssfully',order)
-              this.router.navigate(['/success']);
-            },
-            error:(err)=>console.log(err)
+  console.log(payload);
+  this.orderService.createOrder(this.orderBody).subscribe({
+    next: (order) => {
+      this.cdr.detectChanges();
+      this.router.navigate(['/success']);
+    },
+    error: (err) => {
+    
+
+      
+        Swal.fire({
+          icon: 'error',
+          title: 'Order Failed',
+          text: 'Some items in your cart are sold out. Please update your cart and try again.',
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'Back to Cart'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/cart']);
           }
-         )
-        } else {
+        });
+    }
+  });
+}
+else {
           this.paymentService.intiatePayment(this.orderBody).subscribe({
             next: (response:paymentResponse) => {
               console.log('Order created successfully:', response);

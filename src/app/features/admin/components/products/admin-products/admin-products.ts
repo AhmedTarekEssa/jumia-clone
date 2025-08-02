@@ -224,7 +224,7 @@ declineProduct(product: Product): void {
         product.approvalStatus.toLowerCase() === this.statusFilter.toLowerCase();
       // const matchesAvailability = this.isAvailableFilter === null || product.isAvailable === (this.isAvailableFilter === 'true');
       // console.log(`Product: ${product.name}, Status: ${product.approvalStatus}, Available: ${product.isAvailable} ,matchesStatus: ${matchesStatus}, matchesAvailability: ${matchesAvailability}`);
-      console.log("isAvailableFilter: " , this.isAvailableFilter);
+      
       return matchesSearch && matchesStatus ;
     });
   }
