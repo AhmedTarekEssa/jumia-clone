@@ -38,6 +38,8 @@ export class UserOrderContainer implements OnInit {
   ngOnInit(): void {
     this.orderService.getCurrentUserOrders().subscribe({
       next: (orders: Order[]) => {
+        console.log("=======================================")
+        console.log(orders)
         this.allOrders = orders;
         console.log('All Orders:', this.allOrders);
 

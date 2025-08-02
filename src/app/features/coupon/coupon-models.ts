@@ -20,6 +20,6 @@ export interface CouponDto {
   startDate: Date;
   endDate: Date;
   isActive: boolean;
-  usageLimit?: number;
+  usageLimit: number;
   usageCount: number;
 }
