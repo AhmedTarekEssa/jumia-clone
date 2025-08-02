@@ -92,12 +92,17 @@ export class AdminOrders implements OnInit {
     const currentStatus = order.status.toLowerCase();
     const index = this.statusSequence.indexOf(currentStatus);
 
-    if (index >= 0 && index < this.statusSequence.length - 1) {
-      const nextStatus = this.statusSequence[index + 1];
+    // if (index >= 0 && index < this.statusSequence.length - 1) {
+    //   const nextStatus = this.statusSequence[index + 1];
 
+    const nextStatus = this.getNextStatusLabel(currentStatus);
+    
       this.orderservice.UpdateOrderStatus(order.id, nextStatus).subscribe({
         next: (res) => {
           if (res) {
+            if(nextStatus.toLowerCase()==='delivered'){
+              order.paymentStatus='paid';
+            }
             order.status = this.capitalize(nextStatus);
             this.cdr.detectChanges();
             order = { ...order }; // trigger UI update
@@ -108,7 +113,7 @@ export class AdminOrders implements OnInit {
           console.error('Failed to update status:', err);
         }
       });
-    }
+    
   }
 
 

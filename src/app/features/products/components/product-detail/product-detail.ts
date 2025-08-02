@@ -352,6 +352,7 @@ export class ProductDetailC implements OnInit {
 
     this.cartService.addToCart(items).subscribe(
       {
+       
         next: () => {
           console.log("added to cart");
           // Update cartQuantities after successful add to cart

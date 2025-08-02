@@ -35,7 +35,8 @@ export const environment = {
         Delete:(id:number)=>`/Product/delete/${id}`,
         GetVariantByAttributes:(id:number)=>`/Product/${id}/variant`,
         GetMatchingAtrributesOptions:(id:number)=>`/Product/${id}/attribute-options`,
-        UpdateProduct:'/Product/update'
+        UpdateProduct:'/Product/update',
+        updateStatus:(productId:number,status:string)=>`/Product/update-status?productId=${productId}&status=${status}`
     },
     Cart:{
         GetCart:"/Cart",

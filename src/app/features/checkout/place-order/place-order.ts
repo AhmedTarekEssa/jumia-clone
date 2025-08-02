@@ -196,7 +196,7 @@ export class PlaceOrder implements OnInit {
             next:(order)=>{
               this.cdr.detectChanges()
               console.log('order created succssfully',order)
-              
+              this.router.navigate(['/success']);
             },
             error:(err)=>console.log(err)
           }
