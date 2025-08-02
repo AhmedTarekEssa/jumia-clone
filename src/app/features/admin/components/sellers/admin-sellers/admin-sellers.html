@@ -26,7 +26,7 @@
       <tr *ngFor="let seller of filteredSellers">
         <!-- <td>{{ seller.sellerId }}</td> -->
         <td>{{ seller.businessName }}</td>
-        <td>{{ seller.businessDescription }}</td>
+        <td class="des">{{ seller.businessDescription }}</td>
         <td>{{ seller.rating }}</td>
         <td>
           <span
@@ -70,7 +70,7 @@
         </td>
 
         <td>{{ seller.totalProductsSold }}</td>
-        <td>{{ seller.totalAmountSold | currency }}</td>
+        <td>EGP{{ seller.totalAmountSold  }}</td>
       </tr>
     </tbody>
   </table>

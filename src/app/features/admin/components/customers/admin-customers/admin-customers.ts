@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { AppUser, User, UserProfile } from '../../../../../core/services/User-Service/user';
 import { finalize } from 'rxjs';
 
-
 export interface Customer {
   customerId: number,
   userId: string,
@@ -14,37 +13,33 @@ export interface Customer {
   email: string;
   phone: string;
   gender: string;
-
 }
 
-
 @Component({
-  standalone: true , 
+  standalone: true,
   selector: 'app-admin-customers',
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-customers.html',
   styleUrl: './admin-customers.css'
 })
-
 export class AdminCustomers {
-
-
   showAddForm = false;
   searchTerm = '';
   statusFilter = '';
-
   isLoading = false;
   error = '';
-
   customers: Customer[] = [];
   selectedCustomer: Customer | null = null;
   totalCustomers: number = 0;
   
+  // Pagination properties
+  currentPage = 1;
+  itemsPerPage = 4;
 
-  private cdr = inject(ChangeDetectorRef); 
+  private cdr = inject(ChangeDetectorRef);
   private userService = inject(User);
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     console.log("ngOnInit called");
     this.totalCustomers = this.customers.length;
     this.loadCustomers();
@@ -57,29 +52,28 @@ export class AdminCustomers {
     this.userService.getAllCustomers().pipe(
       finalize(() => {
         this.isLoading = false;
-              this.cdr.detectChanges();
-      }
-      )
+        this.cdr.detectChanges();
+      })
     ).subscribe({
       next: (customers) => {
-              console.log('Customers fetched:', customers); // Log the received data here
-        if(customers && customers.length > 0) {
-        this.customers = customers.map(c => ({
-          ...c,
-          name: `${c.firstName} ${c.lastName}`, // For display purposes
-          phone: c.phone, // Map to match your template
-          // joinDate: this.formatDate(c.user.dateOfBirth), // Format date for display
-          email: c.email,
-          gender: c.gender,
-          isBlocked: c.isBlocked ?? false,
-          customerId: c.customerId,
-          userId: c.userId
-        }));
-        this.cdr.detectChanges();
-                console.log('Mapped customers:', this.customers); // Log the mapped customers
-      }else{
-                this.error = 'No customers found.';
-      }
+        console.log('Customers fetched:', customers);
+        if (customers && customers.length > 0) {
+          this.customers = customers.map(c => ({
+            ...c,
+            name: `${c.firstName} ${c.lastName}`,
+            phone: c.phone,
+            email: c.email,
+            gender: c.gender,
+            isBlocked: c.isBlocked ?? false,
+            customerId: c.customerId,
+            userId: c.userId
+          }));
+          this.totalCustomers = this.customers.length;
+          this.cdr.detectChanges();
+          console.log('Mapped customers:', this.customers);
+        } else {
+          this.error = 'No customers found.';
+        }
       },
       error: (err) => {
         this.error = 'Failed to load customers. Please try again later.';
@@ -88,31 +82,44 @@ export class AdminCustomers {
     });
   }
 
-  
   private formatDate(date: Date): string {
     if (date) {
-        const parsedDate = new Date(date);
-        // Check if the date is valid
-        if (!isNaN(parsedDate.getTime())) {
-          return parsedDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-        }
+      const parsedDate = new Date(date);
+      if (!isNaN(parsedDate.getTime())) {
+        return parsedDate.toISOString().split('T')[0];
       }
-      return ''; 
+    }
+    return '';
   }
 
-  
-  // if (!this.searchTerm?.trim()) {
-  //   console.log('No search term - returning all customers');
-  //   return this.customers;
-  // }
-
-  // Filtered customers getter
   get filteredCustomers(): Customer[] {
-    console.log('Current search term:', this.searchTerm);
-    console.log('All customers:', this.customers);
+    let filtered = this.customers.filter(customer => {
+      const searchLower = this.searchTerm.trim().toLowerCase();
+      return (
+        customer.firstName?.toLowerCase().includes(searchLower) ||
+        customer.lastName?.toLowerCase().includes(searchLower) ||
+        customer.email?.toLowerCase().includes(searchLower))
+    });
 
-    // Filter customers by search term and status filter (Blocked/Active)
-    const filteredBySearch = this.customers.filter(customer => {
+    if (this.statusFilter) {
+      filtered = filtered.filter(customer =>
+        this.statusFilter === 'blocked' ? customer.isBlocked : !customer.isBlocked
+      );
+    }
+
+    // Apply pagination
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  // Pagination methods
+  get totalPages(): number {
+    const filtered = this.getFilteredCustomersWithoutPagination();
+    return Math.ceil(filtered.length / this.itemsPerPage);
+  }
+
+  public getFilteredCustomersWithoutPagination(): Customer[] {
+    let filtered = this.customers.filter(customer => {
       const searchLower = this.searchTerm.trim().toLowerCase();
       return (
         customer.firstName?.toLowerCase().includes(searchLower) ||
@@ -121,49 +128,52 @@ export class AdminCustomers {
       );
     });
 
-    // Apply status filter (Blocked or Active)
     if (this.statusFilter) {
-      return filteredBySearch.filter(customer =>
+      filtered = filtered.filter(customer =>
         this.statusFilter === 'blocked' ? customer.isBlocked : !customer.isBlocked
       );
     }
-
-    return filteredBySearch;
+    return filtered;
   }
 
-   toggleBlockStatus(customer: Customer): void {
-    // Prevent toggling if userId is missing
-  if (!customer.userId) {
-    console.error('User ID is missing!');
-    this.error = 'User ID is missing. Please try again later.';
-    return;
-  }
-
-  // Optimistically update the UI first
-  const originalStatus = customer.isBlocked;
-  customer.isBlocked = !customer.isBlocked;
-  
-
-  // Call the API to toggle the block status
-  this.userService.toggleBlockStatus(customer.customerId)
-  .subscribe({
-    next: (message) => {
-      // Toggle the block status in the UI
-      console.log('Block status updated successfully:', message);
-    },
-    error: (err) => {      
-      customer.isBlocked = originalStatus;
-
-      this.error = 'Failed to update block status. Please try again later.';
-      console.error('Error updating block status:', err);
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
     }
-  });
   }
-  
-    
-  
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  toggleBlockStatus(customer: Customer): void {
+    if (!customer.userId) {
+      console.error('User ID is missing!');
+      this.error = 'User ID is missing. Please try again later.';
+      return;
+    }
+
+    const originalStatus = customer.isBlocked;
+    customer.isBlocked = !customer.isBlocked;
+
+    this.userService.toggleBlockStatus(customer.customerId)
+      .subscribe({
+        next: (message) => {
+          console.log('Block status updated successfully:', message);
+        },
+        error: (err) => {
+          customer.isBlocked = originalStatus;
+          this.error = 'Failed to update block status. Please try again later.';
+          console.error('Error updating block status:', err);
+        }
+      });
+  }
 }
-
-  
-  
-
