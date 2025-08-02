@@ -22,22 +22,23 @@
 
     <!-- Left arrow -->
     <button class="scroll-arrow left-arrow">
-      <i class="fas fa-chevron-left"></i>
+      <i class="fas fa-chevron-left"
+      (click)="scrollLeft(productsContainer)"></i>
     </button>
 
     <!-- Product cards container -->
-<div class="products-container">
+<div #productsContainer class="products-container">
 
   <div class="product-card" *ngFor="let product of flashSaleProducts">
     <a class="text-decoration-none" [routerLink]="['/Products', product.productId]">
       <div class="discount-badge">-{{ product.discountPercentage }}%</div>
       <div class="product-image">
-        <img [src]="product.mainImageUrl" [alt]="product.name">
+        <img [src]="baseImageUrl+product.imageUrl" [alt]="product.name">
       </div>
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
         <div class="product-price">
-          <span class="final-price">EGP {{ product.finalPrice | number }}</span>
+          <span class="final-price">EGP {{ product.basePrice-(product.basePrice * product.discountPercentage / 100) | number }}</span>
           <span class="base-price">EGP {{ product.basePrice | number }}</span>
         </div>
         <div class="stock-info">
@@ -63,7 +64,8 @@
 
     <!-- Right arrow -->
     <button class="scroll-arrow right-arrow">
-      <i class="fas fa-chevron-right"></i>
+      <i class="fas fa-chevron-right"
+      (click)="scrollRight(productsContainer)"></i>
     </button>
 
   </div>
