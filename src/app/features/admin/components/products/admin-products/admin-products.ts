@@ -43,6 +43,7 @@ interface Category {
   name: string;
 }
 
+
 // interface ProductAttribute {
 //   id: number;
 //   name: string;
@@ -72,6 +73,9 @@ export class AdminProducts implements OnInit , OnDestroy {
   error = '';
 
   categories: Category[] = [];
+    // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
    
 
   constructor(private productService : ProductService){}
@@ -120,7 +124,7 @@ acceptProduct(product: Product): void {
   if (confirm('Are you sure you want to approve this product?')) {
     this.isLoading = true;
     
-    this.productService.activateProduct(product.productId).pipe(
+    this.productService.udpateProductStatus(product.productId,'approved').pipe(
       takeUntil(this.destroyed)
     ).subscribe({
       next: (response) => {
@@ -224,6 +228,55 @@ declineProduct(product: Product): void {
       return matchesSearch && matchesStatus ;
     });
   }
+
+    // Pagination methods
+  get paginatedProducts(): Product[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredProducts?.slice(startIndex, endIndex);
+  }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show maximum 5 page numbers
+    let startPage = 1;
+    let endPage = this.totalPages;
+
+    if (this.totalPages > maxVisiblePages) {
+      const half = Math.floor(maxVisiblePages / 2);
+      startPage = Math.max(1, this.currentPage - half);
+      endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
 
  handleImageError(event: Event) {
   const img = event.target as HTMLImageElement;
