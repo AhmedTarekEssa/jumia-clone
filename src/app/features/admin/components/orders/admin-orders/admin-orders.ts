@@ -96,6 +96,7 @@ export class AdminOrders implements OnInit {
     const currentStatus = order.status.toLowerCase();
     const index = this.statusSequence.indexOf(currentStatus);
 
+
     const nextStatus = this.getNextStatusLabel(currentStatus).toLowerCase();
     if (nextStatus === 'delivered') {
       order.paymentStatus = 'Paid';
@@ -168,6 +169,7 @@ export class AdminOrders implements OnInit {
       pages.push(i);
     }
     return pages;
+
   }
 
 

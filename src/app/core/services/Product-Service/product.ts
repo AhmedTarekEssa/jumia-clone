@@ -169,6 +169,9 @@ export class ProductService {
 
   }
 
+  udpateProductStatus(id:number,status:string){
+    return this.httpClient.put(environment.BaseUrlPath+this.controller.updateStatus(id,status.toLowerCase()),{})
+  }
   
 
 

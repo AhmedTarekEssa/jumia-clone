@@ -124,7 +124,7 @@ acceptProduct(product: Product): void {
   if (confirm('Are you sure you want to approve this product?')) {
     this.isLoading = true;
     
-    this.productService.activateProduct(product.productId).pipe(
+    this.productService.udpateProductStatus(product.productId,'approved').pipe(
       takeUntil(this.destroyed)
     ).subscribe({
       next: (response) => {
