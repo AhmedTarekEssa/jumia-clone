@@ -1,4 +1,13 @@
 <div class="kids-fashion-container">
+  <div class="search-box-container">
+    <input type="text"
+           [(ngModel)]="searchQuery"
+           (keyup.enter)="onSearch()"
+           placeholder="Search products..."
+           class="search-input">
+    <button (click)="onSearch()" class="search-btn">Search</button>
+    <button *ngIf="searchQuery" (click)="clearSearch()" class="clear-search-btn">Clear</button>
+  </div>
   <div class="products-row row">
     <div *ngFor="let product of products" class="product-card col-6 col-md-3" (click)="goToProductDetails(product.productId)">
       <div class="product-image-wrapper">

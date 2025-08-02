@@ -67,7 +67,8 @@ export class ProductGrid implements OnInit, OnChanges {
   cartQuantities: { [id: number]: number } = {};
   item!: AddToCart;
   @Input() productsFilters!: ProductFilterRequest;
-
+  searchQuery: string = '';
+isSearchActive: boolean = false;
   // Pagination properties
   currentPage: number = 1;
   totalPages: number = 1;
@@ -85,40 +86,42 @@ export class ProductGrid implements OnInit, OnChanges {
   // }
 
   loadProducts(page: number): void {
-    this.productService
-      .productsByFilters(this.productsFilters, page, this.pageSize)
-      .subscribe({
-        next: (data) => {
-          this.products = data.items;
-          this.totalItems = data.totalCount;
-          this.totalPages = Math.ceil(data.totalCount / this.pageSize);
-          this.currentPage = page;
-          this.cdr.detectChanges();
+  if (this.isSearchActive) return; // Don't load normal products if search is active
 
-          this.cartService.getCart().subscribe({
-            next: (cart) => {
-              cart.cartItems.forEach((item) => {
-                if (item.variationId) {
-                  this.cartQuantities[item.variationId] = item.quantity;
-                } else {
-                  this.cartQuantities[item.productId] = item.quantity;
-                }
-              });
-              this.cdr.detectChanges();
-            },
-            error: (err) => console.error('Error fetching cart', err),
-          });
-        },
-        error: (err) => {
-          this.products = [];
-          if (err.status === 404) {
-            Swal.fire('No Products Found', '', 'warning');
-          } else {
-            console.error('Error fetching products', err);
-          }
-        },
-      });
-  }
+  this.productService
+    .productsByFilters(this.productsFilters, page, this.pageSize)
+    .subscribe({
+      next: (data) => {
+        this.products = data.items;
+        this.totalItems = data.totalCount;
+        this.totalPages = Math.ceil(data.totalCount / this.pageSize);
+        this.currentPage = page;
+        this.cdr.detectChanges();
+
+        this.cartService.getCart().subscribe({
+          next: (cart) => {
+            cart.cartItems.forEach((item) => {
+              if (item.variationId) {
+                this.cartQuantities[item.variationId] = item.quantity;
+              } else {
+                this.cartQuantities[item.productId] = item.quantity;
+              }
+            });
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Error fetching cart', err),
+        });
+      },
+      error: (err) => {
+        this.products = [];
+        if (err.status === 404) {
+          Swal.fire('No Products Found', '', 'warning');
+        } else {
+          console.error('Error fetching products', err);
+        }
+      },
+    });
+}
 
   // Pagination methods
   goToPage(page: number): void {
@@ -373,4 +376,31 @@ export class ProductGrid implements OnInit, OnChanges {
       .fill(0)
       .map((_, i) => (i < Math.floor(rating) ? 1 : 0));
   }
+  onSearch(): void {
+  if (this.searchQuery.trim()) {
+    this.isSearchActive = true;
+    this.productService.search(this.searchQuery.trim()).subscribe({
+      next: (data) => {
+        this.products = data;
+        this.totalItems = data.length;
+        this.totalPages = 1;
+        this.currentPage = 1;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.products = [];
+        if (err.status === 404) {
+          Swal.fire('No Products Found', '', 'warning');
+        } else {
+          console.error('Error searching products', err);
+        }
+      }
+    });
+  }
+}
+clearSearch(): void {
+  this.searchQuery = '';
+  this.isSearchActive = false;
+  this.loadProducts(1);
+}
 }
