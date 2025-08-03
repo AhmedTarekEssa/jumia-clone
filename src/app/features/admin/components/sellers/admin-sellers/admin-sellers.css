@@ -113,21 +113,23 @@ body {
 /* Table container - wrapping the table element directly */
 .sellers-container > .table {
   margin: 0;
-  padding: 3rem;
+ 
   background: white;
   overflow-x: auto;
   box-shadow: none;
   border-radius: 0;
+  
 }
 
 /* Table styles */
 .table {
-  width: 100%;
+  overflow-x: scroll;
   border-collapse: collapse;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  
 }
 
 .table thead {
@@ -139,7 +141,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 1.25rem 1rem;
+ 
   text-align: left;
   font-size: 0.875rem;
   border-bottom: 2px solid #ff6b35;

@@ -35,20 +35,6 @@
           </div>
         </div>
 
-        <div class="item-actions">
-          <button
-            class="action-btn"
-            [ngClass]="'btn-' + item.status"
-            (click)="onActionButtonClick(item)">
-            {{ getActionButtonText(item.status) }}
-          </button>
-          <a
-            href="#"
-            class="status-link"
-            (click)="onStatusHistoryClick(item); $event.preventDefault()">
-            See Status History
-          </a>
-        </div>
       </div>
 
       <div class="return-notice" *ngIf="item.status === 'cancelled' || item.status === 'returned'">

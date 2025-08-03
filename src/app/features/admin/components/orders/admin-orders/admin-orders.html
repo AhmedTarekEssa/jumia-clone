@@ -32,7 +32,6 @@
       <tr>
         <th>Order ID</th>
         <th>Customer</th>
-        <th>Products</th>
         <th>Total  <i class="fas fa-sort"></i></th>
         <th>Payment Status</th>
         <th>Status</th>
@@ -47,14 +46,6 @@
           <div class="customer-cell">
             <i class="fas fa-user-circle customer-icon"></i>
             {{order.customer}}
-          </div>
-        </td>
-        <td>
-          <div class="products-list">
-            <span *ngFor="let product of order.products; let last = last">
-                            <i class="fas fa-box-open product-icon"></i>
-              {{product}}<span *ngIf="!last">, </span>
-            </span>
           </div>
         </td>
         <td class="total-cell">EGP{{order.total}}</td>

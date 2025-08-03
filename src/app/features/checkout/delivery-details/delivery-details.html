@@ -31,19 +31,12 @@
 
 
           <div class="delivery-method">
-            <!-- <div class="method-header">
-              <span class="method-name">Door Delivery</span>
-              <span class="delivery-date">Delivery scheduled on 27 July</span>
-            </div> -->
-
-            <!-- <div class="jumia-express">
-              <img src="/api/placeholder/80/20" alt="Jumia Express" class="express-logo">
-            </div> -->
-
-            <div class="products-list">
-              <div class="product-item" *ngFor="let item of cartItems">
-                <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
-                <div class="product-details">
+            <div class="products-list row">
+              <div class="product-item col-12 row" *ngFor="let item of cartItems">
+                <div class="col-12 col-sm-4">
+                  <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
+                </div>
+                <div class="product-details col-12 col-sm-6 ">
                   <span class="product-quantity">x{{item.quantity}}</span>
                   <p class="product-name">{{item.name}}</p>
                   <p class="product-price">EGP {{item.price}}</p>
@@ -53,18 +46,6 @@
           </div>
         </div>
 
-        <!-- <div class="pickup-station-section">
-          <h5>Pickup Station</h5>
-          <button class="select-station-btn">Select pickup station</button>
-        </div>
-
-        <div class="no-station-selected">
-          <div class="warning-icon">⚠️</div>
-          <div>
-            <strong>No Pickup Station Selected</strong>
-            <p>To use this option, you will need to add a pickup station near your location.</p>
-          </div>
-        </div> -->
       </div>
 
 
@@ -77,19 +58,13 @@
           </div>
 
           <div class="delivery-method">
-            <!-- <div class="method-header">
-              <span class="method-name">Door Delivery</span>
-              <span class="delivery-date">Delivery scheduled on 27 July</span>
-            </div> -->
 
-            <!-- <div class="jumia-express">
-              <img src="/api/placeholder/80/20" alt="Jumia Express" class="express-logo">
-            </div> -->
-
-            <div class="products-list">
-              <div class="product-item" *ngFor="let item of cartItems">
-                <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
-                <div class="product-details">
+            <div class="products-list row">
+              <div class="product-item col-12 row" *ngFor="let item of cartItems">
+                <div class="col-12 col-sm-4">
+                  <img [src]="  baseImageUrl+(item.image)" [alt]="item.name" class="product-image">
+                </div>
+                <div class="product-details col-12 col-sm-6 ">
                   <span class="product-quantity">x{{item.quantity}}</span>
                   <p class="product-name">{{item.name}}</p>
                   <p class="product-price">EGP {{item.price}}</p>

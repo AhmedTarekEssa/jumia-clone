@@ -33,7 +33,7 @@
   <div class="dashboard-content">
     <div class="row h-100">
       <!-- Left Sidebar - Chat Lists -->
-      <div class="col-lg-4 col-md-5">
+      <div class="col-12 col-lg-6 mb-5">
         <div class="chat-sidebar">
 
           <!-- Unassigned Chats Section -->
@@ -69,7 +69,7 @@
                     {{ chat.lastMessage.message }}
                   </p>
                   <div class="chat-actions">
-                    <button class="btn btn-assign" (click)="assignChat(chat); $event.stopPropagation()">
+                    <button class="btn btn-assign m-3" (click)="assignChat(chat); $event.stopPropagation()">
                       <i class="fas fa-user-plus"></i>
                       Assign to Me
                     </button>
@@ -107,10 +107,10 @@
                 </div>
                 <div class="chat-details">
                   <div class="chat-header">
-                    <h4 class="chat-name">{{ chat.userName }}</h4>
+                    <h4 class="chat-name">{{ chat.userEmail }}</h4>
                     <span class="chat-time">{{ chat.createdAt | date:'shortTime' }}</span>
                   </div>
-                  <p class="chat-email">{{ chat.userEmail }}</p>
+                 
                   <p class="chat-preview" *ngIf="chat.lastMessage">
                     <i class="fas fa-reply preview-icon" *ngIf="chat.lastMessage.isFromAdmin"></i>
                     {{ chat.lastMessage.message }}
@@ -126,7 +126,7 @@
       </div>
 
       <!-- Right Panel - Chat Conversation -->
-      <div class="col-lg-8 col-md-7">
+      <div class="col-12 col-lg-6 mb-5">
         <div class="chat-conversation">
 
           <!-- Chat Selected -->
@@ -144,8 +144,7 @@
                     <div class="online-indicator"></div>
                   </div>
                   <div class="user-details">
-                    <h3 class="user-name">{{ selectedChat.userName }}</h3>
-                    <p class="user-email">{{ selectedChat.userEmail }}</p>
+                    <h3 class="user-name">{{ selectedChat.userEmail }}</h3>
                   </div>
                 </div>
               </div>

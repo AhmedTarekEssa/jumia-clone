@@ -1,46 +1,45 @@
-<div class="sellers-container">
-  <div class="header">
+<div class="sellers-container row">
+  <div class="header col-12">
     <h2>Sellers Management</h2>
 
   </div>
 
-  <div class="search-filter">
+  <div class="search-filter col-12">
     <input type="text" placeholder="Search sellers..." [(ngModel)]="searchTerm" class="search-input">
   </div>
 
-  <table class="table table-striped table-hover">
+  <table  class="table table-striped table-hover  col-12 overflow-x-scroll">
     <thead>
       <tr>
         <!-- <th style="min-width: 80px;">ID</th> -->
-        <th style="min-width: 150px;">Business Name</th>
-        <th style="min-width: 200px;">Description</th>
-        <th style="min-width: 80px;">Rating</th>
-        <th style="min-width: 100px;">Verified</th>
-        <th style="min-width: 100px;">Image</th>
-        <th style="min-width: 120px;">Action</th>
-        <th style="min-width: 150px;">Total Products Sold</th>
-        <th style="min-width: 150px;">Total Amount Sold</th>
+        <th >Business Name</th>
+       
+        <th class="text-center">Rating</th>
+        <th class="text-center">Verified</th>
+        <th class="text-center">Image</th>
+        <th class="text-center">Action</th>
+        <th  class="text-center">Total Products Sold</th>
+        <th class="text-center">Total Amount Sold</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let seller of filteredSellers">
         <!-- <td>{{ seller.sellerId }}</td> -->
-        <td>{{ seller.businessName }}</td>
-        <td class="des">{{ seller.businessDescription }}</td>
-        <td>{{ seller.rating }}</td>
-        <td>
+        <td class="text-center">{{ seller.businessName }}</td>
+        <td class="text-center">{{ seller.rating }}</td>
+        <td class="text-center">
           <span
             [class]="seller.isVerified === 'Authorized' ? 'badge bg-success' : seller.isVerified === 'Blocked' ? 'badge bg-danger' : 'badge bg-warning'">
             {{ seller.isVerified === 'Authorized' ? 'Authorized' : seller.isVerified === 'Blocked' ? 'Blocked' :
             'Pending' }}
           </span>
         </td>
-        <td>
-          <img *ngIf="seller.imageUrl" [src]="'http://localhost:5087' + seller.imageUrl" alt="Seller Image" width="60"
+        <td class="text-center"> 
+          <img *ngIf="seller.imageUrl" [src]="'http://localhost:5087' + seller.businessLogo" alt="Seller Image" width="60"
             height="60" style="object-fit: cover; border-radius: 50%;">
           <span *ngIf="!seller.imageUrl">No Image</span>
         </td>
-        <td *ngIf="seller.isVerified">
+        <td class="text-center" *ngIf="seller.isVerified">
           <div class="d-flex flex-column gap-1">
 
             <!-- Pending: Accept + Block -->
@@ -69,8 +68,8 @@
           </div>
         </td>
 
-        <td>{{ seller.totalProductsSold }}</td>
-        <td>EGP{{ seller.totalAmountSold  }}</td>
+        <td class="text-center">{{ seller.totalProductsSold }}</td>
+        <td class="text-center">EGP{{ seller.totalAmountSold  }}</td>
       </tr>
     </tbody>
   </table>

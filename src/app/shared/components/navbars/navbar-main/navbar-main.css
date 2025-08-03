@@ -987,7 +987,7 @@ header.component.css
   background-color: #e67e0d;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .categories-grid, .products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1001,12 +1001,12 @@ header.component.css
     width: 100%;
     margin-bottom: 10px;
   }
-}
+} */
 
 /* Add these media queries to the end of your home-page.component.css file */
 
 /* For tablets and smaller screens */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .jumia-container {
     flex-direction: column;
   }
@@ -1049,9 +1049,9 @@ header.component.css
   .sidebar-banner {
     width: 100%;
   }
-}
+} */
 
-/* For mobile devices */
+/* For mobile devices
 @media (max-width: 768px) {
   .mainHomeContainer {
     padding: 10px 0;
@@ -1127,7 +1127,7 @@ header.component.css
   .jumia-container {
     gap: 5px; /* Further reduce gap on very small screens */
   }
-}
+} */
 
 .dropdown-hover .category-wrapper {
   position: relative;
@@ -1222,11 +1222,14 @@ header.component.css
 }
 
 .search-input {
-  width: 100%;
+   width: 100%;
   padding: 10px 15px;
   border: 2px solid #f68b1e;
   border-radius: 4px;
   font-size: 14px;
+}
+.searchhh{
+  background-color:#f68b1e ;
 }
 
 .search-btn {
@@ -1633,14 +1636,14 @@ body {
   margin-right: 5px;
 }
 
-/* Animations */
+/* Animations
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive Adjustments */
-@media (max-width: 992px) {
+/*@media (max-width: 992px) {
   .container {
     flex-direction: column;
     align-items: stretch;
@@ -1714,4 +1717,5 @@ body {
   .nav-link i {
     margin-right: 0;
   }
-}
+} 
+*/

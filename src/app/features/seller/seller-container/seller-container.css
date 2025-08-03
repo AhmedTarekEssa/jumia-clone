@@ -164,7 +164,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .main-content {
     margin-left: 280px;
   }
@@ -255,10 +255,10 @@
   .hamburger::after {
     width: 18px;
   }
-}
+} */
 
 /* Animation for smooth transitions */
-@keyframes fadeIn {
+/* @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -271,4 +271,4 @@
 
 .content-area > * {
   animation: fadeIn 0.3s ease-out;
-}
+} */
