@@ -75,12 +75,14 @@ export class ProductDetailC implements OnInit {
     private cookieService: CookieService,
     private aiService:Ai
   ) {
+    
     this.productId = Number(this.route.snapshot.paramMap.get('id'));
     console.log("Product ID from route:", this.productId);
 
   }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.messages.push({
       type: 'bot',
       text: "Hello! I'm your product AI assistant. Ask me anything about this product!",
@@ -372,9 +374,9 @@ export class ProductDetailC implements OnInit {
 toggleChat(): void {
     this.showChat = !this.showChat;
     this.cdr.detectChanges(); // Manually trigger change detection
-    if (this.showChat) {
-      this.scrollToBottom(); // Scroll to bottom when chat opens
-    }
+      if (this.showChat) {
+        this.scrollToBottom(); // Scroll to bottom when chat opens
+      }
   }
 
   sendMessage(): void {
