@@ -8,6 +8,7 @@ import { map, Observable } from 'rxjs';
 })
 export class WishlistService {
   private baseUrl: string = environment.BaseUrlPath;
+  
 
   constructor(private http: HttpClient) { }
 

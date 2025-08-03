@@ -16,6 +16,10 @@ export class IReviewService {
 
     return this.http.get<IReview[]>(`http://localhost:5087/api/Rating/ByProduct/${productId}`)
   }
+  GetPendingReviewByCustomer(customerId: number): Observable<IReview[]> {
+
+    return this.http.get<IReview[]>(`http://localhost:5087/api/Rating/GetPendingReviewByCustomer/${customerId}`)
+  }
 
   addRating(dto: IReviewCreate): Observable<any> {
     return this.http.post('http://localhost:5087/api/Rating', dto);
@@ -27,7 +31,7 @@ export class IReviewService {
   getallRatings():Observable<IReview[]>{
     return this.http.get<IReview[]>('http://localhost:5087/api/Rating/GetAllRatings')
   }
-  
+
   getAllForAdmin():Observable<IReview[]>{
     return this.http.get<IReview[]>(`http://localhost:5087/api/Rating/GetAllRatingsForAdmin`);
   }

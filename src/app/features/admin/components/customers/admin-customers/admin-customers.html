@@ -1,61 +1,75 @@
- <div class="customers-container">
-      <div class="header">
-        <h2>Customers Management</h2>
-       
-      </div>
+<div class="customers-container">
+  <div class="header">
+    <h2>Customers Management</h2>
+  </div>
 
-      <div class="search-filter">
-        <input 
-          type="text" 
-          placeholder="Search customers..." 
-          [(ngModel)]="searchTerm"
-          class="search-input">
+  <div class="search-filter">
+    <input 
+      type="text" 
+      placeholder="Search customers..." 
+      [(ngModel)]="searchTerm"
+      class="search-input">
 
-        <!-- Add filter for blocked or active customers -->
-        <select [(ngModel)]="statusFilter" class="filter-select">
-          <option value="">All Customers</option>
-          <option value="blocked">Blocked</option>
-          <option value="active">Active</option>
-        </select>
-      </div>
+    <select [(ngModel)]="statusFilter" class="filter-select">
+      <option value="">All Customers</option>
+      <option value="blocked">Blocked</option>
+      <option value="active">Active</option>
+    </select>
+  </div>
 
-      
+  <div class="customers-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Gender</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of filteredCustomers">
+          <td>{{customer.firstName}} {{customer.lastName}}</td>
+          <td>{{customer.email}}</td>
+          <td>{{customer.phone}}</td>
+          <td>{{customer.gender}}</td>
+          <td>
+            <span [ngClass]="{'text-danger': customer.isBlocked, 'text-success': !customer.isBlocked}">
+              {{ customer.isBlocked ? 'Blocked' : 'Active' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm"
+                    [ngClass]="{'btn-danger': customer.isBlocked, 'btn-success': !customer.isBlocked}"
+                    (click)="toggleBlockStatus(customer)">
+              {{ customer.isBlocked ? 'Unblock' : 'Block' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <div class="customers-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <!-- <th>Join Date</th> -->
-              <th>Gender</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let customer of filteredCustomers">
-              <td>{{customer.firstName}}</td>
-              <td>{{customer.email}}</td>
-              <td>{{customer.phone}}</td>
-            
-              <!-- <td>{{customer.dateOfBirth}}</td> -->
-              <td>{{customer.gender}}</td>
-             <td>
-      <span [ngClass]="{'text-danger': customer.isBlocked, 'text-success': !customer.isBlocked}">
-        {{ customer.isBlocked ? 'Blocked' : 'Active' }}
-      </span>
-    </td>
-    <td>
-      <button class="btn btn-sm"
-              [ngClass]="{'btn-danger': customer.isBlocked, 'btn-success': !customer.isBlocked}"
-              (click)="toggleBlockStatus(customer)">
-        {{ customer.isBlocked ? 'Unblock' : 'Block' }}
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" *ngIf="customers.length > 0">
+      <button 
+        class="btn btn-sm" 
+        [disabled]="currentPage === 1" 
+        (click)="prevPage()">
+        Previous
       </button>
-    </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      
+      <span class="page-info">
+        Page {{currentPage}} of {{totalPages}} ({{getFilteredCustomersWithoutPagination().length}} items)
+      </span>
+      
+      <button 
+        class="btn btn-sm" 
+        [disabled]="currentPage === totalPages" 
+        (click)="nextPage()">
+        Next
+      </button>
     </div>
+  </div>
+</div>

@@ -1,0 +1,155 @@
+<div class="coupon-management-container">
+  <div class="header">
+    <h2>Coupon Management</h2>
+    <!-- <button class="btn btn-primary" (click)="resetForm()">
+      <span class="icon">+</span> New Coupon
+    </button> -->
+  </div>
+
+  <div class="notification" *ngIf="notification.show" [class.success]="notification.type === 'success'" 
+       [class.error]="notification.type === 'error'">
+    {{ notification.message }}
+  </div>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search coupons...">
+  </div>
+
+  <div class="content">
+    <div class="form-section">
+      <form [formGroup]="couponForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Coupon Code</label>
+          <input type="text" formControlName="code" placeholder="SUMMER25">
+          <div class="error" *ngIf="couponForm.get('code')?.invalid && couponForm.get('code')?.touched">
+            <div *ngIf="couponForm.get('code')?.hasError('required')">Code is required</div>
+            <div *ngIf="couponForm.get('code')?.hasError('pattern')">Only uppercase letters and numbers</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" formControlName="description" placeholder="Summer discount">
+          <div class="error" *ngIf="couponForm.get('description')?.invalid && couponForm.get('description')?.touched">
+            Description is required
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Discount Amount</label>
+            <input type="number" formControlName="discountAmount" min="0">
+            <div class="error" *ngIf="couponForm.get('discountAmount')?.invalid && couponForm.get('discountAmount')?.touched">
+              <div *ngIf="couponForm.get('discountAmount')?.hasError('required')">Amount is required</div>
+              <div *ngIf="couponForm.get('discountAmount')?.hasError('min')">Must be positive</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Discount Type</label>
+            <select formControlName="discountType">
+              <option value="Percentage">Percentage (%)</option>
+              <option value="Fixed">Fixed Amount</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Minimum Purchase</label>
+            <input type="number" formControlName="minimumPurchase" min="0">
+            <div class="error" *ngIf="couponForm.get('minimumPurchase')?.invalid && couponForm.get('minimumPurchase')?.touched">
+              Minimum purchase is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Usage Limit</label>
+            <input type="number" formControlName="usageLimit" min="0">
+            <div class="error" *ngIf="couponForm.get('usageLimit')?.invalid && couponForm.get('usageLimit')?.touched">
+              Limit is required
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" formControlName="startDate">
+            <div class="error" *ngIf="couponForm.get('startDate')?.invalid && couponForm.get('startDate')?.touched">
+              Start date is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" formControlName="endDate">
+            <div class="error" *ngIf="couponForm.get('endDate')?.invalid && couponForm.get('endDate')?.touched">
+              End date is required
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group checkbox">
+          <label>
+            <input type="checkbox" formControlName="isActive"> Active
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-cancel" (click)="resetForm()">Cancel</button>
+          <button type="submit" class="btn btn-submit" [disabled]="isLoading">
+            <span *ngIf="isLoading">Processing...</span>
+            <span *ngIf="!isLoading">{{ isEditing ? 'Update' : 'Create' }} Coupon</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="list-section">
+      <div class="coupon-list">
+        <div *ngIf="isLoading && coupons.length === 0" class="loading">
+          Loading coupons...
+        </div>
+
+        <div *ngIf="!isLoading && filteredCoupons.length === 0" class="no-results">
+          No coupons found
+        </div>
+
+        <div *ngFor="let coupon of filteredCoupons" class="coupon-card">
+          <div class="coupon-header">
+            <h3>{{ coupon?.code }}</h3>
+            <span class="status" [class.active]="coupon?.isActive" [class.inactive]="!coupon?.isActive">
+              {{ coupon?.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+          <p class="description">{{ coupon?.description }}</p>
+          
+          <div class="coupon-details">
+            <div class="detail">
+              <span class="label">Discount:</span>
+              <span>{{ coupon?.discountAmount }} {{ coupon?.discountType === 'Percentage' ? '%' : 'EGP' }} off</span>
+            </div>
+            <div class="detail">
+              <span class="label">Min. Purchase:</span>
+              <span>{{ coupon?.minimumPurchase | currency }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Valid:</span>
+              <span>{{ coupon?.startDate | date }} - {{ coupon?.endDate | date }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Usage:</span>
+              <span>{{ coupon?.usageCount || 0 }}/{{ coupon?.usageLimit || '∞' }}</span>
+            </div>
+          </div>
+          
+          <div class="coupon-actions">
+            <button class="btn-edit" (click)="editCoupon(coupon)">Edit</button>
+            <button class="btn-delete" (click)="deleteCoupon(coupon.couponId)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

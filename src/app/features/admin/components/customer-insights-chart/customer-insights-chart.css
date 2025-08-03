@@ -5,6 +5,8 @@
     padding: 24px;
     margin-bottom: 24px;
     border-left: 4px solid #ff6600;
+    width: 100%; /* Ensure it takes full width */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .chart-header {
@@ -60,6 +62,13 @@
     background: #fafafa;
     border-radius: 8px;
     padding: 16px;
+     width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+#customerChart {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .chart-footer {

@@ -18,6 +18,7 @@ export const routes: Routes = [
       { path: 'stats', loadComponent: () => import('./components/stats/admin-stats/admin-stats').then(m => m.AdminStats) },
       { path: 'settings', loadComponent: () => import('./components/settings/admin-settings/admin-settings').then(m => m.AdminSettings) },
       { path: 'Payments', loadComponent: () => import('./components/payments/payments').then(m => m.Payments)},
+      {path: 'Coupons', loadComponent: () => import('./components/coupons/coupons').then(m => m.Coupons)},
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }
