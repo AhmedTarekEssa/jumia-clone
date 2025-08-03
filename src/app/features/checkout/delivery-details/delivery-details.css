@@ -186,12 +186,12 @@
 }
 
 .products-list {
-  display: flex;
+  display: flex;  
   gap: 15px;
 }
 
 .product-item {
-  display: flex;
+ 
   align-items: center;
   gap: 10px;
 }

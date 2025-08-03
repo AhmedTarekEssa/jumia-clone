@@ -36,7 +36,7 @@
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
         <div class="d-flex align-items-center">
-          <!-- Category Menu (Only shows on home page) -->
+          <!-- Category Menu -->
           <div class="category-menu-wrapper me-2" *ngIf="isHome()" (mouseenter)="showCategoryMenu = true"
             (mouseleave)="showCategoryMenu = false">
             <button class="btn border-0 fs-5">
@@ -53,76 +53,84 @@
           </a>
         </div>
 
-        <!-- Search Bar -->
-        <div class="search-container">
-          <form class="d-flex" role="search">
-            <input class="search-input" type="search" #searchInput  placeholder="Search products, brands and categories"
-              aria-label="Search">
-            <button class="search-btn" type="submit" (click)="sementicSearch(searchInput.value.toLowerCase())">Search</button>
-          </form>
-        </div>
+        <!-- Navbar Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <!-- Right Navigation Items -->
-        <div class="right-nav-items">
-          <!-- Account Dropdown (Logged In) -->
-<div class="nav-item account-item" *ngIf="userInfo">
-  <div class="nav-link account-link" (click)="toggleAccountDropdown()">
-    <span class="greeting">Hi, {{ getUserFirstName() }}</span>
-    <i class="fas fa-chevron-down ms-1"></i>
-  </div>
-  <div class="account-dropdown" [class.show]="showAccountDropdown">
-    <div class="dropdown-header">{{ userInfo.Email }}</div>
-    <hr class="dropdown-divider">
-    <a class="dropdown-item" (click)="navigateAndClose('/user')">
-      <i class="fas fa-user me-2"></i>
-      My Account
-    </a>
-    <a class="dropdown-item" (click)="navigateAndClose('/user/orders')">
-      <i class="fas fa-box me-2"></i>
-      Orders
-    </a>
-    <a class="dropdown-item" (click)="navigateAndClose('/user/inbox')">
-      <i class="fas fa-envelope me-2"></i>
-      Inbox
-    </a>
-    <a class="dropdown-item" (click)="navigateAndClose('/user/wishlist')">
-      <i class="fas fa-heart me-2"></i>
-      Wishlist
-    </a>
-    <a class="dropdown-item" (click)="navigateAndClose('/user/vouchers')">
-      <i class="fas fa-tag me-2"></i>
-      Vouchers
-    </a>
-    <hr class="dropdown-divider">
-    <a class="dropdown-item" (click)="logout()">
-      <i class="fas fa-sign-out-alt me-2"></i>
-      Logout
-    </a>
-  </div>
-</div>
-
-          <!-- Login (Logged Out) -->
-          <div class="nav-item" *ngIf="!userInfo">
-            <a class="nav-link" (click)="navigateAndClose('/login-register')" >
-              <i class="fas fa-user"></i>
-              Login
-            </a>
+        <!-- Collapsible Section -->
+        <div class="collapse navbar-collapse justify-content-between mt-3 mt-lg-0" id="navbarResponsive">
+          <!-- Search Bar -->
+          <div class="search-container w-100 me-3 mb-3 mb-lg-0">
+            <form role="search">
+              <div class="input-group">
+                <input class="form-control search-input" type="search" #searchInput placeholder="Search products, brands and categories"
+                  aria-label="Search">
+                <button class="btn searchhh" type="submit"
+                  (click)="sementicSearch(searchInput.value.toLowerCase())">Search</button>
+              </div>
+            </form>
           </div>
 
-          <!-- Help -->
-          <div class="nav-item help-item">
-            <a class="nav-link">
-              <span class="help-icon">?</span>
-              Help
-            </a>
-          </div>
+          <!-- Right Navigation Items -->
+          <div class="right-nav-items d-flex align-items-center gap-3 flex-wrap">
+            <!-- Account Dropdown (Logged In) -->
+            <div class="nav-item account-item" *ngIf="userInfo">
+              <div class="nav-link account-link" (click)="toggleAccountDropdown()">
+                <span class="greeting">Hi, {{ getUserFirstName() }}</span>
+                <i class="fas fa-chevron-down ms-1"></i>
+              </div>
+              <div class="account-dropdown" [class.show]="showAccountDropdown">
+                <div class="dropdown-header">{{ userInfo.Email }}</div>
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" (click)="navigateAndClose('/user')">
+                  <i class="fas fa-user me-2"></i>
+                  My Account
+                </a>
+                <a class="dropdown-item" (click)="navigateAndClose('/user/orders')">
+                  <i class="fa-solid fa-star"></i>
+                  Orders
+                </a>
+                <a class="dropdown-item" (click)="navigateAndClose('/user/user-reviews')">
+                  <i class="fas fa-envelope me-2"></i>
+                  Pending Review
+                </a>
+                <a class="dropdown-item" (click)="navigateAndClose('/user/wishlist')">
+                  <i class="fas fa-heart me-2"></i>
+                  Wishlist
+                </a>
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" (click)="logout()">
+                  <i class="fas fa-sign-out-alt me-2"></i>
+                  Logout
+                </a>
+              </div>
+            </div>
 
-          <!-- Cart -->
-          <div class="nav-item cart-item">
-            <a class="nav-link" (click)="navigateAndClose('/cart')">
-              <i class="fas fa-shopping-cart"></i>
-              Cart
-            </a>
+            <!-- Login (Logged Out) -->
+            <div class="nav-item" *ngIf="!userInfo">
+              <a class="nav-link" (click)="navigateAndClose('/login-register')">
+                <i class="fas fa-user"></i>
+                Login
+              </a>
+            </div>
+
+            <!-- Help -->
+            <div class="nav-item help-item">
+              <a class="nav-link" (click)="chatWithUsAlert()">
+                <span class="help-icon">?</span>
+                Help
+              </a>
+            </div>
+
+            <!-- Cart -->
+            <div class="nav-item cart-item">
+              <a class="nav-link" (click)="navigateAndClose('/cart')">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+              </a>
+            </div>
           </div>
         </div>
       </div>

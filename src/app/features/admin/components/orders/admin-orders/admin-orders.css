@@ -159,7 +159,7 @@ body {
 }
 
 .orders-table {
-  overflow-x: auto;
+  overflow-x: scroll  ;
 }
 
 /* Table styles */

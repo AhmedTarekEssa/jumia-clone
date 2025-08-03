@@ -4,8 +4,8 @@
     (toggleSidebar)="toggleSidebar()">
   </app-seller-sidebar>
 
-  <main class="main-content" [class.expanded]="isSidebarCollapsed">
-    <header class="top-bar">
+  <main class="main-content " [class.expanded]="isSidebarCollapsed">
+    <header class="top-bar ">
       <button class="menu-toggle" (click)="toggleSidebar()">
         <span class="hamburger"></span>
       </button>
@@ -13,15 +13,15 @@
       <div class="user-info">
         <span>Welcome, {{ seller?.sellerName }}</span>
         <div class="avatar" (click)="navigateToSellerDetails()">
-          <img class="avatar-initial" [src]="'http://localhost:5087' +seller?.imageUrl"  />
+          <img class="avatar-initial" [src]="'http://localhost:5087' +seller?.businessLogo"  />
 
 
         </div>
       </div>
     </header>
 
-    <div class="content-area">
-      <router-outlet></router-outlet>
+    <div class="content-area row" >
+      <router-outlet class="col-12"></router-outlet>
     </div>
   </main>
 </div>

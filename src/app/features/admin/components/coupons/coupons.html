@@ -15,8 +15,8 @@
     <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search coupons...">
   </div>
 
-  <div class="content">
-    <div class="form-section">
+  <div class="content row">
+    <div class="form-section col-12 col-lg-6">
       <form [formGroup]="couponForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label>Coupon Code</label>
@@ -116,7 +116,7 @@
           No coupons found
         </div>
 
-        <div *ngFor="let coupon of filteredCoupons" class="coupon-card">
+        <div *ngFor="let coupon of filteredCoupons" class="coupon-card  col-12 col-lg-6">
           <div class="coupon-header">
             <h3>{{ coupon?.code }}</h3>
             <span class="status" [class.active]="coupon?.isActive" [class.inactive]="!coupon?.isActive">
